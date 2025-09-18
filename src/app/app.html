@@ -1,0 +1,14 @@
+
+<button (click)="alternarModo()" class="btnRedondo">
+  <ng-container *ngIf="modoOscuroActivo; else claro">
+    <i class="fas fa-moon"></i>
+  </ng-container>
+  <ng-template #claro>
+    
+    <i class="fas fa-sun"></i>
+  </ng-template>
+  
+</button>
+<p>Hola Mundo</p>
+<app-usuario/>
+<router-outlet />

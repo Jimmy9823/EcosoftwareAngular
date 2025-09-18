@@ -1,0 +1,37 @@
+/* You can add global styles to this file, and also import other style files */
+body.modo-oscuro{
+    background-color:var(--green-dark-bg);
+    color: #f8f9fa;
+}
+body.modo-claro{
+    background-color: var(--bgColorligth);
+    color: #000000;
+}
+
+:root {
+    --bgColorligth: #f8f9fa;
+    /* Colores principales */
+    --primary: #5cb85c;
+    --primary-dark: #4a934a;
+    --primary-hover: #4caf4c;
+
+    /* Verdes oscuros y acentos */
+    --green-dark-bg: #0c1619;
+    --green-accent: #7bc143;
+
+    /* Grises y fondos */
+    --gray-light: #f8f9fa;
+    --gray-medium: #e9ecef;
+    --background-form: #1e1e1e;
+    --background-input: #2a2a2a;
+    --sombra-container: rgba(0, 0, 0, 0.34);
+
+    /* Textos */
+    --text-light: #ffffff;
+    --text-dark: #000000;
+    --text-muted: #6c757d;
+    --text-input: #cccccc;
+
+    /* Otros */
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
