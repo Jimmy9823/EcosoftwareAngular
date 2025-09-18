@@ -17,7 +17,10 @@ export class Usuario implements OnInit {
   error: string='';
   constructor(private usuarioService: UsuarioService){}
 
-  ngOnInit():void {
+  ngOnInit(){
+    this.listarUsuarios()
+  }
+  listarUsuarios():void {
     this.usuarioService.listar().subscribe({
       next: (data) => {
         this.usuarios = data;
@@ -31,4 +34,6 @@ export class Usuario implements OnInit {
     }
     });
   }
+
+
 }

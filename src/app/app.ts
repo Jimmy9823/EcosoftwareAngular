@@ -2,11 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Usuario } from "./usuario/usuario_components/usuario"; //  IMPORTAR
+import {COMPARTIR_IMPORTS} from './ImpCondYForms/imports'
 
 @Component({
   selector: 'app-root',
   standalone: true, //  Asegura que esté como standalone
-  imports: [RouterOutlet, CommonModule, Usuario], //  Agrega CommonModule aquí
+  imports: [RouterOutlet, CommonModule, Usuario, COMPARTIR_IMPORTS], //  Agrega CommonModule aquí
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

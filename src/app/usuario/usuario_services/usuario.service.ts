@@ -24,6 +24,18 @@ constructor(private http: HttpClient){}
 listar(): Observable<UsuarioModel[]> {
   return this.http.get<UsuarioModel[]>(this.apiUrlSpringboot);
 }
+obtenerPorId(id: number): Observable<UsuarioModel> {
+  return this.http.get<UsuarioModel>(`${this.apiUrlSpringboot}/filtrar-id/${id}`);
+}
+filtrarPorNombre(nombre:string): Observable<UsuarioModel[]> {
+  return this.http.get<UsuarioModel[]>(`${this.apiUrlSpringboot}/filtrar-nombre?nombre=${nombre}`);
+}
+filtrarPorDocumento(documento:string): Observable<UsuarioModel[]> {
+  return this.http.get<UsuarioModel[]>(`${this.apiUrlSpringboot}/filtrar-documento?documento=${documento}`);
+}
+filtrarPorCorreo(correo:string) : Observable<UsuarioModel[]> {
+  return this.http.get<UsuarioModel[]>(`${this.apiUrlSpringboot}/filtrar-correo?correo=${correo}`);
+}
 //this.http.get es porque tengo un tipo get en el controlador,
 //aqui puede cambiar a put, delete, post, etc...
 }
