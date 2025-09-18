@@ -10,6 +10,7 @@ EcoSoftwareAngular/
 │   ├── 🗂️app/                 
 │   │   ├── 🗂️inicio/           # Componentes de la página de inicio
 │   │   ├── 🗂️usuario/          # Componentes relacionados con usuarios
+│   │   ├───── 🗂️usuario_component/          # Componentes relacionados con usuarios
 │   │   ├── 🔵 app.config.ts     # Configuraciones globales de la app (API URL, constantes)
 │   │   ├── 🔵 app.css           # Estilos globales de la aplicación
 │   │   ├── 🔵 app.html          # Plantilla principal (root) de la app

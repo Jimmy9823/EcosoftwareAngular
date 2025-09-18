@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Usuario } from "./usuario/usuario"; //  IMPORTAR
+import { Usuario } from "./usuario/usuario_components/usuario"; //  IMPORTAR
 
 @Component({
   selector: 'app-root',

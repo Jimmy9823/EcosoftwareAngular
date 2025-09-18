@@ -1,0 +1,23 @@
+<div *ngIf="cargando">Cargando usuarios...</div>
+<div *ngIf="error">{{ error }}</div>
+
+<table *ngIf="!cargando && usuarios.length" border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Correo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios">
+      <td>{{ usuario.idUsuario }}</td>
+      <td>{{ usuario.nombre }}</td>
+      <td>{{ usuario.correo }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!cargando && usuarios.length === 0">
+  No hay usuarios registrados.
+</div>
