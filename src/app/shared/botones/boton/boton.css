@@ -1,0 +1,41 @@
+button {
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-weight:200;
+    box-sizing: border-box;
+    
+}
+.login{
+    background-color: rgb(35, 252, 35);
+}
+.registrarse{
+    background-color: aqua;
+}
+.btn-table {
+    width: 80px;
+    height: 25px;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 0px 2px 0px 2px;
+}
+.btn-table.editar {
+    background-color: rgb(6, 209, 209);
+}
+.btn-table.eliminar {
+    background-color: rgb(226, 18, 18);
+    color: aliceblue;
+}
+.btn-primary{
+    background-color: aqua;
+    color: white;
+}
+
+.btn-danger{
+    background-color: rgb(250, 20, 20);
+    color: white;
+}
+
+.buscar_solicitud{
+    background-color: rgb(8, 252, 20);
+    color: white;
+}

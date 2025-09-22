@@ -1,12 +1,44 @@
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold fs-4" routerLink="">
+      <i class="bi bi-tree-fill me-2"></i>EcoSoftware
+    </a>
+    <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+      aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-<button (click)="alternarModo()" class="btnRedondo">
-  <ng-container *ngIf="modoOscuroActivo; else claro">
-    <i class="fas fa-moon"></i>
-  </ng-container>
-  <ng-template #claro>
-    <i class="fas fa-sun"></i>
-  </ng-template>
-</button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-semibold" href="#" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Módulos
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Inicio</a></li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li><a class="dropdown-item" routerLink="/usuarios">Gestión de Usuarios</a></li>
+            <li><a class="dropdown-item" routerLink="/solicitudes">Solicitudes de Recolección</a></li>
+            <li><a class="dropdown-item" href="#">Capacitaciones</a></li>
+            <li><a class="dropdown-item" href="#">Puntos de Reciclaje</a></li>
+            <li><a class="dropdown-item" href="#">Noticias / Blog</a></li>
 
-<app-usuario/>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="d-flex gap-2">
+        <button (click)="alternarModo()" class="btnRedondo">
+          <ng-container *ngIf="modoOscuroActivo; else claro"><i class="fas fa-moon"></i></ng-container>
+          <ng-template #claro><i class="fas fa-sun"></i></ng-template>
+        </button>
+        <app-boton label="Login" tipo="login" (accion)="login()"></app-boton>
+        <app-boton label="Registrarse" tipo="registrarse" (accion)="login()"></app-boton>
+      </div>
+    </div>
+  </div>
+</nav>
 <router-outlet />

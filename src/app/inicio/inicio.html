@@ -1,1 +1,306 @@
-<p>inicio works!</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EcoSoftware - Gestión ecológica y reciclaje</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    :root {
+      --eco-green: #2e7d32;
+      --eco-green-light: #60ad5e;
+      --eco-blue: #3493ff;
+      --eco-blue-light: #5e92f3;
+      --eco-bg-light: #c2f5e7;
+      --eco-text-dark: #263238;
+      --eco-text-secondary: #546e7a;
+      --eco-tallito-green: #4caf50;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--eco-bg-light);
+      color: var(--eco-text-dark);
+      margin: 0;
+      padding: 0;
+    }
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(90deg, var(--eco-blue), var(--eco-green));
+    }
+    .navbar-brand, .nav-link, .dropdown-item {
+      color: #e6f2f2 !important;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    .navbar-brand:hover, .nav-link:hover, .dropdown-item:hover {
+      color: var(--eco-green-light) !important;
+    }
+    .btn-login {
+      background-color: transparent;
+      border: 2px solid #e6f2f2;
+      color: #e6f2f2;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-login:hover {
+      background-color: var(--eco-green-light);
+      border-color: var(--eco-green-light);
+      color: white;
+    }
+    .btn-register {
+      background-color: var(--eco-green);
+      color: white;
+      font-weight: 600;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+    .btn-register:hover {
+      background-color: var(--eco-green-light);
+      color: white;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      min-height: 70vh;
+      background-color: white;
+      box-shadow: 0 0 15px rgb(0 0 0 / 0.05);
+    }
+    .hero-left {
+      flex: 1 1 50%;
+      min-width: 300px;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80') center center/cover no-repeat;
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+    }
+    .hero-right {
+      flex: 1 1 50%;
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-color: var(--eco-bg-light);
+      border-top-right-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+    .hero-right h1 {
+      color: var(--eco-green);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .hero-right p {
+      font-size: 1.2rem;
+      line-height: 1.5;
+      color: var(--eco-text-secondary);
+    }
+
+    /* Section styles */
+    section {
+      padding: 3rem 1.5rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+    h2.section-title {
+      text-align: center;
+      color: var(--eco-blue);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      position: relative;
+      font-size: 2rem;
+    }
+    h2.section-title::after {
+      content: '';
+      display: block;
+      width: 70px;
+      height: 4px;
+      background-color: var(--eco-green);
+      margin: 0.5rem auto 0;
+      border-radius: 2px;
+    }
+
+    /* Quiénes somos y objetivo */
+    #about p {
+      max-width: 700px;
+      margin: auto;
+      font-size: 1.1rem;
+      color: var(--eco-text-secondary);
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    /* Tips de reciclaje */
+    #tips {
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 5px 15px rgb(0 0 0 / 0.05);
+      max-width: 900px;
+      margin: auto;
+    }
+    #tips ul {
+      list-style: none;
+      padding-left: 0;
+      max-width: 600px;
+      margin: auto;
+    }
+    #tips ul li {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      color: var(--eco-text-dark);
+      line-height: 1.4;
+    }
+    #tips ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.6rem;
+      width: 15px;
+      height: 15px;
+      background-color: var(--eco-green);
+      clip-path: polygon(50% 0%, 100% 100%, 0 100%);
+      /* small “tallito” shape */
+    }
+
+    /* Testimonios */
+    #testimonials {
+      max-width: 1000px;
+      margin: auto;
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    .testimonial-card {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 5px 20px rgb(0 0 0 / 0.1);
+      padding: 1.5rem 2rem 2rem 2rem;
+      position: relative;
+      color: var(--eco-text-dark);
+      font-style: italic;
+    }
+    .testimonial-card::before {
+      content: '';
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      width: 25px;
+      height: 25px;
+      background-color: var(--eco-tallito-green);
+      clip-path: polygon(50% 0%, 100% 100%, 0 100%);
+      /* small “tallito” */
+      box-shadow: 0 0 8px var(--eco-tallito-green);
+    }
+    .testimonial-text {
+      margin-bottom: 1rem;
+    }
+    .testimonial-author {
+      font-weight: 700;
+      color: var(--eco-green);
+      text-align: right;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--eco-blue);
+      color: white;
+      padding: 2rem 1.5rem;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    footer a {
+      color: var(--eco-green-light);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: white;
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+      }
+      .hero-left, .hero-right {
+        flex: 1 1 100%;
+        border-radius: 0;
+        min-height: 250px;
+      }
+      .hero-left {
+        min-height: 200px;
+      }
+      .hero-right {
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  
+
+  <!-- Hero Section -->
+  <section class="hero my-5 mx-auto rounded shadow">
+    <div class="hero-left" aria-label="Imagen naturaleza"></div>
+    <div class="hero-right">
+      <h1>Bienvenido a EcoSoftware</h1>
+      <p>Tu sistema web para gestionar actividades ecológicas enfocadas en reciclaje y sostenibilidad. Únete a nuestra comunidad para hacer un planeta más verde y consciente.</p>
+    </div>
+  </section>
+
+  <!-- Quiénes somos y objetivo -->
+  <section id="about">
+    <h2 class="section-title">Quiénes Somos y Nuestro Objetivo</h2>
+    <p>
+      EcoSoftware es una plataforma dedicada a fomentar la gestión ecológica mediante la participación activa de ciudadanos, empresas, recicladores y administradores. Nuestra meta es facilitar el reciclaje, promover la educación ambiental y construir comunidades sostenibles.
+    </p>
+  </section>
+
+  <!-- Tips de reciclaje -->
+  <section id="tips" class="my-5 px-4 py-4">
+    <h2 class="section-title">Tips para un Reciclaje Responsable</h2>
+    <ul>
+      <li>Separa los residuos en orgánicos, plásticos, vidrio, cartón y metales.</li>
+      <li>Limpia y seca los envases antes de reciclar para evitar contaminación.</li>
+      <li>Reduce el uso de plásticos de un solo uso, opta por materiales reutilizables.</li>
+      <li>Participa en campañas locales de reciclaje y educación ambiental.</li>
+      <li>Reutiliza y dona objetos en buen estado para extender su vida útil.</li>
+    </ul>
+  </section>
+
+  <!-- Testimonios -->
+  <section id="testimonials" class="mb-5 px-3">
+    <h2 class="section-title">Testimonios</h2>
+    <div class="testimonial-card">
+      <p class="testimonial-text">"Gracias a EcoSoftware he podido organizar las solicitudes de recolección en mi comunidad de forma sencilla y eficiente. ¡Muy recomendable!"</p>
+      <p class="testimonial-author">- Laura Méndez, Ciudadana</p>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-text">"La plataforma ha sido clave para capacitar a nuestro equipo en prácticas sostenibles y mejorar el reciclaje en nuestra empresa."</p>
+      <p class="testimonial-author">- José Rodríguez, Empresa</p>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-text">"Como reciclador, EcoSoftware me conecta fácilmente con solicitudes y rutas, optimizando mi trabajo diario."</p>
+      <p class="testimonial-author">- Ana Gómez, Recicladora</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>Contacto: <a href="mailto:contacto@ecosoftware.com">contacto@ecosoftware.com</a> | Teléfono: +54 9 11 1234 5678</p>
+    <p>Equipo desarrollador: EcoSoftware Team &copy; 2024</p>
+    <p>
+      <a href="#" aria-label="Política de privacidad">Política de privacidad</a> |
+      <a href="#" aria-label="Términos de uso">Términos de uso</a>
+    </p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

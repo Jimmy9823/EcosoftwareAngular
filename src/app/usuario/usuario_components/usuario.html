@@ -1,12 +1,23 @@
 <div *ngIf="cargando">Cargando usuarios...</div>
 <div *ngIf="error">{{ error }}</div>
 
+<h3>Bienvenido a Ecosoftware</h3>
+<p class="mensaje-bienvenida">Tu plataforma de gestion del reciclaje </p>
+<div class="container-fluid">
+<app-boton label="Buscar por Id" tipo="buscar_solicitud" (accion)="consultarPorId(usuarios.values.call.arguments)"></app-boton>
+
+
+</div>
+<div class="container-fluid">
 <table *ngIf="!cargando && usuarios.length" border="1" cellpadding="5">
+
+ 
   <thead>
     <tr>
       <th>ID</th>
       <th>Nombre</th>
       <th>Correo</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -14,10 +25,19 @@
       <td>{{ usuario.idUsuario }}</td>
       <td>{{ usuario.nombre }}</td>
       <td>{{ usuario.correo }}</td>
+      <td><app-boton label="Editar" tipo="btn-table editar" (accion)="consultarPorCorreo()"
+        
+></app-boton></td>
+        <td><app-boton label="Eliminar" tipo="btn-table eliminar"(accion)="consultarPorCorreo()"
+></app-boton></td>
     </tr>
   </tbody>
 </table>
 
+ 
+
+
+<!-- Mensaje que aparecera si no hay usuarios registrados y termino de cargar la pagina -->
 <div *ngIf="!cargando && usuarios.length === 0">
   No hay usuarios registrados.
 </div>

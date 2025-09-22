@@ -1,0 +1,13 @@
+
+h3, .mensaje-bienvenida{
+    display: flex;
+    justify-content: center;
+}
+.container-fluid{
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+}
+.buscar_solicitud{
+    background-color: rgb(38, 88, 88);
+}

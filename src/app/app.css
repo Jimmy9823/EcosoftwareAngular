@@ -1,12 +1,22 @@
-.btnRedondo{
+/* .btnRedondo {
     border-radius: 50%;
     background-color: rgb(238, 238, 218);
 }
-.btnRedondo:hover{
-    background: linear-gradient(rgb(247, 170, 29),rgb(96, 186, 228)
-    )
+
+.btnRedondo:hover {
+    background: linear-gradient(rgb(247, 170, 29), rgb(96, 186, 228))
 }
-.fa-moon{
-    
+
+.fa-moon {
+
     color: rgb(80, 79, 8);
 }
+
+navbar.modo-oscuro {
+    color: rgb(210, 238, 229);
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+} */

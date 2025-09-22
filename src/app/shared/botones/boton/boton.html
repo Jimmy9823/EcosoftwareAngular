@@ -1,0 +1,10 @@
+<!-- Aqui llamo a lo declarado en el .ts y lo asigno
+Class define el estilo de Bootstrap en este caso
+click igual a onclick JS -->
+<button
+    class="{{tipo}}"
+    [disabled]="disabled"
+    (click)="ejecutarAccion()"
+    [ngStyle]="estilo"
+>{{label}}</button>
+<!-- Usar ngStyle para cambiar algo muy pero muy especifico, sino mejor hacerlo desde el class -->
