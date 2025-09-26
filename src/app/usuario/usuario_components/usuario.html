@@ -25,16 +25,19 @@
       <td>{{ usuario.idUsuario }}</td>
       <td>{{ usuario.nombre }}</td>
       <td>{{ usuario.correo }}</td>
-      <td><app-boton label="Editar" tipo="btn-table editar" (accion)="consultarPorCorreo()"
+      <td><app-boton label="Editar" tipo="btn-table editar" (accion)="consultarPorCorreo(usuario.correo)"
         
 ></app-boton></td>
-        <td><app-boton label="Eliminar" tipo="btn-table eliminar"(accion)="consultarPorCorreo()"
+        <td><app-boton label="Eliminar" tipo="btn-table eliminar" (accion)="consultarPorCorreo(usuario.correo)"
 ></app-boton></td>
     </tr>
   </tbody>
 </table>
 
- 
+
+ <h2>Registro de usuario</h2>
+
+<app-form-comp [mode]="'registro'" (formSubmit)="guardarUsuario($event)"></app-form-comp>>
 
 
 <!-- Mensaje que aparecera si no hay usuarios registrados y termino de cargar la pagina -->

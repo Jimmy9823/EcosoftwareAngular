@@ -36,6 +36,18 @@ filtrarPorDocumento(documento:string): Observable<UsuarioModel[]> {
 filtrarPorCorreo(correo:string) : Observable<UsuarioModel[]> {
   return this.http.get<UsuarioModel[]>(`${this.apiUrlSpringboot}/filtrar-correo?correo=${correo}`);
 }
+guardarUsuario(usuario:UsuarioModel): Observable<UsuarioModel>{
+  return this.http.post<UsuarioModel>(this.apiUrlSpringboot, usuario)
+}
 //this.http.get es porque tengo un tipo get en el controlador,
 //aqui puede cambiar a put, delete, post, etc...
+actualizarUsuario(id:number, usuario:UsuarioModel): Observable<UsuarioModel>{
+  return this.http.put<UsuarioModel>(`${this.apiUrlSpringboot}/${id}`, usuario) 
+}
+eliminarUsuario(id:number): Observable<void>{
+  return this.http.delete<void>(`${this.apiUrlSpringboot}/${id}`); 
+}
+eliminacionLogica(id: number): Observable<string> {
+  return this.http.patch<string>(`${this.apiUrlSpringboot}/eliminar/${id}`, null);
+}
 }

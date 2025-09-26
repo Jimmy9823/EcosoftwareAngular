@@ -5,7 +5,7 @@
 Siempre crear con esta estructura =  
 | ng      | instruccion    | ubicacion(carpeta)| nombre |
 |--------------------|---------------------|-------------|-------------|
-|ng    | **generate component** o **g c**              | usuario/usuario_components/| usuario |
+|ng    | **generate component** o **g c**              | usuario/usuario/| usuario |
 
 Instruccion completa  
 ng g c usuario_components/usuario 

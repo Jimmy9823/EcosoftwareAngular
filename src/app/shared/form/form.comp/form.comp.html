@@ -1,0 +1,74 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <!-- ================== REGISTRO ================== -->
+  <ng-container *ngIf="mode === 'registro'">
+
+    <!-- Selección de rol -->
+    <label for="rol">Rol:</label>
+    <select id="rol" formControlName="rol">
+      <option *ngFor="let r of roles" [value]="r">{{ r | titlecase }}</option>
+    </select>
+    <div *ngIf="f['rol']?.touched && f['rol']?.invalid" class="error">
+      Selecciona un rol válido
+    </div>
+
+    <!-- Datos básicos -->
+    <input type="text" placeholder="Nombre" formControlName="nombre">
+    <div *ngIf="f['nombre']?.touched && f['nombre']?.invalid" class="error">
+      El nombre es requerido (mínimo 3 caracteres).
+    </div>
+
+    <input type="email" placeholder="Correo" formControlName="correo">
+    <div *ngIf="f['correo']?.touched && f['correo']?.invalid" class="error">
+      Ingresa un correo válido.
+    </div>
+
+    <input type="text" placeholder="Teléfono (10 dígitos)" formControlName="telefono">
+    <div *ngIf="f['telefono']?.touched && f['telefono']?.invalid" class="error">
+      Ingresa un teléfono válido de 10 dígitos.
+    </div>
+
+    <input type="text" placeholder="Cédula" formControlName="cedula">
+
+    <!-- Contraseñas -->
+    <input type="password" placeholder="Contraseña" formControlName="contrasena">
+    <div *ngIf="f['contrasena']?.touched && f['contrasena']?.errors?.['contraseñaSegura']" class="error">
+      La contraseña debe tener mayúscula, número y caracter especial.
+    </div>
+
+    <input type="password" placeholder="Confirmar contraseña" formControlName="confirmarContraseña">
+    <div *ngIf="form.errors?.['noCoinciden'] && f['confirmarContraseña']?.touched" class="error">
+      Las contraseñas no coinciden.
+    </div>
+
+    <!-- Campos según rol -->
+    <div *ngIf="form.get('rol')?.value === 'empresa' || form.get('rol')?.value === 'reciclador'">
+      <input type="text" placeholder="NIT" formControlName="nit">
+      <input type="number" placeholder="Cantidad mínima" formControlName="cantidad_minima">
+      <input type="text" placeholder="Zona de trabajo" formControlName="zona_de_trabajo">
+    </div>
+
+    <!-- Campos adicionales generales -->
+    <input type="text" placeholder="Barrio" formControlName="barrio">
+    <input type="text" placeholder="Localidad" formControlName="localidad">
+    <input type="text" placeholder="Horario (opcional)" formControlName="horario">
+    <input type="text" placeholder="Certificaciones (opcional)" formControlName="certificaciones">
+    <input type="file" formControlName="imagen_perfil">
+  </ng-container>
+
+  <!-- ================== LOGIN ================== -->
+  <ng-container *ngIf="mode === 'login'">
+    <input type="email" placeholder="Correo" formControlName="correo">
+    <input type="password" placeholder="Contraseña" formControlName="contrasena">
+  </ng-container>
+
+  <!-- ================== RECUPERAR ================== -->
+  <ng-container *ngIf="mode === 'recuperar'">
+    <input type="email" placeholder="Correo registrado" formControlName="correo">
+  </ng-container>
+
+  <!-- ================== BOTÓN ================== -->
+  <button type="submit" >
+    {{ mode === 'login' ? 'Ingresar' : mode === 'registro' ? 'Registrarse' : 'Recuperar' }}
+  </button>
+</form>
