@@ -97,3 +97,61 @@ Los archivos **app.routes.ts**, **app.html** y **app.css** definen la **estructu
 4. Ajustar **estilos globales** (**app.css / styles.css**).  
 5. Configurar **variables globales** o **endpoints** en **app.config.ts**.  
 6. Revisar la **plantilla raíz** **app.html** para asegurar que los **componentes se rendericen correctamente**.
+
+
+
+
+Arquitectura propuesta por copilot
+src/
+└── app/
+    ├── auth/                     # Módulo de autenticación
+    │   ├── login/                # Componente de login
+    │   │   ├── login.ts
+    │   │   ├── login.html
+    │   │   ├── login.css
+    │   ├── registro/             # Componente de registro
+    │   │   ├── registro.ts
+    │   │   ├── registro.html
+    │   │   ├── registro.css
+    │   ├── auth.service.ts       # Servicio para autenticación
+    │   ├── auth.guard.ts         # Guard para proteger rutas según roles
+    │   ├── auth.models.ts        # Modelos relacionados con autenticación
+    │   ├── auth.state.ts         # Estado de autenticación (opcional)
+    │
+    ├── usuario/                  # Módulo de usuarios
+    │   ├── usuario-list/         # Componente para listar usuarios (solo admin)
+    │   │   ├── usuario-list.ts
+    │   │   ├── usuario-list.html
+    │   │   ├── usuario-list.css
+    │   ├── usuario-form/         # Componente para crear/editar usuarios
+    │   │   ├── usuario-form.ts
+    │   │   ├── usuario-form.html
+    │   │   ├── usuario-form.css
+    │   ├── usuario-detail/       # Componente para ver detalles de un usuario
+    │   │   ├── usuario-detail.ts
+    │   │   ├── usuario-detail.html
+    │   │   ├── usuario-detail.css
+    │   ├── usuario.service.ts    # Servicio para operaciones CRUD
+    │   ├── usuario.models.ts     # Modelos relacionados con usuarios
+    │   ├── usuario.state.ts      # Estado centralizado de usuarios (opcional)
+    │
+    ├── roles/                    # Módulo para manejar roles
+    │   ├── admin/                # Componente para el rol de administrador
+    │   │   ├── admin.ts
+    │   │   ├── admin.html
+    │   │   ├── admin.css
+    │   ├── user/                 # Componente para el rol de usuario estándar
+    │   │   ├── user.ts
+    │   │   ├── user.html
+    │   │   ├── user.css
+    │
+    ├── shared/                   # Componentes y servicios reutilizables
+    │   ├── botones/              # Componente de botones reutilizables
+    │   ├── form/                 # Componente de formularios reutilizables
+    │   ├── table/                # Componente de tablas reutilizables
+    │   ├── interceptors/         # Interceptores HTTP
+    │   ├── pipes/                # Pipes reutilizables
+    │   ├── directives/           # Directivas reutilizables
+    │
+    ├── app.routes.ts             # Rutas principales de la aplicación
+    ├── app.config.ts             # Configuración global de la aplicación

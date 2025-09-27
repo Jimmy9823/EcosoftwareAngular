@@ -3,15 +3,14 @@ import { UsuarioService } from '../usuario_services/usuario.service';
 import { UsuarioModel } from '../usuario_models/usuario';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { Boton } from "../../shared/botones/boton/boton";
-import { FormComp } from '../../shared/form/form.comp/form.comp';
-import { FormBuilder, FormGroup } from '@angular/forms';
+
 
 @Component({
   selector: 'app-usuario',
   standalone: true,             //  obligatorio para standalone
   templateUrl: './usuario.html',
   styleUrls: ['./usuario.css'],
-  imports: [...COMPARTIR_IMPORTS, Boton, FormComp]
+  imports: [...COMPARTIR_IMPORTS, Boton]
 })
 export class Usuario implements OnInit {
 
@@ -19,14 +18,11 @@ export class Usuario implements OnInit {
   mensaje: string = '';
   cargando: boolean = true;
   error: string = '';
-  filtroForm: FormGroup; // Formulario adaptable para filtros
+ // Formulario adaptable para filtros
 
-  constructor(private usuarioService: UsuarioService, private fb: FormBuilder) {
+  constructor(private usuarioService: UsuarioService) {
     // Inicializar el formulario adaptable
-    this.filtroForm = this.fb.group({
-      filtro: [''], // Campo para el valor del filtro
-      tipoFiltro: ['correo'] // Tipo de filtro: correo, documento, nombre
-    });
+
   }
 
   ngOnInit() {
@@ -49,6 +45,8 @@ export class Usuario implements OnInit {
       }
     });
   }
+
+ 
 
   consultarPorId(id: number) {
     this.usuarioService.obtenerPorId(id).subscribe({
@@ -106,18 +104,7 @@ export class Usuario implements OnInit {
     });
   }
 
-  guardarUsuario(data: any) {
-    this.usuarioService.guardarUsuario(data).subscribe({
-      next: (nuevoUsuario) => {
-        this.cargando = false;
-        this.usuarios.push(nuevoUsuario);
-      },
-      error: (err) => {
-        this.error = 'Error al ingresar usuario nuevo';
-        this.cargando = false;
-      }
-    });
-  }
+ 
 
   eliminarUsuario(id: number) {
     this.usuarioService.eliminacionLogica(id).subscribe({
@@ -134,15 +121,5 @@ export class Usuario implements OnInit {
   }
 
   // Método para manejar el formulario adaptable
-  buscarConFiltro() {
-    const { filtro, tipoFiltro } = this.filtroForm.value;
-    if (tipoFiltro === 'correo') {
-      this.consultarPorCorreo(filtro);
-    } else if (tipoFiltro === 'documento') {
-      this.consultarPorDocumento(filtro);
-    } else if (tipoFiltro === 'nombre') {
-      this.consultarPorNombre(filtro);
-    }
-  }
 }
 

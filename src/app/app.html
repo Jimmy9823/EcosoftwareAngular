@@ -35,8 +35,8 @@
           <ng-container *ngIf="modoOscuroActivo; else claro"><i class="fas fa-moon"></i></ng-container>
           <ng-template #claro><i class="fas fa-sun"></i></ng-template>
         </button>
-        <app-boton label="Login" tipo="login" (accion)="login()"></app-boton>
-        <app-boton label="Registrarse" tipo="registrarse" (accion)="login()"></app-boton>
+        <app-boton label="Login" tipo="login" routerLink="/login"></app-boton>
+        <app-boton label="Registrarse" tipo="registrarse" routerLink="/registarse" ></app-boton>
       </div>
     </div>
   </div>

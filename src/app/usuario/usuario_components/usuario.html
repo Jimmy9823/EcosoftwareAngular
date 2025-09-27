@@ -35,12 +35,4 @@
 </table>
 
 
- <h2>Registro de usuario</h2>
-
-<app-form-comp [mode]="'registro'" (formSubmit)="guardarUsuario($event)"></app-form-comp>>
-
-
-<!-- Mensaje que aparecera si no hay usuarios registrados y termino de cargar la pagina -->
-<div *ngIf="!cargando && usuarios.length === 0">
-  No hay usuarios registrados.
-</div>
+ 

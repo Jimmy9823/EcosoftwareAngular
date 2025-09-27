@@ -6,7 +6,7 @@
     <!-- Selección de rol -->
     <label for="rol">Rol:</label>
     <select id="rol" formControlName="rol">
-      <option *ngFor="let r of roles" [value]="r">{{ r | titlecase }}</option>
+      <option *ngFor="let r of roles" [value]="r.id">{{ r.label| titlecase }}</option>
     </select>
     <div *ngIf="f['rol']?.touched && f['rol']?.invalid" class="error">
       Selecciona un rol válido

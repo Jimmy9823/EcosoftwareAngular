@@ -32,7 +32,12 @@ export class FormComp {
   @Output() formSubmit = new EventEmitter<any>()
 
   form!: FormGroup
-  roles = ['ciudadano', 'empresa', 'reciclador', 'administrador']
+  roles = [
+  { id: 1, label: 'Ciudadano' },
+  { id: 2, label: 'Empresa' },
+  { id: 3, label: 'Reciclador' },
+  { id: 4, label: 'Administrador' }
+];
 
   constructor(private fb: FormBuilder) { }
 
@@ -47,12 +52,12 @@ export class FormComp {
 
   if (this.mode === 'registro') {
   this.form = this.fb.group({
-    rol: ['ciudadano', Validators.required],
+    rol: [1, Validators.required],
     nombre: ['', [Validators.required, Validators.minLength(3)]],
     correo: ['', [Validators.required, Validators.email]],
     telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     cedula: ['', [Validators.minLength(9)]],
-    contrasena: ['', [Validators.required, Validators.minLength(6), validarContrasena]],
+    contrasena: ['', [Validators.required]],
     confirmarContraseña: ['', Validators.required],
     barrio: ['', Validators.required],
     localidad: ['', Validators.required],
