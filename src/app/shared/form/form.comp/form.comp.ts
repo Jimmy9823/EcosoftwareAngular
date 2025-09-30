@@ -28,7 +28,7 @@ function contraseñasCoinciden(group: FormGroup) {
 })
 
 export class FormComp {
-  @Input() mode: 'login' | 'registro' | 'recuperar' = 'login'
+  @Input() mode: 'login' | 'registro' | 'recuperar' | 'filtrar' = 'login'
   @Output() formSubmit = new EventEmitter<any>()
 
   form!: FormGroup
@@ -74,6 +74,12 @@ export class FormComp {
 if (this.mode === 'recuperar') {
   this.form = this.fb.group({
     correo: ['', [Validators.required, Validators.email]]
+  })
+}
+
+if (this.mode === 'filtrar'){
+  this.form = this.fb.group({
+    
   })
 }
   }

@@ -1,0 +1,34 @@
+form {
+    box-sizing: border-box;
+  display: flex;
+  flex-direction: column;  /* apilar inputs verticalmente */
+  align-items: center;     /* centrar horizontalmente */
+  justify-content: center; /* centrar verticalmente */
+  gap: 10px;               /* espacio definido entre inputs */
+  padding: 2px;           /* espacio interno del form */
+  border-radius: 12%;     /* esquinas redondeadas */
+  width: 100%;            /* ancho fijo o máximo deseado */
+    /* incluye padding en el ancho */
+  margin: auto; 
+  margin-top: 2%;           /* centro horizontal */
+}
+
+input, select {
+  width: 80%;              /* ancho fijo o máximo deseado */
+  padding: 10px;           /* espacio interno del input */
+  border: 1px solid #ccc;  /* borde del input */
+  border-radius: 5px;      /* esquinas redondeadas */
+  font-size: 16px;         /* tamaño de fuente legible */
+  box-sizing: border-box;  /* incluye padding en el ancho */
+}
+
+button {
+  width: 50%;              /* ancho fijo o máximo deseado */
+  padding: 10px;           /* espacio interno del botón */
+  border: none;            /* sin borde */
+  border-radius: 5px;      /* esquinas redondeadas */
+  background-color: #28a745; /* color de fondo */
+  color: white;            /* color del texto */
+  font-size: 16px;         /* tamaño de fuente legible */
+  cursor: pointer;         /* cursor de mano al pasar sobre el botón */
+}

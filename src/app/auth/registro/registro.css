@@ -1,0 +1,20 @@
+#reg-container {
+  display: flex;
+  width: 90%;           /* ocupa 90% del contenedor padre */ /* opcional: ajusta según header/footer */
+  margin: auto;
+  gap: 20px;   
+  background-color: rgba(7, 145, 69, 0.664);  
+  border-radius: 8%;       /* espacio entre las dos columnas */
+}
+
+#reg-form, #reg-info {
+  flex: 1;              /* cada uno ocupa la mitad del espacio */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centra verticalmente los contenidos */
+}
+
+#reg-info {
+  color: rgb(2, 22, 10);          /* si quieres que se vea sobre la imagen */
+  padding: 20px;
+}

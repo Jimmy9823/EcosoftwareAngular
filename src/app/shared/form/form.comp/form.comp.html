@@ -12,6 +12,15 @@
       Selecciona un rol válido
     </div>
 
+    <!-- filtrar por id, nombre, correo, etc -->
+     <label for="filtrar">Filtrar por:</label>
+    <select id="filtrar" filtrarformControlName="filtrar">
+      <option *ngFor="let r of roles" [value]="r.id">{{ r.label| titlecase }}</option>
+    </select>
+    <div *ngIf="f['rol']?.touched && f['rol']?.invalid" class="error">
+      Selecciona un rol válido
+    </div>
+
     <!-- Datos básicos -->
     <input type="text" placeholder="Nombre" formControlName="nombre">
     <div *ngIf="f['nombre']?.touched && f['nombre']?.invalid" class="error">
@@ -42,7 +51,7 @@
     </div>
 
     <!-- Campos según rol -->
-    <div *ngIf="form.get('rol')?.value === 'empresa' || form.get('rol')?.value === 'reciclador'">
+    <div *ngIf="form.get('rol')?.value === 2 || form.get('rol')?.value === 3">
       <input type="text" placeholder="NIT" formControlName="nit">
       <input type="number" placeholder="Cantidad mínima" formControlName="cantidad_minima">
       <input type="text" placeholder="Zona de trabajo" formControlName="zona_de_trabajo">
