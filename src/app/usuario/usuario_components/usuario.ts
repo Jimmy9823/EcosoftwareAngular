@@ -1,125 +1,82 @@
-import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from '../usuario_services/usuario.service';
-import { UsuarioModel } from '../usuario_models/usuario';
-import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
-import { Boton } from "../../shared/botones/boton/boton";
-
+import { Component, OnInit } from '@angular/core'
+import { UsuarioService } from '../usuario_services/usuario.service'
+import { UsuarioModel } from '../usuario_models/usuario'
+import {COMPARTIR_IMPORTS} from '../../ImpCondYForms/imports'
 
 @Component({
-  selector: 'app-usuario',
-  standalone: true,             //  obligatorio para standalone
+  selector: 'app-usuarios',
+  imports: [COMPARTIR_IMPORTS],
   templateUrl: './usuario.html',
-  styleUrls: ['./usuario.css'],
-  imports: [...COMPARTIR_IMPORTS, Boton]
+  styleUrls: ['./usuario.css']
 })
 export class Usuario implements OnInit {
+  usuarios: UsuarioModel[] = []
+  cargando: boolean = false
+  error: string = ''
+  mensaje: string = ''
 
-  usuarios: UsuarioModel[] = [];
-  mensaje: string = '';
-  cargando: boolean = true;
-  error: string = '';
- // Formulario adaptable para filtros
+  // Filtros
+  criterio: string = 'nombre'
+  valorFiltro: string = ''
 
-  constructor(private usuarioService: UsuarioService) {
-    // Inicializar el formulario adaptable
+  constructor(private usuarioService: UsuarioService) {}
 
+  ngOnInit(): void {
+    this.consultarUsuarios()
   }
 
-  ngOnInit() {
-    this.listarUsuarios();
-  }
-
-  listarUsuarios(): void {
+  // ========================
+  // CONSULTAR TODOS LOS USUARIOS
+  // ========================
+  consultarUsuarios(): void {
+    this.cargando = true
     this.usuarioService.listar().subscribe({
-      next: (data) => {
-        this.mensaje = "Usuarios cargados con éxito";
-        this.usuarios = data;
-        this.cargando = false;
-        this.error = '';
-        console.log(data);
+      next: (lista) => {
+        this.usuarios = lista
+        this.cargando = false
+        this.mensaje = `Se cargaron ${lista.length} usuario(s)`
+        this.error = ''
       },
       error: (err) => {
-        this.error = 'Error de conexión con el backend';
-        this.cargando = false;
-        this.mensaje = 'Error al cargar usuarios';
+        console.error('Error al cargar usuarios:', err)
+        this.error = 'Error al cargar la lista de usuarios'
+        this.mensaje = ''
+        this.cargando = false
       }
-    });
+    })
   }
 
- 
+  // ========================
+  // FILTRAR USUARIOS
+  // ========================
+  aplicarFiltro(): void {
+    if (!this.valorFiltro.trim()) {
+      this.consultarUsuarios()
+      return
+    }
 
-  consultarPorId(id: number) {
-    this.usuarioService.obtenerPorId(id).subscribe({
-      next: (data) => {
-        this.usuarios = [data];
-        this.cargando = false;
-        console.log(data);
+    this.cargando = true
+    this.usuarioService.filtrar(this.criterio, this.valorFiltro).subscribe({
+      next: (usuariosFiltrados) => {
+        this.usuarios = usuariosFiltrados
+        this.mensaje = ` ${usuariosFiltrados.length} usuario(s) encontrado(s)`
+        this.error = ''
+        this.cargando = false
       },
       error: (err) => {
-        this.error = 'Error de conexión con el backend';
-        this.cargando = false;
+        console.error('Error al filtrar usuarios:', err)
+        this.error = 'Error al filtrar usuarios'
+        this.mensaje = ''
+        this.cargando = false
       }
-    });
+    })
   }
 
-  consultarPorCorreo(correo: string) {
-    this.usuarioService.filtrarPorCorreo(correo).subscribe({
-      next: (data) => {
-        this.usuarios = data;
-        this.cargando = false;
-        console.log(data);
-      },
-      error: (err) => {
-        this.error = 'Error al buscar por correo';
-        this.cargando = false;
-      }
-    });
+  // ========================
+  // 📌 LIMPIAR FILTRO
+  // ========================
+  limpiarFiltro(): void {
+    this.valorFiltro = ''
+    this.consultarUsuarios()
   }
-
-  consultarPorDocumento(documento: string) {
-    this.usuarioService.filtrarPorDocumento(documento).subscribe({
-      next: (data) => {
-        this.usuarios = data;
-        this.cargando = false;
-        console.log(data);
-      },
-      error: (err) => {
-        this.error = 'Error al buscar por documento';
-        this.cargando = false;
-      }
-    });
-  }
-
-  consultarPorNombre(nombre: string) {
-    this.usuarioService.filtrarPorNombre(nombre).subscribe({
-      next: (data) => {
-        this.usuarios = data;
-        this.cargando = false;
-        console.log(data);
-      },
-      error: (err) => {
-        this.error = 'Error al buscar por nombre';
-        this.cargando = false;
-      }
-    });
-  }
-
- 
-
-  eliminarUsuario(id: number) {
-    this.usuarioService.eliminacionLogica(id).subscribe({
-      next: (mensaje) => {
-        this.mensaje = mensaje;
-        this.usuarios = this.usuarios.filter(usuario => usuario.idUsuario !== id);
-        console.log(mensaje);
-      },
-      error: (err) => {
-        this.error = 'Error al eliminar usuario';
-        console.log(err);
-      }
-    });
-  }
-
-  // Método para manejar el formulario adaptable
 }
-

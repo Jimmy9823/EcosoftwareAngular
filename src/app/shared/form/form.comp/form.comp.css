@@ -1,34 +1,57 @@
 form {
-    box-sizing: border-box;
   display: flex;
-  flex-direction: column;  /* apilar inputs verticalmente */
-  align-items: center;     /* centrar horizontalmente */
-  justify-content: center; /* centrar verticalmente */
-  gap: 10px;               /* espacio definido entre inputs */
-  padding: 2px;           /* espacio interno del form */
-  border-radius: 12%;     /* esquinas redondeadas */
-  width: 100%;            /* ancho fijo o máximo deseado */
-    /* incluye padding en el ancho */
-  margin: auto; 
-  margin-top: 2%;           /* centro horizontal */
+  flex-direction: column;
+  max-width: 400px;
+  margin: 1.5rem auto;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  gap: 0.5rem;
 }
 
-input, select {
-  width: 80%;              /* ancho fijo o máximo deseado */
-  padding: 10px;           /* espacio interno del input */
-  border: 1px solid #ccc;  /* borde del input */
-  border-radius: 5px;      /* esquinas redondeadas */
-  font-size: 16px;         /* tamaño de fuente legible */
-  box-sizing: border-box;  /* incluye padding en el ancho */
+input, select, button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  display: block;            /* ocupa línea completa */
+  width: 100%;               /* ocupa todo el ancho del contenedor */
+  max-width: 100%;           /* evitar exceder */
+  box-sizing: border-box;    /* incluye padding/border dentro del width */
+  padding: 0.5rem;           /* espacio interno del input */
+  margin: 0;                 /* quitar márgenes si los hubiera */
+  font-size: 1rem;
 }
 
 button {
-  width: 50%;              /* ancho fijo o máximo deseado */
-  padding: 10px;           /* espacio interno del botón */
-  border: none;            /* sin borde */
-  border-radius: 5px;      /* esquinas redondeadas */
-  background-color: #28a745; /* color de fondo */
-  color: white;            /* color del texto */
-  font-size: 16px;         /* tamaño de fuente legible */
-  cursor: pointer;         /* cursor de mano al pasar sobre el botón */
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+
+button:hover {
+  background-color: #2563eb;
+}
+
+/* Estilos por rol */
+.ciudadano { background-color: #fff7d6; }    /* amarillo claro */
+.reciclador, .empresa { background-color: #e5f7e5; } /* verde claro */
+.admin { background-color: #e0edff; }        /* azul claro */
+
+/* Filtro */
+.filter-form {
+  background-color: #f8fbff; /* azul MUY clarito */
+}
+
+form label {
+  display: block; /* aseguras que cada label ocupe toda la línea */
+  margin-top: 10px; /* 👈 este es el espacio clave */
+  font-weight: 600; /* opcional, mejora legibilidad */
+}
+
+.error-msg {
+  color: #d93025;
+  font-size: 0.8rem;
+  margin-top: -4px;
+  margin-bottom: 6px;
 }

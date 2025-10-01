@@ -1,111 +1,180 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-function validarContrasena(control: any) {
-  const value = control.value
-  if (!value) return null
-  const tieneMayuscula = /[A-Z]/.test(value)
-  const tieneNumero = /\d/.test(value)
-  const caracterEspecial = /[@$!%*?&]/.test(value)
-  return tieneMayuscula && tieneNumero && caracterEspecial ? null : {
-    contraseñaSegura: true
-  }
-}
-
-function contraseñasCoinciden(group: FormGroup) {
-  const pass = group.get('contrasena')?.value
-  const confirmar = group.get('confirmarContraseña')?.value
-  return pass === confirmar ? null : { noCoinciden: true }
-}
+// src/app/shared/form/form.comp.ts
+import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms'
 
 @Component({
   selector: 'app-form-comp',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './form.comp.html',
-  styleUrl: './form.comp.css'
+  styleUrls: ['./form.comp.css']
 })
-
 export class FormComp {
-  @Input() mode: 'login' | 'registro' | 'recuperar' | 'filtrar' = 'login'
+  @Input() mode: 'registro' | 'login' | 'filtro' = 'registro'
   @Output() formSubmit = new EventEmitter<any>()
 
-  form!: FormGroup
-  roles = [
-  { id: 1, label: 'Ciudadano' },
-  { id: 2, label: 'Empresa' },
-  { id: 3, label: 'Reciclador' },
-  { id: 4, label: 'Administrador' }
-];
+  registroForm!: FormGroup
+  loginForm!: FormGroup
+  filtroForm!: FormGroup
 
-  constructor(private fb: FormBuilder) { }
+  selectedRol: 'ciudadano' | 'reciclador' | 'empresa' | 'admin' = 'ciudadano'
+  tiposMaterial: string[] = ['Plástico', 'Papel', 'Cartón', 'Vidrio', 'Metal', 'Orgánico', 'Otros']
+  mostrarOtrosMateriales: boolean = false
 
-  ngOnInit() {
-    if (this.mode === 'login') {
-      this.form = this.fb.group({
-        correo: ['', [Validators.required, Validators.email]],
-        contrasena: ['', [Validators.required, Validators.minLength(6)]]
-      })
+  constructor(private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.initForms()
+  }
+
+  // ===================== VALIDADORES PERSONALIZADOS =====================
+
+  // ✅ Solo números + longitud entre 7 y 15
+  cedulaValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value
+      if (!value) return null
+      const regex = /^[0-9]+$/
+      if (!regex.test(value)) return { numerosInvalidos: true }
+      if (value.length < 7) return { minLength: true }
+      if (value.length > 15) return { maxLength: true }
+      return null
     }
-  
-
-  if (this.mode === 'registro') {
-  this.form = this.fb.group({
-    rol: [1, Validators.required],
-    nombre: ['', [Validators.required, Validators.minLength(3)]],
-    correo: ['', [Validators.required, Validators.email]],
-    telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-    cedula: ['', [Validators.minLength(9)]],
-    contrasena: ['', [Validators.required]],
-    confirmarContraseña: ['', Validators.required],
-    barrio: ['', Validators.required],
-    localidad: ['', Validators.required],
-    horario: [''],
-    certificaciones: [''],
-    imagen_perfil: [null],
-    cantidad_minima: [''],
-    zona_de_trabajo: [''],
-    nit: ['', [Validators.minLength(7)]],
-  }, { validators: contraseñasCoinciden });
-}
-
-
-if (this.mode === 'recuperar') {
-  this.form = this.fb.group({
-    correo: ['', [Validators.required, Validators.email]]
-  })
-}
-
-if (this.mode === 'filtrar'){
-  this.form = this.fb.group({
-    
-  })
-}
   }
-onSubmit() {
-  if (this.form.valid) {
-    this.formSubmit.emit({
-      nombre: this.form.value.nombre,
-      correo: this.form.value.correo,
-      contrasena: this.form.value.contrasena,
-      rolId: this.form.value.rol,   // aquí mapeas rol -> rolId
-      telefono: this.form.value.telefono,
-      cedula: this.form.value.cedula,
-      barrio: this.form.value.barrio,
-      localidad: this.form.value.localidad,
-      horario: this.form.value.horario,
-      certificaciones: this.form.value.certificaciones,
-      imagen_perfil: this.form.value.imagen_perfil,
-      cantidad_minima: this.form.value.cantidad_minima,
-      zona_de_trabajo: this.form.value.zona_de_trabajo,
-      nit: this.form.value.nit
-    });
-  } else {
-    this.form.markAllAsTouched();
+
+  // ✅ Teléfono entre 7 y 15
+  telefonoValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value
+      if (!value) return null
+      if (value.length < 7) return { minLength: true }
+      if (value.length > 15) return { maxLength: true }
+      return null
+    }
   }
-}
-get f(){
-  return this.form.controls
-}
+
+  // ✅ Contraseña compleja
+  passwordValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value || ''
+      const errors: any = {}
+
+      if (!/[a-z]/.test(value)) errors.missingLowercase = true
+      if (!/[A-Z]/.test(value)) errors.missingUppercase = true
+      if (!/[0-9]/.test(value)) errors.missingNumber = true
+      if (!/[!@#$%^&*(),.?":{}|<>_\-]/.test(value)) errors.missingSpecial = true
+
+      return Object.keys(errors).length ? errors : null
+    }
+  }
+
+  // ✅ Confirmar contraseña igual
+  matchPasswordValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!this.registroForm) return null
+      const password = this.registroForm.get('contrasena')?.value
+      const confirm = control.value
+      return password !== confirm ? { passwordsMismatch: true } : null
+    }
+  }
+
+  // ===================== INICIALIZAR FORMULARIOS =====================
+  private initForms() {
+    this.registroForm = this.fb.group({
+      rol: ['ciudadano'],
+      nombre: [''],
+      cedula: ['', [Validators.required, this.cedulaValidator()]],
+      correo: ['', [Validators.required, Validators.email]],
+      telefono: ['', [Validators.required, this.telefonoValidator()]],
+      direccion: [''],
+      barrio: [''],
+      localidad: [''],
+      contrasena: ['', [Validators.required, this.passwordValidator()]],
+      validarContrasena: ['', [Validators.required, this.matchPasswordValidator()]], // 👈 Nuevo campo
+
+      nit: [''],
+      representanteLegal: [''],
+      horario: [''],
+      cantidadMinima: [''],
+      tipoMaterial: [[]],
+      otrosMateriales: [''],
+      zonaTrabajo: [''],
+      horarioTrabajo: ['']
+    })
+
+    this.loginForm = this.fb.group({
+      correo: ['', [Validators.required, Validators.email]],
+      contrasena: ['', Validators.required]
+    })
+
+    this.filtroForm = this.fb.group({
+      criterio: ['correo'],
+      valor: ['']
+    })
+  }
+
+  // ===================== EVENTOS =====================
+
+  onRolChange(event: any) {
+    this.selectedRol = event.target.value
+  }
+
+  onTipoMaterialChange(event: any) {
+    const value = event.target.value
+    const checked = event.target.checked
+    const materiales = this.registroForm.get('tipoMaterial')?.value || []
+    if (checked) {
+      materiales.push(value)
+    } else {
+      const index = materiales.indexOf(value)
+      if (index >= 0) materiales.splice(index, 1)
+    }
+    this.registroForm.patchValue({ tipoMaterial: materiales })
+    this.mostrarOtrosMateriales = materiales.includes('Otros')
+  }
+
+  onSubmit() {
+    let data: any
+    switch (this.mode) {
+      case 'registro':
+        data = { ...this.registroForm.value }
+        delete data.validarContrasena // ❌ no enviamos esto al backend
+        break
+      case 'login':
+        data = this.loginForm.value
+        break
+      case 'filtro':
+        data = this.filtroForm.value
+        break
+    }
+    this.formSubmit.emit(data)
+  }
+
+  // Helper para el HTML
+  getErrorMessages(controlName: string): string[] {
+    const control = this.registroForm.get(controlName)
+    if (!control || !control.errors || !(control.dirty || control.touched)) return []
+
+    const errors: string[] = []
+    const e = control.errors
+
+    if (e['required']) errors.push('Este campo es obligatorio.')
+    if (e['numerosInvalidos']) errors.push('Solo se permiten valores numericos')
+    if (e['minLength']) errors.push('El campo debe tener mínimo 7 caracteres.')
+    if (e['maxLength']) errors.push('El campo puede tener máximo 15 caracteres.')
+    if (e['email']) errors.push('correo no valido')
+    if (e['missingLowercase']) errors.push('Debe contener al menos una minúscula.')
+    if (e['missingUppercase']) errors.push('Debe contener al menos una mayúscula.')
+    if (e['missingNumber']) errors.push('Debe contener al menos un número.')
+    if (e['missingSpecial']) errors.push('Debe contener al menos un carácter especial.')
+    if (e['passwordsMismatch']) errors.push('Las contraseñas no coinciden.')
+
+    return errors
+  }
+
+  isFieldInvalid(form: FormGroup, field: string): boolean {
+    const control = form.get(field)
+    return !!(control && control.invalid && (control.dirty || control.touched))
+  }
 }

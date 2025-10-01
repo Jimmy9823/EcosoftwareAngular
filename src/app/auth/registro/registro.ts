@@ -1,58 +1,65 @@
-import { Component } from '@angular/core';
-import { FormComp } from '../../shared/form/form.comp/form.comp';
-import { UsuarioService } from '../../usuario/usuario_services/usuario.service';
-import { UsuarioModel } from '../../usuario/usuario_models/usuario';
-import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core'
+import { UsuarioService } from '../../usuario/usuario_services/usuario.service'
+import { FormComp } from '../../shared/form/form.comp/form.comp'
+import { UsuarioModel } from '../../usuario/usuario_models/usuario'
 
 @Component({
   selector: 'app-registro',
   imports: [FormComp],
   templateUrl: './registro.html',
-  styleUrl: './registro.css'
+  styleUrls: ['./registro.css']
 })
 export class Registro {
-  usuarios: UsuarioModel[] = [];
-  mensaje: string = '';
-  cargando: boolean = true;
-  error: string = '';
-   // Formulario adaptable para filtros
 
-  constructor( private usuarioService: UsuarioService,
-  private fb: FormBuilder,
-  private router: Router) {
-
-  }
-   guardarUsuario(usuario: UsuarioModel) {
-    console.log('Usuario que se enviará al backend:', usuario);
-    this.usuarioService.guardarUsuario(usuario).subscribe({
-      next: (data) => {
-        this.mensaje = "Usuario creado con éxito";  
-        this.usuarios.push(data);
-        console.log(data);
-        this.router.navigate(['/login']);
-      },  
-      error: (err) => {
-        this.error = 'Error al crear usuario';
-        console.log(err);
-      }
-    });
-  }
+  constructor(private usuarioService: UsuarioService) {}
 
   registro(data: any) {
-  console.log('Datos recibidos en registro:', data);
+    console.log('📌 Datos del formulario crudo:', data)
 
-  const usuario: UsuarioModel = {
-    ...data,
-    cantidad_minima: data.cantidad_minima ? Number(data.cantidad_minima)  : null,
-    nit: data.nit || null,
-    zona_de_trabajo: data.zona_de_trabajo || null,
-    horario: data.horario || null,
-    certificaciones: data.certificaciones || null,
-    imagen_perfil: data.imagen_perfil || null
-  };
+    // 🧠 1️⃣ Mapeo del rol (de texto → número)
+    const rolMap: Record<string, number> = {
+      'admin': 1,
+      'ciudadano': 2,
+      'empresa': 3,
+      'reciclador': 4
+    }
 
-  this.guardarUsuario(usuario);
+    // 🧠 2️⃣ Construcción del payload según el DTO del backend
+  const payload: UsuarioModel = {
+  rolId: rolMap[data.rol] ?? 2,
+  nombre: data.nombre,
+  contrasena: data.contrasena,
+  correo: data.correo,
+  cedula: data.cedula,
+  telefono: data.telefono,
+  direccion: data.direccion,
+  barrio: data.barrio,
+  localidad: data.localidad,
+
+  nit: data.nit || undefined,
+  representanteLegal: data.representanteLegal || undefined,
+  zona_de_trabajo: data.zonaTrabajo || undefined,
+  horario: data.horario || undefined,
+  tipoMaterial: (data.tipoMaterial || []).join(', ') || undefined,
+  cantidad_minima: data.cantidadMinima ? Number(data.cantidadMinima) : undefined,
+
+  imagen_perfil: undefined,
+  certificaciones: undefined,
+  estado: true,
+  fechaCreacion: new Date().toISOString()
 }
 
+    console.log(' Payload final al backend:', payload) // Revisar que los datos sean los adecuados
+
+    this.usuarioService.guardar(payload).subscribe({
+      next: (res) => {
+        console.log('✅ Usuario registrado correctamente:', res)
+        alert('Usuario registrado con éxito ✅')
+      },
+      error: (err) => {
+        console.error('❌ Error al registrar usuario:', err)
+        alert('Error al registrar usuario ❌')
+      }
+    })
+  }
 }
