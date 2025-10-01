@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { UsuarioService } from '../../usuario/usuario_services/usuario.service'
 import { FormComp } from '../../shared/form/form.comp/form.comp'
 import { UsuarioModel } from '../../usuario/usuario_models/usuario'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro',
@@ -11,12 +12,12 @@ import { UsuarioModel } from '../../usuario/usuario_models/usuario'
 })
 export class Registro {
 
-  constructor(private usuarioService: UsuarioService) {}
+  constructor(private usuarioService: UsuarioService, private router:Router) {}
 
   registro(data: any) {
-    console.log('📌 Datos del formulario crudo:', data)
+    console.log('Datos del formulario crudo:', data)
 
-    // 🧠 1️⃣ Mapeo del rol (de texto → número)
+    //Mapeo del rol (de texto → número)// El dto pide numero
     const rolMap: Record<string, number> = {
       'admin': 1,
       'ciudadano': 2,
@@ -24,7 +25,8 @@ export class Registro {
       'reciclador': 4
     }
 
-    // 🧠 2️⃣ Construcción del payload según el DTO del backend
+    // Construcción del payload según el DTO del backend
+    // Campos con el mismo nombre del usuario model
   const payload: UsuarioModel = {
   rolId: rolMap[data.rol] ?? 2,
   nombre: data.nombre,
@@ -50,15 +52,17 @@ export class Registro {
 }
 
     console.log(' Payload final al backend:', payload) // Revisar que los datos sean los adecuados
+    // Este console log sirve para verificar que no se este enviadno otro tipo de dato al requerido
 
     this.usuarioService.guardar(payload).subscribe({
       next: (res) => {
-        console.log('✅ Usuario registrado correctamente:', res)
-        alert('Usuario registrado con éxito ✅')
+        console.log('Usuario registrado correctamente:', res)
+        alert('Usuario registrado con éxito')
+        this.router.navigate(['/usuarios']);
       },
       error: (err) => {
-        console.error('❌ Error al registrar usuario:', err)
-        alert('Error al registrar usuario ❌')
+        console.error('Error al registrar usuario:', err)
+        alert('Error al registrar usuario')
       }
     })
   }

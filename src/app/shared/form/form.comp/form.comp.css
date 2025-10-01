@@ -15,10 +15,17 @@ input, select, button {
   display: block;            /* ocupa línea completa */
   width: 100%;               /* ocupa todo el ancho del contenedor */
   max-width: 100%;           /* evitar exceder */
-  box-sizing: border-box;    /* incluye padding/border dentro del width */
-  padding: 0.5rem;           /* espacio interno del input */
+  box-sizing: border-box;    /* incluye padding/border dentro del width */          /* espacio interno del input */
   margin: 0;                 /* quitar márgenes si los hubiera */
   font-size: 1rem;
+  gap: 0.5rem;
+}
+
+.checkbox-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columnas iguales */
+  gap: 0.5rem; /* espacio entre elementos */
+  justify-items: center;
 }
 
 button {
@@ -34,7 +41,7 @@ button:hover {
 }
 
 /* Estilos por rol */
-.ciudadano { background-color: #fff7d6; }    /* amarillo claro */
+.ciudadano { background-color: #ffb64842; }    /* amarillo claro */
 .reciclador, .empresa { background-color: #e5f7e5; } /* verde claro */
 .admin { background-color: #e0edff; }        /* azul claro */
 
