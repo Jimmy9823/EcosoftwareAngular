@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core'
 import { UsuarioService } from '../usuario_services/usuario.service'
 import { UsuarioModel } from '../usuario_models/usuario'
 import {COMPARTIR_IMPORTS} from '../../ImpCondYForms/imports'
+import { Header } from '../../shared/header/header'
 
 @Component({
   selector: 'app-usuarios',
-  imports: [COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS, Header],
   templateUrl: './usuario.html',
   styleUrls: ['./usuario.css']
 })

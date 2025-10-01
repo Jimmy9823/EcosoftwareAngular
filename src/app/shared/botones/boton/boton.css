@@ -1,41 +1,35 @@
 button {
-    border-radius: 8px;
-    padding: 4px 10px;
-    font-weight:200;
-    box-sizing: border-box;
-    
-}
-.login{
-    background-color: rgb(35, 252, 35);
-}
-.registrarse{
-    background-color: aqua;
-}
-.btn-table {
-    width: 80px;
-    height: 25px;
-    font-size: 15px;
-    font-weight: 500;
-    padding: 0px 2px 0px 2px;
-}
-.btn-table.editar {
-    background-color: rgb(6, 209, 209);
-}
-.btn-table.eliminar {
-    background-color: rgb(226, 18, 18);
-    color: aliceblue;
-}
-.btn-primary{
-    background-color: aqua;
-    color: white;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-weight: 500;
+  font-size: 15px;
+  box-sizing: border-box;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.btn-danger{
-    background-color: rgb(250, 20, 20);
-    color: white;
+/* Botón de Login */
+.btn-login {
+    background-color: #6dbf4b;
+  color: #ffffff;
 }
 
-.buscar_solicitud{
-    background-color: rgb(8, 252, 20);
-    color: white;
+.btn-login:hover {
+   background-color: #3e7d3c;
+}
+
+/* Botón de Registro */
+.btn-registro {
+  background-color: #5c8ead; /* azul agua */
+  color: #ffffff;
+}
+
+.btn-registro:hover {
+  background-color: #4a7a92;
+}
+
+/* Íconos dentro del botón */
+button i {
+  margin-right: 6px;
 }

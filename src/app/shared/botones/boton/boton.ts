@@ -19,6 +19,7 @@ export class Boton {
 
   @Input() estilo: {[key:string]:string}={}
 
+  @Input() icono : string = ' '
   //Evento a ejecutar segun metodos
   @Output() accion = new EventEmitter<void>()
 
