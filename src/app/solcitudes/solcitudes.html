@@ -1,40 +1,51 @@
 <app-header></app-header>
 
-<div class="container">
-  <h2>Listado de Solicitudes de Recolección</h2>
+<div class="container mt-4">
+  <h2 class="mb-3">📋 Solicitudes de Recolección</h2>
 
-  <table class="table table-bordered table-striped">
-    <thead>
+  <table class="table table-striped table-bordered text-center">
+    <thead class="table-success">
       <tr>
-        <th>ID Solicitud</th>
-        <th>Usuario ID</th>
-        <th>Aceptada Por</th>
+        <th>ID</th>
         <th>Tipo Residuo</th>
         <th>Cantidad</th>
-        <th>Estado</th>
-        <th>Descripción</th>
         <th>Localidad</th>
-        <th>Ubicación</th>
-        <th>Evidencia</th>
-        <th>Recolección ID</th>
+        <th>Estado</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let servicio of Servicios">
-        <td>{{ servicio.idSolicitud }}</td>
-        <td>{{ servicio.usuarioId }}</td>
-        <td>{{ servicio.aceptadaPorId }}</td>
-        <td>{{ servicio.tipoResiduo }}</td>
-        <td>{{ servicio.cantidad }}</td>
-        <td>{{ servicio.estadoPeticion }}</td>
-        <td>{{ servicio.descripcion }}</td>
-        <td>{{ servicio.localidad }}</td>
-        <td>{{ servicio.ubicacion }}</td>
+      <tr *ngFor="let s of Servicios">
+        <td>{{ s.idSolicitud }}</td>
+        <td>{{ s.tipoResiduo }}</td>
+        <td>{{ s.cantidad }}</td>
+        <td>{{ s.localidad }}</td>
+        <td>{{ s.estadoPeticion }}</td>
         <td>
-          <a *ngIf="servicio.evidencia" [href]="servicio.evidencia" target="_blank">Ver</a>
+          <button class="btn btn-sm btn-success me-2" (click)="aceptarSolicitud(s)" [disabled]="s.estadoPeticion !== 'Pendiente'">Aceptar</button>
+          <button class="btn btn-sm btn-danger" (click)="abrirModalRechazo(s)" [disabled]="s.estadoPeticion !== 'Pendiente'">Rechazar</button>
         </td>
-        <td>{{ servicio.recoleccionId }}</td>
       </tr>
     </tbody>
   </table>
+
+  <!-- 📝 Modal Rechazo -->
+  <div class="modal-backdrop" *ngIf="mostrarModalRechazo">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-3">
+        <div class="modal-header">
+          <h5 class="modal-title">Rechazar Solicitud #{{ selectedSolicitud?.idSolicitud }}</h5>
+          <button type="button" class="btn-close" (click)="cerrarModalRechazo()"></button>
+        </div>
+        <div class="modal-body">
+          <label for="motivo" class="form-label">Motivo del rechazo</label>
+          <textarea id="motivo" class="form-control" [(ngModel)]="motivoRechazo"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="cerrarModalRechazo()">Cancelar</button>
+          <button class="btn btn-danger" (click)="confirmarRechazo()" [disabled]="!motivoRechazo.trim()">Confirmar Rechazo</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

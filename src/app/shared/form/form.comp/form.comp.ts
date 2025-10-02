@@ -1,180 +1,120 @@
-// src/app/shared/form/form.comp.ts
 import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms'
 import { CommonModule } from '@angular/common'
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms'
+import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports'  // 👈 Tu archivo central de imports
 
 @Component({
   selector: 'app-form-comp',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, COMPARTIR_IMPORTS],
   templateUrl: './form.comp.html',
   styleUrls: ['./form.comp.css']
 })
 export class FormComp {
-  @Input() mode: 'registro' | 'login' | 'filtro' = 'registro'
+  @Input() mode: 'login' | 'registro' | 'filtro' = 'login'
   @Output() formSubmit = new EventEmitter<any>()
+  @Output() filterClear = new EventEmitter<void>()
 
   registroForm!: FormGroup
   loginForm!: FormGroup
   filtroForm!: FormGroup
 
-  selectedRol: 'ciudadano' | 'reciclador' | 'empresa' | 'admin' = 'ciudadano'
-  tiposMaterial: string[] = ['Plástico', 'Papel', 'Cartón', 'Vidrio', 'Metal', 'Orgánico', 'Otros']
-  mostrarOtrosMateriales: boolean = false
+  selectedRol: string = 'ciudadano'
+  tiposMaterial: string[] = ['Papel', 'Plástico', 'Vidrio', 'Metales', 'Orgánicos', 'Otros']
+  mostrarOtrosMateriales = false
 
-  constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {
+  constructor(private fb: FormBuilder) {
     this.initForms()
   }
 
-  // ===================== VALIDADORES PERSONALIZADOS =====================
-
-  // ✅ Solo números + longitud entre 7 y 15
-  cedulaValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value
-      if (!value) return null
-      const regex = /^[0-9]+$/
-      if (!regex.test(value)) return { numerosInvalidos: true }
-      if (value.length < 7) return { minLength: true }
-      if (value.length > 15) return { maxLength: true }
-      return null
-    }
-  }
-
-  // ✅ Teléfono entre 7 y 15
-  telefonoValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value
-      if (!value) return null
-      if (value.length < 7) return { minLength: true }
-      if (value.length > 15) return { maxLength: true }
-      return null
-    }
-  }
-
-  // ✅ Contraseña compleja
-  passwordValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value || ''
-      const errors: any = {}
-
-      if (!/[a-z]/.test(value)) errors.missingLowercase = true
-      if (!/[A-Z]/.test(value)) errors.missingUppercase = true
-      if (!/[0-9]/.test(value)) errors.missingNumber = true
-      if (!/[!@#$%^&*(),.?":{}|<>_\-]/.test(value)) errors.missingSpecial = true
-
-      return Object.keys(errors).length ? errors : null
-    }
-  }
-
-  // ✅ Confirmar contraseña igual
-  matchPasswordValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!this.registroForm) return null
-      const password = this.registroForm.get('contrasena')?.value
-      const confirm = control.value
-      return password !== confirm ? { passwordsMismatch: true } : null
-    }
-  }
-
-  // ===================== INICIALIZAR FORMULARIOS =====================
   private initForms() {
+    // 📝 Registro base (para todos)
     this.registroForm = this.fb.group({
-      rol: ['ciudadano'],
-      nombre: [''],
-      cedula: ['', [Validators.required, this.cedulaValidator()]],
+      rol: ['ciudadano', Validators.required],
+      nombre: ['', Validators.required],
+      cedula: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
       correo: ['', [Validators.required, Validators.email]],
-      telefono: ['', [Validators.required, this.telefonoValidator()]],
+      telefono: ['', [Validators.required, Validators.pattern(/^\d{7,10}$/)]],
+      contrasena: ['', [Validators.required, Validators.minLength(6)]],
+      validarContrasena: ['', [Validators.required]],
+      // Campos opcionales que activamos por rol
       direccion: [''],
       barrio: [''],
       localidad: [''],
-      contrasena: ['', [Validators.required, this.passwordValidator()]],
-      validarContrasena: ['', [Validators.required, this.matchPasswordValidator()]], // 👈 Nuevo campo
-
-      nit: [''],
-      representanteLegal: [''],
-      horario: [''],
+      zonaTrabajo: [''],
+      horarioTrabajo: [''],
       cantidadMinima: [''],
       tipoMaterial: [[]],
       otrosMateriales: [''],
-      zonaTrabajo: [''],
-      horarioTrabajo: ['']
-    })
+      nit: [''],
+      representanteLegal: [''],
+      horario: ['']
+    }, { validators: this.passwordMatchValidator })
 
+    //  Login
     this.loginForm = this.fb.group({
       correo: ['', [Validators.required, Validators.email]],
       contrasena: ['', Validators.required]
     })
-
+    //  Filtro
     this.filtroForm = this.fb.group({
-      criterio: ['correo'],
+      criterio: ['nombre'],
       valor: ['']
     })
   }
 
-  // ===================== EVENTOS =====================
-
-  onRolChange(event: any) {
-    this.selectedRol = event.target.value
+  // Validar contraseñas iguales
+  private passwordMatchValidator(form: FormGroup) {
+    const pass = form.get('contrasena')?.value
+    const confirm = form.get('validarContrasena')?.value
+    return pass === confirm ? null : { passwordMismatch: true }
   }
 
-  onTipoMaterialChange(event: any) {
-    const value = event.target.value
-    const checked = event.target.checked
-    const materiales = this.registroForm.get('tipoMaterial')?.value || []
-    if (checked) {
-      materiales.push(value)
+  // Cambiar rol dinámicamente
+  onRolChange(event: Event) {
+    const select = event.target as HTMLSelectElement
+    this.selectedRol = select.value
+  }
+
+  onTipoMaterialChange(event: Event) {
+    const checkbox = event.target as HTMLInputElement
+    const value = checkbox.value
+    const selected = this.registroForm.get('tipoMaterial')?.value || []
+
+    if (checkbox.checked) {
+      selected.push(value)
     } else {
-      const index = materiales.indexOf(value)
-      if (index >= 0) materiales.splice(index, 1)
+      const idx = selected.indexOf(value)
+      if (idx !== -1) selected.splice(idx, 1)
     }
-    this.registroForm.patchValue({ tipoMaterial: materiales })
-    this.mostrarOtrosMateriales = materiales.includes('Otros')
+
+    this.registroForm.get('tipoMaterial')?.setValue(selected)
+    this.mostrarOtrosMateriales = selected.includes('Otros')
   }
 
   onSubmit() {
-    let data: any
+    let form: FormGroup
     switch (this.mode) {
-      case 'registro':
-        data = { ...this.registroForm.value }
-        delete data.validarContrasena // ❌ no enviamos esto al backend
-        break
-      case 'login':
-        data = this.loginForm.value
-        break
-      case 'filtro':
-        data = this.filtroForm.value
-        break
+      case 'login': form = this.loginForm; break
+      case 'registro': form = this.registroForm; break
+      case 'filtro': form = this.filtroForm; break
+      default: return
     }
-    this.formSubmit.emit(data)
+
+    if (form.valid) {
+      this.formSubmit.emit(form.value)
+    } else {
+      form.markAllAsTouched()
+    }
   }
 
-  // Helper para el HTML
-  getErrorMessages(controlName: string): string[] {
-    const control = this.registroForm.get(controlName)
-    if (!control || !control.errors || !(control.dirty || control.touched)) return []
-
-    const errors: string[] = []
-    const e = control.errors
-
-    if (e['required']) errors.push('Este campo es obligatorio.')
-    if (e['numerosInvalidos']) errors.push('Solo se permiten valores numericos')
-    if (e['minLength']) errors.push('El campo debe tener mínimo 7 caracteres.')
-    if (e['maxLength']) errors.push('El campo puede tener máximo 15 caracteres.')
-    if (e['email']) errors.push('correo no valido')
-    if (e['missingLowercase']) errors.push('Debe contener al menos una minúscula.')
-    if (e['missingUppercase']) errors.push('Debe contener al menos una mayúscula.')
-    if (e['missingNumber']) errors.push('Debe contener al menos un número.')
-    if (e['missingSpecial']) errors.push('Debe contener al menos un carácter especial.')
-    if (e['passwordsMismatch']) errors.push('Las contraseñas no coinciden.')
-
-    return errors
+  limpiarFiltro() {
+    this.filtroForm.reset({ criterio: 'nombre', valor: '' })
+    this.filterClear.emit()
   }
 
-  isFieldInvalid(form: FormGroup, field: string): boolean {
-    const control = form.get(field)
-    return !!(control && control.invalid && (control.dirty || control.touched))
+  isInvalid(form: FormGroup, controlName: string, error?: string) {
+    const control = form.get(controlName)
+    return control && control.touched && (error ? control.hasError(error) : control.invalid)
   }
 }

@@ -1,0 +1,51 @@
+.dashboard {
+  padding: 3rem 2rem;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.dashboard h2 {
+  color: #3e7d3c;
+  margin-bottom: 1rem;
+}
+
+.dashboard p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.carta {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  width: 250px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.carta:hover {
+  transform: translateY(-5px);
+}
+
+.carta i {
+  font-size: 2rem;
+  color: #5c8ead;
+  margin-bottom: 0.5rem;
+}
+
+.carta h4 {
+  margin: 0.5rem 0;
+  color: #3e7d3c;
+}
+
+.carta p {
+  font-size: 0.95rem;
+  color: #555;
+}

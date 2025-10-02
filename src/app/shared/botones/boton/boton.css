@@ -31,5 +31,8 @@ button {
 
 /* Íconos dentro del botón */
 button i {
-  margin-right: 6px;
+  vertical-align: middle;
+  font-size: 1rem;
 }
+
+

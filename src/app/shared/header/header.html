@@ -8,15 +8,13 @@
         <a href="#">Servicios ▾</a>
         <div class="dropdown-content">
           <a routerLink="/usuarios"><i class="fas fa-box"></i> Gestión de usuarios</a>
-          <a href="#"><i class="fas fa-calendar-alt"></i> Solicitar recolección</a>
-          <a href="#"><i class="fas fa-book-open"></i> Educación ambiental</a>
+          <a href="#" routerLink="/administrador"><i class="fas fa-calendar-alt"></i> Administrador</a>
+          <a href="#" routerLink="/ciudadano"><i class="fas fa-book-open"></i> ciudadano</a>
         </div>
       </li>
-
-    <app-boton label="Login" tipo="btn-login" routerLink="/login"></app-boton>
-
-    
-    <app-boton label="Registrarse" tipo="btn-registro" routerLink="/registarse" ></app-boton>
+<app-boton label="Login" tipo="btn-login" icono="fa-solid fa-right-to-bracket" routerLink="/login">
+</app-boton>
+    <app-boton label="Registrarse" tipo="btn-registro" icono="fa-solid fa-user-plus" routerLink="/registarse" ></app-boton>
     </ul>
   </nav>
 </header>

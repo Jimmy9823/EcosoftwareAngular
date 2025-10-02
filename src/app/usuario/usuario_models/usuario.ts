@@ -23,4 +23,5 @@ export interface UsuarioModel {
   tipoMaterial?: string[];       // reciclador / empresa
   otrosMateriales?: string;      // reciclador / empresa
   representanteLegal?: string;   // empresa
+  rol?: string
 }

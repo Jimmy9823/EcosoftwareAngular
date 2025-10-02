@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { UsuarioService } from '../usuario_services/usuario.service'
 import { UsuarioModel } from '../usuario_models/usuario'
-import {COMPARTIR_IMPORTS} from '../../ImpCondYForms/imports'
+import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports'
 import { Header } from '../../shared/header/header'
 
 @Component({
@@ -15,6 +15,7 @@ export class Usuario implements OnInit {
   cargando: boolean = false
   error: string = ''
   mensaje: string = ''
+  rol: string = ''
 
   // Filtros
   criterio: string = 'nombre'
@@ -33,7 +34,12 @@ export class Usuario implements OnInit {
     this.cargando = true
     this.usuarioService.listar().subscribe({
       next: (lista) => {
-        this.usuarios = lista
+        // 🔹 Mapeamos la lista para agregar el nombre de rol
+        this.usuarios = lista.map(usuario => ({
+          ...usuario,
+          rol: this.obtenerNombreRol(usuario.rolId)
+        }))
+
         this.cargando = false
         this.mensaje = `Se cargaron ${lista.length} usuario(s)`
         this.error = ''
@@ -59,7 +65,10 @@ export class Usuario implements OnInit {
     this.cargando = true
     this.usuarioService.filtrar(this.criterio, this.valorFiltro).subscribe({
       next: (usuariosFiltrados) => {
-        this.usuarios = usuariosFiltrados
+        this.usuarios = usuariosFiltrados.map(usuario => ({
+          ...usuario,
+          rol: this.obtenerNombreRol(usuario.rolId)
+        }))
         this.mensaje = ` ${usuariosFiltrados.length} usuario(s) encontrado(s)`
         this.error = ''
         this.cargando = false
@@ -79,5 +88,18 @@ export class Usuario implements OnInit {
   limpiarFiltro(): void {
     this.valorFiltro = ''
     this.consultarUsuarios()
+  }
+
+  // ========================
+  // OBTENER NOMBRE DE ROL
+  // ========================
+  private obtenerNombreRol(rolId: number): string {
+    switch (rolId) {
+      case 1: return 'Administrador'
+      case 2: return 'Ciudadano'
+      case 3: return 'Empresa'
+      case 4: return 'Reciclador'
+      default: return 'Desconocido'
+    }
   }
 }

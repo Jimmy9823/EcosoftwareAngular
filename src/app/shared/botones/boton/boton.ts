@@ -1,30 +1,26 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgStyle } from '@angular/common';
+import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports';
 
 @Component({
-  standalone:true,
+  standalone: true,
   selector: 'app-boton',
-  imports: [NgStyle],
+  imports: [NgStyle, COMPARTIR_IMPORTS],
   templateUrl: './boton.html',
   styleUrl: './boton.css'
 })
 export class Boton {
-  //Texto que se mostrata en el boton 
-  //Igual a <button> Boton </button>
-  @Input() label: string = ' '
-  // Estilo de bootstrap 
-  @Input() tipo: string = ''
-  //Habilitado o desabilitado
-  @Input() disabled: boolean = false
+  @Input() label: string = '';
+  @Input() tipo: string = ''; 
+  @Input() disabled: boolean = false;
+  @Input() estilo: { [key: string]: string } = {};
 
-  @Input() estilo: {[key:string]:string}={}
+  // 👉 Clases de Font Awesome, ejemplo: 'fa-solid fa-right-to-bracket'
+  @Input() icono: string = '';  
 
-  @Input() icono : string = ' '
-  //Evento a ejecutar segun metodos
-  @Output() accion = new EventEmitter<void>()
+  @Output() accion = new EventEmitter<void>();
 
   ejecutarAccion() {
-    this.accion.emit()
+    this.accion.emit();
   }
-
 }

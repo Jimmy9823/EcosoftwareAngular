@@ -2,7 +2,7 @@
 <form *ngIf="mode === 'registro'" [formGroup]="registroForm" (ngSubmit)="onSubmit()" [ngClass]="selectedRol">
   <h2>Registro de {{ selectedRol | titlecase }}</h2>
 
-  <!-- Selector de Rol -->
+  <!-- Rol -->
   <label for="rol">Selecciona Rol</label>
   <select id="rol" formControlName="rol" (change)="onRolChange($event)">
     <option value="ciudadano">Ciudadano</option>
@@ -11,45 +11,29 @@
     <option value="admin">Administrador</option>
   </select>
 
-  <!-- ===================== CAMPOS CIUDADANO ===================== -->
-  <div *ngIf="selectedRol === 'ciudadano'">
-    <input type="text" placeholder="Nombre completo" formControlName="nombre">
+  <!-- Campos base (todos los roles) -->
+  <input type="text" placeholder="Nombre completo" formControlName="nombre">
+  <div class="error-msg" *ngIf="isInvalid(registroForm,'nombre')">Nombre requerido</div>
 
-    <input type="text" placeholder="Cédula" formControlName="cedula">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('cedula')">{{ msg }}</div>
+  <input type="text" placeholder="Cédula" formControlName="cedula">
+  <div class="error-msg" *ngIf="isInvalid(registroForm,'cedula')">Cédula inválida</div>
 
-    <input type="email" placeholder="Correo" formControlName="correo">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('correo')">{{ msg }}</div>
+  <input type="email" placeholder="Correo" formControlName="correo">
+  <div class="error-msg" *ngIf="isInvalid(registroForm,'correo','email')">Correo inválido</div>
 
-    <input type="text" placeholder="Teléfono" formControlName="telefono">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('telefono')">{{ msg }}</div>
+  <input type="text" placeholder="Teléfono" formControlName="telefono">
+  <div class="error-msg" *ngIf="isInvalid(registroForm,'telefono')">Teléfono inválido</div>
 
-    <input type="text" placeholder="Dirección" formControlName="direccion">
-    <input type="text" placeholder="Barrio" formControlName="barrio">
-    <input type="text" placeholder="Localidad" formControlName="localidad">
+  <!-- Campos adicionales por rol -->
+  <ng-container *ngIf="selectedRol === 'ciudadano'">
+    <input placeholder="Dirección" formControlName="direccion">
+    <input placeholder="Barrio" formControlName="barrio">
+    <input placeholder="Localidad" formControlName="localidad">
+  </ng-container>
 
-    <input type="password" placeholder="Contraseña" formControlName="contrasena">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('contrasena')">{{ msg }}</div>
-
-    <input type="password" placeholder="Validar Contraseña" formControlName="validarContrasena">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('validarContrasena')">{{ msg }}</div>
-  </div>
-
-  <!-- ===================== CAMPOS RECICLADOR ===================== -->
-  <div *ngIf="selectedRol === 'reciclador'">
-    <input type="text" placeholder="Nombre" formControlName="nombre">
-
-    <input type="text" placeholder="Cédula" formControlName="cedula">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('cedula')">{{ msg }}</div>
-
-    <input type="email" placeholder="Correo" formControlName="correo">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('correo')">{{ msg }}</div>
-
-    <input type="text" placeholder="Teléfono" formControlName="telefono">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('telefono')">{{ msg }}</div>
-
-    <input type="text" placeholder="Zona de trabajo" formControlName="zonaTrabajo">
-    <input type="text" placeholder="Horario de trabajo" formControlName="horarioTrabajo">
+  <ng-container *ngIf="selectedRol === 'reciclador'">
+    <input placeholder="Zona de trabajo" formControlName="zonaTrabajo">
+    <input placeholder="Horario de trabajo" formControlName="horarioTrabajo">
     <input type="number" placeholder="Cantidad mínima de residuos" formControlName="cantidadMinima">
 
     <label>Tipo de material:</label>
@@ -59,35 +43,17 @@
       </label>
     </div>
 
-    <div *ngIf="mostrarOtrosMateriales">
-      <input type="text" placeholder="Otros materiales" formControlName="otrosMateriales">
-    </div>
+    <input *ngIf="mostrarOtrosMateriales" placeholder="Otros materiales" formControlName="otrosMateriales">
+  </ng-container>
 
-    <input type="password" placeholder="Contraseña" formControlName="contrasena">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('contrasena')">{{ msg }}</div>
-
-    <input type="password" placeholder="Validar Contraseña" formControlName="validarContrasena">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('validarContrasena')">{{ msg }}</div>
-  </div>
-
-  <!-- ===================== CAMPOS EMPRESA ===================== -->
-  <div *ngIf="selectedRol === 'empresa'">
-    <input type="text" placeholder="Nombre de la empresa" formControlName="nombre">
-    <input type="text" placeholder="NIT" formControlName="nit">
-    <input type="text" placeholder="Representante legal" formControlName="representanteLegal">
-    <input type="text" placeholder="Cédula" formControlName="cedula">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('cedula')">{{ msg }}</div>
-
-    <input type="email" placeholder="Correo" formControlName="correo">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('correo')">{{ msg }}</div>
-
-    <input type="text" placeholder="Teléfono" formControlName="telefono">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('telefono')">{{ msg }}</div>
-
-    <input type="text" placeholder="Dirección" formControlName="direccion">
-    <input type="text" placeholder="Barrio" formControlName="barrio">
-    <input type="text" placeholder="Localidad" formControlName="localidad">
-    <input type="text" placeholder="Horario de operación" formControlName="horario">
+  <ng-container *ngIf="selectedRol === 'empresa'">
+    <input placeholder="Nombre de la empresa" formControlName="nombre">
+    <input placeholder="NIT" formControlName="nit">
+    <input placeholder="Representante legal" formControlName="representanteLegal">
+    <input placeholder="Dirección" formControlName="direccion">
+    <input placeholder="Barrio" formControlName="barrio">
+    <input placeholder="Localidad" formControlName="localidad">
+    <input placeholder="Horario de operación" formControlName="horario">
     <input type="number" placeholder="Cantidad mínima de residuos" formControlName="cantidadMinima">
 
     <label>Tipo de material:</label>
@@ -97,36 +63,15 @@
       </label>
     </div>
 
-    <div *ngIf="mostrarOtrosMateriales">
-      <input type="text" placeholder="Otros materiales" formControlName="otrosMateriales">
-    </div>
+    <input *ngIf="mostrarOtrosMateriales" placeholder="Otros materiales" formControlName="otrosMateriales">
+  </ng-container>
 
-    <input type="password" placeholder="Contraseña" formControlName="contrasena">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('contrasena')">{{ msg }}</div>
+  <!-- Contraseñas -->
+  <input type="password" placeholder="Contraseña" formControlName="contrasena">
+  <div class="error-msg" *ngIf="isInvalid(registroForm,'contrasena')">Mínimo 6 caracteres</div>
 
-    <input type="password" placeholder="Validar Contraseña" formControlName="validarContrasena">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('validarContrasena')">{{ msg }}</div>
-  </div>
-
-  <!-- ===================== CAMPOS ADMIN ===================== -->
-  <div *ngIf="selectedRol === 'admin'">
-    <input type="text" placeholder="Nombre completo" formControlName="nombre">
-
-    <input type="text" placeholder="Cédula" formControlName="cedula">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('cedula')">{{ msg }}</div>
-
-    <input type="email" placeholder="Correo" formControlName="correo">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('correo')">{{ msg }}</div>
-
-    <input type="text" placeholder="Teléfono" formControlName="telefono">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('telefono')">{{ msg }}</div>
-
-    <input type="password" placeholder="Contraseña" formControlName="contrasena">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('contrasena')">{{ msg }}</div>
-
-    <input type="password" placeholder="Validar Contraseña" formControlName="validarContrasena">
-    <div class="error-msg" *ngFor="let msg of getErrorMessages('validarContrasena')">{{ msg }}</div>
-  </div>
+  <input type="password" placeholder="Validar Contraseña" formControlName="validarContrasena">
+  <div class="error-msg" *ngIf="registroForm.hasError('passwordMismatch')">Las contraseñas no coinciden</div>
 
   <button type="submit">Registrar</button>
 </form>
@@ -135,22 +80,30 @@
 <form *ngIf="mode === 'login'" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
   <h2>Iniciar Sesión</h2>
   <input type="email" placeholder="Correo electrónico" formControlName="correo">
-  <div class="error-msg" *ngFor="let msg of getErrorMessages('correo')">{{ msg }}</div>
+  <div class="error-msg" *ngIf="isInvalid(loginForm,'correo')">Correo requerido</div>
 
   <input type="password" placeholder="Contraseña" formControlName="contrasena">
-  <div class="error-msg" *ngIf="isFieldInvalid(loginForm, 'contrasena')">La contraseña es obligatoria.</div>
+  <div class="error-msg" *ngIf="isInvalid(loginForm,'contrasena')">Contraseña requerida</div>
 
   <button type="submit">Entrar</button>
 </form>
 
 <!-- ===================== FILTRO ===================== -->
-<form *ngIf="mode === 'filtro'" [formGroup]="filtroForm" (ngSubmit)="onSubmit()" class="filter-form">
-  <h2>Filtrar</h2>
-  <select formControlName="criterio">
-    <option value="correo">Correo</option>
-    <option value="nombre">Nombre</option>
-    <option value="documento">Documento</option>
-  </select>
-  <input type="text" placeholder="Valor a filtrar" formControlName="valor">
-  <button type="submit">Buscar</button>
+<form *ngIf="mode === 'filtro'" [formGroup]="filtroForm" (ngSubmit)="onSubmit()" class="card p-3 mb-4 shadow-sm filter-form">
+  <div class="row g-2 align-items-center">
+    <div class="col-md-3">
+      <select class="form-select" formControlName="criterio">
+        <option value="nombre">Nombre</option>
+        <option value="correo">Correo</option>
+        <option value="documento">Documento</option>
+      </select>
+    </div>
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="Valor de búsqueda" formControlName="valor">
+    </div>
+    <div class="col-md-4 d-flex gap-2">
+      <button type="submit" class="btn btn-primary w-50">Buscar</button>
+      <button type="button" class="btn btn-secondary w-50" (click)="limpiarFiltro()">Limpiar</button>
+    </div>
+  </div>
 </form>

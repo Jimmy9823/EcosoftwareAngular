@@ -7,7 +7,7 @@ import { UsuarioModel } from '../usuario_models/usuario'
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrlSpringboot = 'http://localhost:8082/api/personas'
+  private apiUrlSpringboot = 'http://localhost:8080/api/personas'
 
   constructor(private http: HttpClient) {}
 
@@ -58,7 +58,7 @@ export class UsuarioService {
   }
 
   // ========================
-  // 📌 CRUD
+  // CRUD
   // ========================
   guardar(usuario: UsuarioModel): Observable<UsuarioModel> {
     return this.http.post<UsuarioModel>(this.apiUrlSpringboot, usuario)
