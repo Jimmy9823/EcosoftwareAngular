@@ -74,7 +74,7 @@ export class Usuario implements OnInit {
   }
 
   // ========================
-  // 📌 LIMPIAR FILTRO
+  // LIMPIAR FILTRO
   // ========================
   limpiarFiltro(): void {
     this.valorFiltro = ''

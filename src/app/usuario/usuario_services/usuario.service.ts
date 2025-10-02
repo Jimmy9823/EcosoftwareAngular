@@ -12,21 +12,21 @@ export class UsuarioService {
   constructor(private http: HttpClient) {}
 
   // ========================
-  // 📌 LISTAR TODOS
+  //  LISTAR TODOS
   // ========================
   listar(): Observable<UsuarioModel[]> {
     return this.http.get<UsuarioModel[]>(this.apiUrlSpringboot)
   }
 
   // ========================
-  // 📌 OBTENER POR ID
+  //  OBTENER POR ID
   // ========================
   obtenerPorId(id: number): Observable<UsuarioModel> {
     return this.http.get<UsuarioModel>(`${this.apiUrlSpringboot}/filtrar-id/${id}`)
   }
 
   // ========================
-  // 📌 FILTROS INDIVIDUALES
+  //  FILTROS INDIVIDUALES
   // ========================
   filtrarPorNombre(nombre: string): Observable<UsuarioModel[]> {
     return this.http.get<UsuarioModel[]>(`${this.apiUrlSpringboot}/filtrar-nombre?nombre=${nombre}`)
@@ -41,7 +41,7 @@ export class UsuarioService {
   }
 
   // ========================
-  // 📌 FILTRO CONDICIONAL CENTRALIZADO
+  //  FILTRO CONDICIONAL CENTRALIZADO
   // ========================
   filtrar(criterio: string, valor: string): Observable<UsuarioModel[]> {
     switch (criterio) {
