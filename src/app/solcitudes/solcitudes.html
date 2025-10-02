@@ -1,1 +1,40 @@
-<p>solcitudes works!</p>
+<app-header></app-header>
+
+<div class="container">
+  <h2>Listado de Solicitudes de Recolección</h2>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>ID Solicitud</th>
+        <th>Usuario ID</th>
+        <th>Aceptada Por</th>
+        <th>Tipo Residuo</th>
+        <th>Cantidad</th>
+        <th>Estado</th>
+        <th>Descripción</th>
+        <th>Localidad</th>
+        <th>Ubicación</th>
+        <th>Evidencia</th>
+        <th>Recolección ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let servicio of Servicios">
+        <td>{{ servicio.idSolicitud }}</td>
+        <td>{{ servicio.usuarioId }}</td>
+        <td>{{ servicio.aceptadaPorId }}</td>
+        <td>{{ servicio.tipoResiduo }}</td>
+        <td>{{ servicio.cantidad }}</td>
+        <td>{{ servicio.estadoPeticion }}</td>
+        <td>{{ servicio.descripcion }}</td>
+        <td>{{ servicio.localidad }}</td>
+        <td>{{ servicio.ubicacion }}</td>
+        <td>
+          <a *ngIf="servicio.evidencia" [href]="servicio.evidencia" target="_blank">Ver</a>
+        </td>
+        <td>{{ servicio.recoleccionId }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
