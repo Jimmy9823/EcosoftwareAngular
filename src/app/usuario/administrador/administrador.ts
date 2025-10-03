@@ -22,7 +22,7 @@ export class Administrador {
   error: string = '';
   mensaje: string = '';
   rol: string = '';
-  vistaActual: 'usuarios' | 'solicitudes' | 'recolecciones' | null = null;
+  vistaActual:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'noticias'| null = null;
 
 
   // 🔸 Ya no necesitamos las propiedades criterio y valorFiltro manuales
@@ -32,7 +32,7 @@ export class Administrador {
     this.consultarUsuarios();
   }
 
-  cambiarVista(vista: 'usuarios' | 'solicitudes' | 'recolecciones') {
+  cambiarVista(vista:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones'|'puntos'|'noticias') {
   this.vistaActual = vista;
 }
 
@@ -169,4 +169,19 @@ export class Administrador {
         link.click();
       });
     }
+
+     menuAbierto = true;
+perfilMenuAbierto = false;
+
+toggleMenu() {
+  this.menuAbierto = !this.menuAbierto;
+  if(!this.menuAbierto) this.perfilMenuAbierto = false; // cierra perfil al colapsar
 }
+
+togglePerfilMenu() {
+  this.perfilMenuAbierto = !this.perfilMenuAbierto;
+}
+
+
+}
+

@@ -1,7 +1,9 @@
+
+
 /* Hero Section */
 .hero-section {
   background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  padding: 100px 0 80px;
+  padding: 120px 0 80px;
   position: relative;
   overflow: hidden;
 }
@@ -194,6 +196,8 @@
   margin: 0;
   line-height: 1.6;
 }
+
+
 
 /* Responsive */
 @media (max-width: 991.98px) {
