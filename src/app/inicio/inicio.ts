@@ -12,20 +12,7 @@ interface WasteType {
   name: string;
 }
 
-interface EcoTip {
-  iconClass: string;
-  title: string;
-  description: string;
-}
 
-interface NewsItem {
-  iconClass: string;
-  badgeClass: string;
-  category: string;
-  title: string;
-  description: string;
-  time: string;
-}
 
 @Component({
   selector: 'app-Inicio',
