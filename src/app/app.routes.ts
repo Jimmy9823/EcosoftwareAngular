@@ -12,7 +12,7 @@ export const routes: Routes = [
     {path: 'solicitudes', component: Solcitudes},
     {path: 'usuarios', component: Usuario},
     {path: 'login', component:Login},
-    {path: 'registarse', component:Registro},
+    {path: 'registro', component:Registro},
     {path: 'administrador', component:Administrador},
     {path: 'ciudadano', component:Ciudadano},
     {path: '**', redirectTo: ''} //cualquier otra ruta redirecciona a inicio

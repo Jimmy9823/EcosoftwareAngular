@@ -8,7 +8,7 @@ import { ServiceModel } from './model';
 })
 export class Service {
 
-  private api = "http://localhost:8082/api/solicitudes"
+  private api = "http://localhost:8080/api/solicitudes"
   solicitud: ServiceModel[] = []
   constructor(private http: HttpClient) {
 
@@ -28,4 +28,6 @@ export class Service {
   rechazarSolicitud(id: number, solicitud: ServiceModel): Observable<ServiceModel> {
     return this.http.post<ServiceModel>(`${this.api}/${id}/rechazar`, solicitud)
   }
+
+  
 }

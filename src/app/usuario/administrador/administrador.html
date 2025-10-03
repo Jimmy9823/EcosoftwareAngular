@@ -8,26 +8,27 @@
   </section>
 
   <section class="acciones">
-    <div class="carta">
-      <i class="fas fa-user-cog"></i>
-      <h4>Gestión de Usuarios</h4>
-      <p>Administra roles y accesos.</p>
-    </div>
-    <div class="carta">
-      <i class="fas fa-chart-pie"></i>
-      <h4>Estadísticas Globales</h4>
-      <p>Monitorea el impacto ambiental general.</p>
-    </div>
-    <div class="carta">
-      <i class="fas fa-bullhorn"></i>
-      <h4>Campañas</h4>
-      <p>Organiza eventos y jornadas ecológicas.</p>
-    </div>
-  </section>
-</main>
+  <div class="carta" (click)="cambiarVista('usuarios')">
+    <i class="fas fa-user-cog"></i>
+    <h4>Gestión de Usuarios</h4>
+    <p>Administra roles y accesos.</p>
+  </div>
+  <div class="carta" (click)="cambiarVista('solicitudes')">
+    <i class="fas fa-chart-pie"></i>
+    <h4>Estadísticas Globales</h4>
+    <p>Monitorea el impacto ambiental general.</p>
+  </div>
+  <div class="carta" (click)="cambiarVista('recolecciones')">
+    <i class="fas fa-bullhorn"></i>
+    <h4>Campañas</h4>
+    <p>Organiza eventos y jornadas ecológicas.</p>
+  </div>
+</section>
 
-<div class="container mt-4">
-  <h2 class="mb-3 text-center">Lista de Usuarios</h2>
+<!-- ===================== VISTAS DINÁMICAS ===================== -->
+<ng-container *ngIf="vistaActual === 'usuarios'">
+  <!-- TODO el bloque de tabla y filtros de usuarios -->
+   <h2 class="mb-3 text-center">Lista de Usuarios</h2>
 
   <!-- FILTRO -->
 <app-form-comp
@@ -75,12 +76,50 @@
   </table>
 </div>
 
-<!-- 📭 SIN RESULTADOS -->
-  <div *ngIf="!cargando && usuarios.length === 0" class="alert alert-warning text-center">
-    No se encontraron usuarios.
-  </div>
 
+<!-- ejemplo: dashboard.component.html -->
+<app-boton
+  tipo="btn btn-success"
+  [disabled]="false"
+  icono="bi bi-check-circle"
+  label="Descargar Excel"
+  [estilo]="{ 'font-weight': 'bold' }"
+  (accion)="exportarExcel()"
+>
+</app-boton>
+
+<app-boton
+  tipo="btn btn-danger"
+  [disabled]="false"
+  icono="bi bi-box-seam"
+  label="Descargar pdf"
+  [estilo]="{ 'font-weight': 'bold' }"
+  (accion)="exportarPDF()"
+>
+</app-boton>
+
+
+<!-- SIN RESULTADOS -->
+  <div *ngIf="!cargando && usuarios.length === 0" class="alert alert-warning text-center">
+    No se encontraron usuarios registrados.
+  </div>
+</ng-container>
+
+<ng-container *ngIf="vistaActual === 'solicitudes'">
   <app-solcitudes/>
+</ng-container>
+
+<ng-container *ngIf="vistaActual === 'recolecciones'">
+  <div class="alert alert-info text-center mt-4">
+    Aquí irá el módulo de campañas ecológicas 🌿
+  </div>
+</ng-container>
+</main>
+
+<div class="container mt-4">
+  
+
+  
 </div>
 
 
