@@ -21,7 +21,7 @@
       </div>
       <div class="col-lg-6 hero-image">
         <div class="hero-illustration">
-          <!--la imagen de la chica-->
+          <img src="https://static.vecteezy.com/system/resources/previews/021/564/181/non_2x/illustration-of-planet-earth-illustration-cartoon-design-free-vector.jpg" alt="Reciclaje" class="img-fluid">
         </div>
       </div>
     </div>
@@ -79,18 +79,14 @@
   </div>
   <div class="waste-slider">
     <div class="waste-item" *ngFor="let waste of wasteTypes">
-      <div class="waste-icon-box">
-        <i [class]="waste.icon"></i>
-      </div>
+      <div class="waste-icon-box">{{ waste.icon }}</div>
       <h5>{{ waste.name }}</h5>
     </div>
-    <div class="waste-item" *ngFor="let waste of wasteTypes">
-      <div class="waste-icon-box">
-        <i [class]="waste.icon"></i>
-      </div>
+    <!-- Duplicate for seamless loop -->
+    <div class="waste-item" *ngFor="let waste of wasteTypes.slice(0, 8)">
+      <div class="waste-icon-box">{{ waste.icon }}</div>
       <h5>{{ waste.name }}</h5>
     </div>
-
   </div>
 </section>
 
@@ -109,7 +105,7 @@
         </div>
         <div class="tip-card">
           <h4>
-            <i class="fas fa-sync-alt text-success me-2"></i>Reutiliza Creativamente
+            <i class="fas fa-sync-alt text-danger-emphasis me-2"></i>Reutiliza Creativamente
           </h4>
           <p>Dale una segunda vida a los objetos. Frascos, botellas y cajas pueden tener múltiples usos antes del reciclaje.</p>
         </div>

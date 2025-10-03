@@ -35,16 +35,15 @@ interface NewsItem {
   styleUrl: './inicio.css'
 })
 export class Inicio {
-  wasteTypes = [
-    { name: 'Papeles y Cartones', icon: 'bi bi-file-earmark-text-fill icon-paper' },
-    { name: 'Plásticos', icon: 'bi bi-bag-fill icon-plastic' },
-    { name: 'Metales', icon: 'bi bi-box-seam-fill icon-metal' },
-    { name: 'Vidrios', icon: 'bi bi-cup-straw icon-glass' },
-    { name: 'Desechos Orgánicos', icon: 'bi bi-flower1 icon-organic' },
-    { name: 'Otros Residuos', icon: 'bi bi-trash-fill icon-mixed' },
-    { name: 'Residuos Peligrosos', icon: 'bi bi-exclamation-triangle-fill icon-hazard' },
-    { name: 'Aparatos Eléctricos', icon: 'bi bi-cpu-fill icon-electronic' },
-    { name: 'Textiles', icon: 'bi bi-bag-heart-fill icon-textile' }
+  wasteTypes: WasteType[] = [
+    { icon: '🗞️', name: 'Papel' },
+    { icon: '🍾', name: 'Plástico' },
+    { icon: '🥫', name: 'Metal' },
+    { icon: '🍷', name: 'Vidrio' },
+    { icon: '📦', name: 'Cartón' },
+    { icon: '🔋', name: 'Baterías' },
+    { icon: '💻', name: 'Electrónicos' },
+    { icon: '👕', name: 'Textiles' },
   ];
 }
 
