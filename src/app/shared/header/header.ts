@@ -1,14 +1,22 @@
 import { Component } from '@angular/core';
-import { Boton} from '../botones/boton/boton';
-import { RouterLink} from '@angular/router';
-
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header',
-  imports: [Boton, RouterLink],
+  standalone: true,
+  imports: [RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './header.html',
-  styleUrl: './header.css'
+  styleUrls: ['./header.css']
 })
 export class Header {
+  
+ onProfileClick(): void {
+    console.log('Profile clicked');
+  }
 
+  onLogoutClick(): void {
+    console.log('Logout clicked');
+    // Aquí va tu lógica de cerrar sesión
+  }
 }
