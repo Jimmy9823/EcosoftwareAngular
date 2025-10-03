@@ -4,10 +4,11 @@ import { UsuarioModel } from '../usuario_models/usuario';
 import { Header } from '../../shared/header/header';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { FormComp } from '../../shared/form/form.comp/form.comp';
+import { Solcitudes } from '../../solcitudes/solcitudes';
 
 @Component({
   selector: 'app-administrador',
-  imports: [Header, COMPARTIR_IMPORTS, FormComp],
+  imports: [Header, COMPARTIR_IMPORTS, FormComp, Solcitudes],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
@@ -99,5 +100,27 @@ export class Administrador {
       case 4: return 'Reciclador';
       default: return 'Desconocido';
     }
+  }
+
+  generarExcel(): void {
+    this.cargando = true;
+    this.usuarioService.generarReporte().subscribe({
+      next: (lista) => {
+        this.usuarios = lista.map(usuario => ({
+          ...usuario,
+          rol: this.obtenerNombreRol(usuario.rolId)
+        }));
+
+        this.cargando = false;
+        this.mensaje = `Se cargaron ${lista.length} usuario(s)`;
+        this.error = '';
+      },
+      error: (err) => {
+        console.error('Error al cargar usuarios:', err);
+        this.error = 'Error al cargar la lista de usuarios';
+        this.mensaje = '';
+        this.cargando = false;
+      }
+    });
   }
 }

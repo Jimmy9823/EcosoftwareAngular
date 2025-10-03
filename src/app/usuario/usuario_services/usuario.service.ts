@@ -75,4 +75,7 @@ export class UsuarioService {
   eliminarLogico(id: number): Observable<string> {
     return this.http.patch<string>(`${this.apiUrlSpringboot}/eliminar/${id}`, null)
   }
+  generarReporte():Observable<UsuarioModel[]> {
+    return this.http.get<UsuarioModel[]>(`${this.apiUrlSpringboot}/export/excel`)
+  }
 }
