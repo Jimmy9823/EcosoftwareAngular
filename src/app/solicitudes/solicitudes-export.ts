@@ -5,8 +5,8 @@ import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-solicitudes-export',
-  templateUrl: './solicitudes-export.component.html',
-  styleUrls: ['./solicitudes-export.component.css']
+  templateUrl: './solicitudes-export.html',
+  styleUrls: ['./solicitudes-export.css']
 })
 export class SolicitudesExportComponent implements OnInit {
 
