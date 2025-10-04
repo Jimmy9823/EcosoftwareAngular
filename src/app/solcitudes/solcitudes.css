@@ -1,67 +1,79 @@
+/* Contenedor principal */
 .solicitudes-container {
-  padding: 1.5rem;
-  background-color: #f9fdf9;
-  border-radius: 1rem;
+  padding: 20px;
 }
 
-.titulo-seccion {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+/* Contenedor tabla */
+.table-container {
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.tabla-wrapper {
-  overflow-x: auto;
-  border-radius: 0.75rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.tabla-solicitudes {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-}
-
-.tabla-solicitudes th {
-  background-color: #d8f3dc;
-  color: #2d6a4f;
-  padding: 0.75rem;
+/* Tabla */
+.table th, 
+.table td {
   text-align: center;
-  font-weight: 600;
+  vertical-align: middle;
 }
 
-.tabla-solicitudes td {
-  padding: 0.75rem;
-  text-align: center;
-  border-bottom: 1px solid #e9ecef;
-}
-
-.tabla-solicitudes tr:hover {
-  background-color: #f1fdf5;
-}
-
+/* Badges de estados */
 .badge {
-  padding: 0.25rem 0.6rem;
-  border-radius: 0.4rem;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+  padding: 0.4em 0.8em;
+  border-radius: 8px;
+}
+
+/* Botones */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #bdbdbd !important;
+  border-color: #bdbdbd !important;
+}
+
+/* Modal */
+.modal {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  border-radius: 12px;
+}
+
+/* Colores suaves para estados */
+.badge.bg-success {
+  background-color: #b2f2bb !important; /* Verde pastel */
+  color: #155724; /* Verde oscuro para texto */
+}
+
+.badge.bg-danger {
+  background-color: #f8d7da !important; /* Rojo pastel */
+  color: #721c24; /* Rojo oscuro para texto */
+}
+
+.badge.bg-warning {
+  background-color: #fff3cd !important; /* Amarillo pastel */
+  color: #856404; /* Amarillo oscuro para texto */
+}
+
+
+/* Modal detalle más suave */
+.modal-detalle {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.header-suave {
+  background-color: #d8f3dc; /* verde muy clarito */
+  color: #155724;
   font-weight: 600;
 }
 
-.badge.pendiente {
-  background-color: #ffdd57;
-  color: #7a5c00;
+.list-group-item {
+  font-size: 0.95rem;
+  padding: 10px 15px;
 }
 
-.badge.aceptada {
-  background-color: #2d6a4f;
-  color: white;
+.list-group-item strong {
+  color: #155724;
 }
-
-.badge.rechazada {
-  background-color: #d62828;
-  color: white;
-}
-

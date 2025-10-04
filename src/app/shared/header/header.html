@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top ">
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
   <div class="container px-4">
     <!-- Logo -->
     <a class="navbar-brand fw-bold fs-4 verde-principal" routerLink="/">
@@ -6,7 +6,8 @@
     </a>
 
     <!-- Botón hamburguesa para móvil -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -15,71 +16,88 @@
       <!-- Menú de navegación (centrado) -->
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" 
-             routerLink="/capacitacion" 
-             routerLinkActive="active"
+          <a class="nav-link" routerLink="/capacitacion" routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: false}">
             Capacitación
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-             routerLink="/puntos-reciclaje" 
-             routerLinkActive="active"
+          <a class="nav-link" routerLink="/puntos-reciclaje" routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: false}">
             Puntos de Reciclaje
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-             routerLink="/solicitudes" 
-             routerLinkActive="active"
+          <a class="nav-link" routerLink="/solicitudes" routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: false}">
             Solicitudes
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-             routerLink="/noticias" 
-             routerLinkActive="active"
+          <a class="nav-link" routerLink="/noticias" routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: false}">
             Noticias
           </a>
         </li>
       </ul>
 
-      <!-- Dropdown del usuario -->
-      <div class="dropdown d-flex align-items-center">
-        <button 
-          class="btn btn-link p-0 border-0" 
-          type="button" 
-          id="userMenuDropdown" 
-          data-bs-toggle="dropdown" 
-          aria-expanded="false">
-          <img 
-            src="https://i.pinimg.com/564x/40/c5/3f/40c53ff5a0da610aa4daff660c962961.jpg" 
-            alt="User Avatar" 
-            class="rounded-circle avatar-perfil"
-            style="width: 40px; height: 40px; object-fit: cover;">
+      <!-- Botón de Mi Perfil -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
+  <div class="container px-4">
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold fs-4 verde-principal" routerLink="/">
+      EcoSoftware
+    </a>
+
+    <!-- Botón hamburguesa para móvil -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Contenido del navbar -->
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <!-- Menú de navegación (centrado) -->
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/capacitacion" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: false}">
+            Capacitación
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/puntos-reciclaje" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: false}">
+            Puntos de Reciclaje
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/solicitudes" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: false}">
+            Solicitudes
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/noticias" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: false}">
+            Noticias
+          </a>
+        </li>
+      </ul>
+
+      <!-- Botón de Mi Perfil -->
+      <div class="d-flex align-items-center">
+        <a class="btn btn-outline-success me-2" routerLink="/perfil">
+          Mi Perfil
+        </a>
+        <button class="btn btn-danger" (click)="onLogoutClick()">
+          Cerrar Sesión
         </button>
-        
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuDropdown">
-          <li>
-            <a class="dropdown-item" 
-               routerLink="/perfil" 
-               (click)="onProfileClick()">
-              <span>Perfil</span>
-            </a>
-          </li>
-          <li><hr class="dropdown-divider"></li>
-          <li>
-            <a class="dropdown-item text-danger" 
-               (click)="onLogoutClick(); $event.preventDefault()">
-              Cerrar Sesión
-            </a>
-          </li>
-        </ul>
       </div>
+    </div>
+  </div>
+</nav>
+
     </div>
   </div>
 </nav>
