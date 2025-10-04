@@ -20,7 +20,7 @@ export class Administrador {
   error: string = '';
   mensaje: string = '';
   rol: string = '';
-  vistaActual:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'noticias' = 'panel';;
+  vistaActual:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'capacitaciones'|'noticias' = 'panel';;
 
 
   // 🔸 Ya no necesitamos las propiedades criterio y valorFiltro manuales
@@ -32,7 +32,7 @@ export class Administrador {
 }
 
 
-  cambiarVista(vista:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones'|'puntos'|'noticias') {
+  cambiarVista(vista:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones'|'puntos'|'capacitaciones'|'noticias') {
   this.vistaActual = vista;
 }
 

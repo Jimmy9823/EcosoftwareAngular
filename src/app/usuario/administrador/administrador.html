@@ -61,6 +61,14 @@
       </li>
       <li class="nav-item mb-2">
         <a class="nav-link d-flex align-items-center"
+           [ngClass]="{'active-link': vistaActual==='capacitaciones'}"
+           (click)="cambiarVista('capacitaciones')">
+          <i class="bi bi-mortarboard-fill"></i>
+          <span *ngIf="menuAbierto">Capacitaciones</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link d-flex align-items-center"
            [ngClass]="{'active-link': vistaActual==='noticias'}"
            (click)="cambiarVista('noticias')">
           <i class="bi bi-newspaper"></i>
@@ -214,7 +222,7 @@
 
     <!-- RECOLECCIONES -->
     <ng-container *ngIf="vistaActual === 'recolecciones'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Campañas y Recolecciones</h3>
+      <h3 class="fw-bold text-center verde-principal mb-4">Recolecciones</h3>
       <p class="text-center">Vista para gestionar campañas y recolecciones.</p>
     </ng-container>
 
@@ -222,6 +230,12 @@
     <ng-container *ngIf="vistaActual === 'puntos'">
       <h3 class="fw-bold text-center verde-principal mb-4">Puntos de Reciclaje</h3>
       <p class="text-center">Mapa e información de los puntos de reciclaje.</p>
+    </ng-container>
+
+    <!-- PUNTOS DE CAPACITACIONES -->
+    <ng-container *ngIf="vistaActual === 'capacitaciones'">
+      <h3 class="fw-bold text-center verde-principal mb-4">Capacitaciones</h3>
+      <p class="text-center">Todas las capacitaciones sobre reciclaje.</p>
     </ng-container>
 
     <!-- NOTICIAS -->
