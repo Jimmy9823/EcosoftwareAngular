@@ -31,13 +31,13 @@
 
 .carta i {
   font-size: 2rem;
-  color: #1e6fb6; 
+  color: #3e7d3c;
   margin-bottom: 0.5rem;
 }
 
 .carta h4 {
   margin: 0.5rem 0;
-  color: #1e6fb6;
+  color: #3e7d3c;
 }
 
 .carta p {
@@ -48,7 +48,7 @@
 /* ===================== SIDEBAR ===================== */
 .sidebar {
   width: 220px;
-  background-color: #eaf2fb; /* azul claro */
+  background-color: #eaf6ea;
   transition: width 0.3s;
   min-height: 100vh;
   display: flex;
@@ -61,7 +61,7 @@
 
 /* LOGO */
 .sidebar-logo a {
-  color: #1e6fb6;
+  color: #3e7d3c;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -69,7 +69,7 @@
 }
 
 .sidebar-logo i {
-  color: #1e6fb6;
+  color: #3e7d3c;
 }
 
 .sidebar-logo span {
@@ -96,11 +96,11 @@
   align-items: center;
   padding: 0.5rem 1rem;
   transition: background-color 0.3s, padding 0.3s;
-  color: #1e6fb6;
+  color: #3e7d3c;
 }
 
 .sidebar .nav-link:hover {
-  background-color: #d7e7f9;
+  background-color: #d4efd4;
 }
 
 .sidebar .nav-link i {
@@ -111,7 +111,7 @@
 }
 
 .sidebar .nav-link.active-link {
-  background-color: #1e6fb6;
+  background-color: #3e7d3c;
   color: #ffffff;
 }
 
@@ -136,14 +136,14 @@
   text-align: center;
   position: relative;
   padding-top: 1rem;
-  border-top: 1px solid #c8dff7;
+  border-top: 1px solid #d4efd4;
 }
 
 .sidebar-perfil button {
   border-radius: 10px;
   border: none;
-  background-color: #eaf2fb;
-  color: #1e6fb6;
+  background-color: #eaf6ea;
+  color: #3e7d3c;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -154,7 +154,7 @@
 }
 
 .sidebar-perfil button:hover {
-  background-color: #d7e7f9;
+  background-color: #d4efd4;
 }
 
 /* MENÚ DESPLEGABLE */
@@ -178,7 +178,7 @@
 }
 
 .perfil-menu li a {
-  color: #1e6fb6;
+  color: #3e7d3c;
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
@@ -194,7 +194,7 @@
 }
 
 .perfil-menu li a:hover {
-  background-color: #dce9f8;
+  background-color: #e2f0e2;
 }
 
 .perfil-menu li a.text-danger:hover {
@@ -209,26 +209,6 @@ table {
 
 .btn {
   border-radius: 10px;
-}
-
-.btn-outline-success {
-  border-color: #1e6fb6;
-  color: #1e6fb6;
-}
-
-.btn-outline-success:hover {
-  background-color: #1e6fb6;
-  color: #fff;
-}
-
-.btn-outline-danger {
-  border-color: #d9534f;
-  color: #d9534f;
-}
-
-.btn-outline-danger:hover {
-  background-color: #d9534f;
-  color: #fff;
 }
 
 /* ===================== RESPONSIVE ===================== */
