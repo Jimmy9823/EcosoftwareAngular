@@ -305,7 +305,6 @@ main.flex-fill {
 .contenido-solicitud {
   margin-top: 20px;
   padding: 15px;
-  border: 2px dashed #28a745;
   border-radius: 10px;
   background-color: #f8fff9;
   animation: fadeIn 0.3s ease-in-out;
