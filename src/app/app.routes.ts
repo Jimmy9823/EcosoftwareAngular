@@ -8,6 +8,7 @@ import { Administrador } from './usuario/administrador/administrador';
 import { Ciudadano } from './usuario/ciudadano/ciudadano';
 import { CardsSolicitud } from './solcitudes/cards-solicitud/cards-solicitud';
 import { CardARSolicitud } from './solcitudes/card-a-r-solicitud/card-a-r-solicitud';
+import { FormRegistro } from './solcitudes/form-registro/form-registro';
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -19,6 +20,7 @@ export const routes: Routes = [
     {path: 'ciudadano', component:Ciudadano},
     {path: 'card-solicitud', component:CardsSolicitud},
     {path: 'card-re-acpt-solicitud', component:CardARSolicitud},
+    {path: 'form-solicitud', component:FormRegistro},
 
     {path: '**', redirectTo: ''} //cualquier otra ruta redirecciona a inicio
 ];
