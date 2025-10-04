@@ -1,41 +1,8 @@
+/* Navbar general */
 .navbar {
   box-shadow: 0 2px 4px rgba(0,0,0,0.08);
   z-index: 1030;
   padding: 15px 0;
-}
-
-.dropdown-toggle::after {
-  display: none;
-}
-
-.dropdown-menu {
-  min-width: 200px;
-  margin-top: 0.5rem;
-}
-
-/* Borde verde al avatar del perfil */
-.avatar-perfil {
-  border: 3px solid #28a745;
-  padding: 2px;
-  transition: border-color 0.3s ease;
-}
-
-.avatar-perfil:hover {
-  border-color: #218838;
-}
-
-/* Quitar el borde azul al hacer focus/click en el botón del avatar */
-.btn:focus,
-.btn:active,
-.btn-link:focus,
-.btn-link:active {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-.btn-link:hover {
-  text-decoration: none;
 }
 
 /* Estilos del menú de navegación */
@@ -52,7 +19,6 @@
   color: #28a745;
 }
 
-/* Menú activo con borde inferior verde */
 .nav-link.active {
   color: #28a745 !important;
   font-weight: 600;
@@ -68,23 +34,7 @@
   background-color: #28a745;
 }
 
-/* Quitar el fondo azul de las opciones del dropdown */
-.dropdown-item:active,
-.dropdown-item:focus {
-  background-color: #f8f9fa !important;
-  color: inherit !important;
-}
-
-.dropdown-item:hover {
-  background-color: #f8f9fa;
-}
-
-/* Estilo para el texto de cerrar sesión */
-.dropdown-item.text-danger:hover {
-  background-color: #f8f9fa;
-  color: #dc3545 !important;
-}
-
+/* Verde principal para links y logo */
 .verde-principal {
   color: #28a745;
   text-decoration: none;
@@ -94,6 +44,8 @@
 .verde-principal:hover {
   color: #218838;
 }
+
+
 
 /* Responsive - Menú móvil */
 @media (max-width: 991.98px) {
@@ -110,8 +62,16 @@
     top: 0;
   }
   
-  .dropdown {
+  /* Botones en columna en móvil */
+  .d-flex.align-items-center {
+    flex-direction: column;
     margin-top: 1rem;
     margin-bottom: 1rem;
+  }
+
+  .d-flex.align-items-center .btn-perfil,
+  .d-flex.align-items-center .btn-cerrar {
+    width: 100%;
+    margin-bottom: 0.5rem;
   }
 }
