@@ -141,62 +141,7 @@
 
     <!-- USUARIOS -->
     <ng-container *ngIf="vistaActual === 'usuarios'">
-      <h3 class="mb-3 text-center fw-bold verde-principal">Lista de Usuarios</h3>
-
-      <!-- FILTRO -->
-      <app-form-comp
-        mode="filtro"
-        (formSubmit)="aplicarFiltroDesdeForm($event)"
-        (filterClear)="limpiarFiltro()">
-      </app-form-comp>
-
-      <!-- BOTONES DE EXPORTAR -->
-      <div class="d-flex justify-content-center gap-3 mt-4 py-4">
-        <button type="button" class="btn btn-outline-success export-btn" (click)="exportarExcel()">
-          <i class="bi bi-file-earmark-excel me-2"></i> Exportar Excel
-        </button>
-        <button type="button" class="btn btn-outline-danger export-btn" (click)="exportarPDF()">
-          <i class="bi bi-file-earmark-pdf me-2"></i> Exportar PDF
-        </button>
-      </div>
-
-      <!-- ALERTAS -->
-      <div *ngIf="cargando" class="alert alert-info text-center py-2">
-        Cargando usuarios...
-      </div>
-      <div *ngIf="mensaje" class="alert alert-success text-center py-2">
-        {{ mensaje }}
-      </div>
-      <div *ngIf="error" class="alert alert-danger text-center py-2">
-        {{ error }}
-      </div>
-
-      <!-- TABLA -->
-      <div class="table-container shadow rounded mt-3" *ngIf="usuarios.length > 0">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="table-success text-center">
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Correo</th>
-              <th>Rol</th>
-              <th>Documento</th>
-              <th>Teléfono</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let usuario of usuarios" class="text-center">
-              <td>{{ usuario.idUsuario }}</td>
-              <td>{{ usuario.nombre }}</td>
-              <td>{{ usuario.correo }}</td>
-              <td>{{ usuario.rol }}</td>
-              <td>{{ usuario.nit || usuario.cedula }}</td>
-              <td>{{ usuario.telefono }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
+    <app-usuario-tabla/>
       <!-- SIN RESULTADOS -->
       <div *ngIf="!cargando && usuarios.length === 0"
            class="alert alert-warning text-center shadow-sm rounded-pill py-2 mt-3">

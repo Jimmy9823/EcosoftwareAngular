@@ -1,68 +1,71 @@
-<app-header></app-header>
+<div class="tabla-container">
+  <h2>Gestión de Usuarios</h2>
 
-<div class="container mt-4">
-  <h2 class="mb-3 text-center">Lista de Usuarios</h2>
+  <div *ngIf="cargando" class="mensaje info">Cargando usuarios...</div>
+  <div *ngIf="mensaje" class="mensaje exito">{{ mensaje }}</div>
+  <div *ngIf="error" class="mensaje error">{{ error }}</div>
 
-  <!-- FILTRO -->
-  <div class="card p-3 mb-4 shadow-sm">
-    <div class="row g-2 align-items-center">
-      <div class="col-md-3">
-        <select class="form-select" [(ngModel)]="criterio">
-          <option value="nombre">Nombre</option>
-          <option value="correo">Correo</option>
-          <option value="documento">documento</option>
-        </select>
-      </div>
-      <div class="col-md-5">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Valor de búsqueda"
-          [(ngModel)]="valorFiltro"
-        />
-      </div>
-      <div class="col-md-4 d-flex gap-2">
-        <button class="btn btn-primary w-50" (click)="aplicarFiltro()"> Buscar</button>
-        <button class="btn btn-secondary w-50" (click)="limpiarFiltro()"> Limpiar</button>
-      </div>
-    </div>
-  </div>
+  <table class="tabla-usuarios" *ngIf="usuarios.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>Rol</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios">
+        <td>{{ usuario.idUsuario }}</td>
 
-  <!--  CARGANDO -->
-  <div *ngIf="cargando" class="alert alert-info text-center">
-    Cargando usuarios...
-  </div>
+        <!-- Nombre -->
+        <td *ngIf="editandoId !== usuario.idUsuario">{{ usuario.nombre }}</td>
+        <td *ngIf="editandoId === usuario.idUsuario">
+          <input [(ngModel)]="usuarioEditado.nombre" />
+        </td>
 
-  <!--  MENSAJES -->
-  <div *ngIf="mensaje" class="alert alert-success">{{ mensaje }}</div>
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+        <!-- Correo -->
+        <td *ngIf="editandoId !== usuario.idUsuario">{{ usuario.correo }}</td>
+        <td *ngIf="editandoId === usuario.idUsuario">
+          <input [(ngModel)]="usuarioEditado.correo" />
+        </td>
 
-  <!--  TABLA -->
-  <div class="table-responsive" *ngIf="usuarios.length > 0">
-    <table class="table table-striped table-hover">
-      <thead class="table-dark">
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Correo</th>
-          <th>Rol</th>
-          <th>Documento</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let usuario of usuarios">
-          <td>{{ usuario.idUsuario }}</td>
-          <td>{{ usuario.nombre }}</td>
-          <td>{{ usuario.correo }}</td>
-          <td>{{ usuario.rolId}}</td>
-          <td>{{ usuario.cedula || usuario.nit}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        <!-- Teléfono -->
+        <td *ngIf="editandoId !== usuario.idUsuario">{{ usuario.telefono }}</td>
+        <td *ngIf="editandoId === usuario.idUsuario">
+          <input [(ngModel)]="usuarioEditado.telefono" />
+        </td>
 
-  <!-- 📭 SIN RESULTADOS -->
-  <div *ngIf="!cargando && usuarios.length === 0" class="alert alert-warning text-center">
-    No se encontraron usuarios.
+        <!-- Rol -->
+        <td *ngIf="editandoId !== usuario.idUsuario">{{ obtenerNombreRol(usuario.rolId) }}</td>
+        <td *ngIf="editandoId === usuario.idUsuario">
+          <select [(ngModel)]="usuarioEditado.rolId">
+            <option *ngFor="let r of roles" [value]="r.id">{{ r.nombre }}</option>
+          </select>
+        </td>
+
+        <!-- Estado -->
+        <td>
+          <span [class.activo]="usuario.estado" [class.inactivo]="!usuario.estado">
+            {{ usuario.estado ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+
+        <!-- Acciones -->
+        <td class="acciones">
+          <button *ngIf="editandoId !== usuario.idUsuario" class="btn editar" (click)="activarEdicion(usuario)">Editar</button>
+          <button *ngIf="editandoId === usuario.idUsuario" class="btn guardar" (click)="guardarCambios(usuario)">Guardar</button>
+          <button *ngIf="editandoId === usuario.idUsuario" class="btn cancelar" (click)="cancelarEdicion()">Cancelar</button>
+          <button class="btn eliminar" (click)="eliminarUsuario(usuario.idUsuario!)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="usuarios.length === 0 && !cargando" class="mensaje info">
+    No hay usuarios registrados.
   </div>
 </div>

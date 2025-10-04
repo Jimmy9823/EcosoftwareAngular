@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { UsuarioService } from '../usuario_services/usuario.service';
 import { UsuarioModel } from '../usuario_models/usuario';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
-import { FormComp } from '../../shared/form/form.comp/form.comp';
 import { Solcitudes } from '../../solcitudes/solcitudes';
+import { Usuario } from "../usuario_components/usuario";
 
 @Component({
   selector: 'app-administrador',
-  imports: [ COMPARTIR_IMPORTS, FormComp, Solcitudes],
+  imports: [COMPARTIR_IMPORTS, Solcitudes, Usuario],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
@@ -45,7 +45,7 @@ export class Administrador {
       next: (lista) => {
         this.usuarios = lista.map(usuario => ({
           ...usuario,
-          rol: this.obtenerNombreRol(usuario.rolId)
+          rol: this.obtenerNombreRol(usuario.rolId!)
         }));
 
         this.cargando = false;
@@ -93,7 +93,7 @@ export class Administrador {
     next: (usuariosFiltrados) => {
       this.usuarios = usuariosFiltrados.map(usuario => ({
         ...usuario,
-        rol: this.obtenerNombreRol(usuario.rolId)
+        rol: this.obtenerNombreRol(usuario.rolId!)
       }));
       this.mensaje = `${usuariosFiltrados.length} usuario(s) encontrado(s)`;
       this.error = '';
