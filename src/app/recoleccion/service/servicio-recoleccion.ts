@@ -5,6 +5,6 @@ import { ModeloRecoleccion } from '../model/modelo-recoleccion';
   providedIn: 'root'
 })
 export class ServicioRecoleccion {
-  private api = "http://localhost:8080/api/solicitudes"
+  private api = "http://localhost:8082/api/solicitudes"
   
 }
