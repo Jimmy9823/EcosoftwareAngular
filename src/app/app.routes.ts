@@ -18,7 +18,7 @@ export const routes: Routes = [
     {path: 'administrador', component:Administrador},
     {path: 'ciudadano', component:Ciudadano},
     {path: 'card-solicitud', component:CardsSolicitud},
-    {path: 'card-re-acpt-solicitus', component:CardARSolicitud},
+    {path: 'card-re-acpt-solicitud', component:CardARSolicitud},
 
     {path: '**', redirectTo: ''} //cualquier otra ruta redirecciona a inicio
 ];
