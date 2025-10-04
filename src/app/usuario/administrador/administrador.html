@@ -1,127 +1,241 @@
-<app-header></app-header>
 
 
-<main class="dashboard administrador">
-  <section class="bienvenida">
-    <h2>Panel Administrador</h2>
-    <p>Controla el sistema, gestiona usuarios y campañas ambientales.</p>
-  </section>
+<div class="d-flex">
 
-  <section class="acciones">
-  <div class="carta" (click)="cambiarVista('usuarios')">
-    <i class="fas fa-user-cog"></i>
-    <h4>Gestión de Usuarios</h4>
-    <p>Administra roles y accesos.</p>
-  </div>
-  <div class="carta" (click)="cambiarVista('solicitudes')">
-    <i class="fas fa-chart-pie"></i>
-    <h4>Estadísticas Globales</h4>
-    <p>Monitorea el impacto ambiental general.</p>
-  </div>
-  <div class="carta" (click)="cambiarVista('recolecciones')">
-    <i class="fas fa-bullhorn"></i>
-    <h4>Campañas</h4>
-    <p>Organiza eventos y jornadas ecológicas.</p>
-  </div>
-</section>
+  <!-- SIDEBAR LATERAL -->
+  <nav [class.collapsed]="!menuAbierto" class="sidebar border rounded p-3 shadow d-flex flex-column">
 
-<!-- ===================== VISTAS DINÁMICAS ===================== -->
-<ng-container *ngIf="vistaActual === 'usuarios'">
-  <!-- TODO el bloque de tabla y filtros de usuarios -->
-   <h2 class="mb-3 text-center">Lista de Usuarios</h2>
+    <!-- LOGO -->
+    <div class="sidebar-logo mb-4 text-center">
+      <a routerLink="/" class="d-flex align-items-center justify-content-center gap-2">
+        <i class="bi bi-arrow-repeat fs-3"></i>
+        <span *ngIf="menuAbierto" class="ms-2 fw-bold fs-4 verde-principal">EcoSoftware</span>
+      </a>
+    </div>
 
-  <!-- FILTRO -->
-<app-form-comp
-  mode="filtro"
-  (formSubmit)="aplicarFiltroDesdeForm($event)"
-  (filterClear)="limpiarFiltro()">
-</app-form-comp>
+    <!-- Botón toggle -->
+    <button class="btn btn-outline-success mb-3 w-100" (click)="toggleMenu()">
+      <i class="bi" [ngClass]="menuAbierto ? 'bi-x-lg' : 'bi-list'"></i>
+      <span *ngIf="menuAbierto" class="ms-2">Menú</span>
+    </button>
 
- 
+    <!-- Menú principal -->
+    <ul class="nav flex-column mt-2" id="sidebarMenu">
+      <li class="nav-item mb-2">
+        <a class="nav-link d-flex align-items-center" 
+           [ngClass]="{'active-link': vistaActual==='panel'}"
+           (click)="cambiarVista('panel')">
+          <i class="bi bi-speedometer2"></i>
+          <span *ngIf="menuAbierto">Panel de Control</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link d-flex align-items-center" 
+           [ngClass]="{'active-link': vistaActual==='usuarios'}"
+           (click)="cambiarVista('usuarios')">
+          <i class="bi bi-people"></i>
+          <span *ngIf="menuAbierto">Usuarios</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link d-flex align-items-center"
+           [ngClass]="{'active-link': vistaActual==='solicitudes'}"
+           (click)="cambiarVista('solicitudes')">
+          <i class="bi bi-bar-chart-line"></i>
+          <span *ngIf="menuAbierto">Solicitudes</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link d-flex align-items-center"
+           [ngClass]="{'active-link': vistaActual==='recolecciones'}"
+           (click)="cambiarVista('recolecciones')">
+          <i class="bi bi-bullhorn"></i>
+          <span *ngIf="menuAbierto">Recolecciones</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link d-flex align-items-center"
+           [ngClass]="{'active-link': vistaActual==='puntos'}"
+           (click)="cambiarVista('puntos')">
+          <i class="bi bi-geo-alt"></i>
+          <span *ngIf="menuAbierto">Puntos de Reciclaje</span>
+        </a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link d-flex align-items-center"
+           [ngClass]="{'active-link': vistaActual==='noticias'}"
+           (click)="cambiarVista('noticias')">
+          <i class="bi bi-newspaper"></i>
+          <span *ngIf="menuAbierto">Noticias</span>
+        </a>
+      </li>
+    </ul>
 
-  <!--  CARGANDO -->
-  <div *ngIf="cargando" class="alert alert-info text-center">
-    Cargando usuarios...
-  </div>
+    <!-- PERFIL USUARIO -->
+    <div class="sidebar-perfil mt-auto text-center position-relative">
+      <button class="btn w-100 d-flex align-items-center justify-content-center gap-2"
+              (click)="togglePerfilMenu()">
+        <i class="bi bi-person-circle fs-3"></i>
+        <span *ngIf="menuAbierto">Paula Sofía</span>
+        <i *ngIf="menuAbierto" class="bi ms-auto" [ngClass]="perfilMenuAbierto ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
+      </button>
 
-  <!--  MENSAJES -->
-  <div *ngIf="mensaje" class="alert alert-success">{{ mensaje }}</div>
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <ul *ngIf="perfilMenuAbierto" class="perfil-menu list-unstyled shadow rounded">
+        <li>
+          <a class="dropdown-item d-flex align-items-center justify-content-center" href="#">
+            <i class="bi bi-pencil"></i>
+            <span *ngIf="menuAbierto" class="ms-2">Editar Perfil</span>
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item d-flex align-items-center justify-content-center" href="#">
+            <i class="bi bi-gear"></i>
+            <span *ngIf="menuAbierto" class="ms-2">Configuración</span>
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item d-flex align-items-center justify-content-center text-danger" href="#">
+            <i class="bi bi-box-arrow-right"></i>
+            <span *ngIf="menuAbierto" class="ms-2">Cerrar Sesión</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
 
-<!--  TABLA -->
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="dashboard administrador flex-fill p-4 scrollspy-container"
+        data-bs-spy="scroll"
+        data-bs-target="#sidebarMenu"
+        data-bs-smooth-scroll="true"
+        tabindex="0">     
 
-<div class="table-responsive" *ngIf="usuarios.length > 0">
-  <table class="table table-striped table-hover">
-    <thead class="table-dark">
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Correo</th>
-        <th>Rol</th>
-        <th>Documento</th>
-        <th>telefono</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let usuario of usuarios">
-        <td>{{ usuario.idUsuario }}</td>
-        <td>{{ usuario.nombre }}</td>
-        <td>{{ usuario.correo }}</td>
-        <td>{{ usuario.rol }}</td> <!-- ✅ aquí usamos el rol mapeado -->
-        <td>{{  usuario.nit || usuario.cedula }}</td>
-        <td>{{  usuario.telefono }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <!-- PANEL DE CONTROL -->
+    <ng-container *ngIf="vistaActual === 'panel'">
+      <h3 class="fw-bold text-center verde-principal mb-4">Panel de Control</h3>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card text-center shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-people fs-1 text-success"></i>
+              <h5 class="mt-2">Usuarios activos</h5>
+              <p class="fs-4 fw-bold">128</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-recycle fs-1 text-success"></i>
+              <h5 class="mt-2">Kg reciclados</h5>
+              <p class="fs-4 fw-bold">1.245</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-graph-up-arrow fs-1 text-success"></i>
+              <h5 class="mt-2">Campañas activas</h5>
+              <p class="fs-4 fw-bold">6</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- USUARIOS -->
+    <ng-container *ngIf="vistaActual === 'usuarios'">
+
+    <h3 class="mb-3 text-center fw-bold verde-principal">Lista de Usuarios</h3>
+
+    <!-- FILTRO -->
+    <app-form-comp
+      mode="filtro"
+      (formSubmit)="aplicarFiltroDesdeForm($event)"
+      (filterClear)="limpiarFiltro()">
+    </app-form-comp>
+
+    <!-- ALERTAS -->
+    <div *ngIf="cargando" class="alert alert-info text-center shadow-sm rounded-pill py-2">
+      Cargando usuarios...
+    </div>
+    <div *ngIf="mensaje" class="alert alert-success text-center shadow-sm rounded-pill py-2">
+      {{ mensaje }}
+    </div>
+    <div *ngIf="error" class="alert alert-danger text-center shadow-sm rounded-pill py-2">
+      {{ error }}
+    </div>
+
+    <!-- TABLA -->
+    <div class="table-container shadow rounded mt-3" *ngIf="usuarios.length > 0">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-success text-center">
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Documento</th>
+            <th>Teléfono</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios" class="text-center">
+            <td>{{ usuario.idUsuario }}</td>
+            <td>{{ usuario.nombre }}</td>
+            <td>{{ usuario.correo }}</td>
+            <td>{{ usuario.rol }}</td>
+            <td>{{ usuario.nit || usuario.cedula }}</td>
+            <td>{{ usuario.telefono }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- BOTONES DE EXPORTAR -->
+    <div class="d-flex justify-content-center gap-3 mt-4">
+      <button type="button" class="btn btn-outline-success export-btn" (click)="exportarExcel()">
+        <i class="bi bi-file-earmark-excel me-2"></i> Exportar Excel
+      </button>
+      <button type="button" class="btn btn-outline-danger export-btn" (click)="exportarPDF()">
+        <i class="bi bi-file-earmark-pdf me-2"></i> Exportar PDF
+      </button>
+    </div>
+
+    <!-- SIN RESULTADOS -->
+    <div *ngIf="!cargando && usuarios.length === 0" 
+         class="alert alert-warning text-center shadow-sm rounded-pill py-2 mt-3">
+      No se encontraron usuarios registrados.
+    </div>
+
+  </ng-container>
+
+    <!-- SOLICITUDES -->
+    <ng-container *ngIf="vistaActual === 'solicitudes'">
+      <h3 class="fw-bold text-center verde-principal mb-4">Solicitudes</h3>
+      
+    </ng-container>
+
+    <!-- RECOLECCIONES -->
+    <ng-container *ngIf="vistaActual === 'recolecciones'">
+      <h3 class="fw-bold text-center verde-principal mb-4">Campañas y Recolecciones</h3>
+      
+    </ng-container>
+
+    <!-- PUNTOS DE RECICLAJE -->
+    <ng-container *ngIf="vistaActual === 'puntos'">
+      <h3 class="fw-bold text-center verde-principal mb-4">Puntos de Reciclaje</h3>
+      
+    </ng-container>
+
+    <!-- NOTICIAS -->
+    <ng-container *ngIf="vistaActual === 'noticias'">
+      <h3 class="fw-bold text-center verde-principal mb-4">Noticias</h3>
+      
+    </ng-container>
+
+  </main>
 </div>
-
-
-<!-- ejemplo: dashboard.component.html -->
-<app-boton
-  tipo="btn btn-success"
-  [disabled]="false"
-  icono="bi bi-check-circle"
-  label="Descargar Excel"
-  [estilo]="{ 'font-weight': 'bold' }"
-  (accion)="exportarExcel()"
->
-</app-boton>
-
-<app-boton
-  tipo="btn btn-danger"
-  [disabled]="false"
-  icono="bi bi-box-seam"
-  label="Descargar pdf"
-  [estilo]="{ 'font-weight': 'bold' }"
-  (accion)="exportarPDF()"
->
-</app-boton>
-
-
-<!-- SIN RESULTADOS -->
-  <div *ngIf="!cargando && usuarios.length === 0" class="alert alert-warning text-center">
-    No se encontraron usuarios registrados.
-  </div>
-</ng-container>
-
-<ng-container *ngIf="vistaActual === 'solicitudes'">
-  <app-solcitudes/>
-</ng-container>
-
-<ng-container *ngIf="vistaActual === 'recolecciones'">
-  <div class="alert alert-info text-center mt-4">
-    Aquí irá el módulo de campañas ecológicas 🌿
-  </div>
-</ng-container>
-</main>
-
-<div class="container mt-4">
-  
-
-  
-</div>
-
-
-
 

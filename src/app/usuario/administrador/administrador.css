@@ -1,19 +1,12 @@
+/* ===================== DASHBOARD ===================== */
 .dashboard {
   padding: 3rem 2rem;
   text-align: center;
   margin-top: 30px;
+  transition: margin-left 0.3s;
 }
 
-.dashboard h2 {
-  color: #3e7d3c;
-  margin-bottom: 1rem;
-}
-
-.dashboard p {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-}
-
+/* ===================== ACCIONES - CARTAS ===================== */
 .acciones {
   display: flex;
   flex-wrap: wrap;
@@ -27,16 +20,18 @@
   padding: 1.5rem;
   width: 250px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .carta:hover {
   transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
 .carta i {
   font-size: 2rem;
-  color: #5c8ead;
+  color: #3e7d3c;
   margin-bottom: 0.5rem;
 }
 
@@ -48,4 +43,221 @@
 .carta p {
   font-size: 0.95rem;
   color: #555;
+}
+
+/* ===================== SIDEBAR ===================== */
+.sidebar {
+  width: 220px;
+  background-color: #eaf6ea;
+  transition: width 0.3s;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+/* LOGO */
+.sidebar-logo a {
+  color: #3e7d3c;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-logo i {
+  color: #3e7d3c;
+}
+
+.sidebar-logo span {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+}
+
+/* Botón toggle */
+.sidebar button {
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Links del sidebar */
+.sidebar .nav-link {
+  border-radius: 10px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s, padding 0.3s;
+  color: #3e7d3c;
+}
+
+.sidebar .nav-link:hover {
+  background-color: #d4efd4;
+}
+
+.sidebar .nav-link i {
+  min-width: 24px;
+  text-align: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.sidebar .nav-link.active-link {
+  background-color: #3e7d3c;
+  color: #ffffff;
+}
+
+.sidebar .nav-link.active-link i {
+  color: #ffffff;
+}
+
+.sidebar.collapsed .nav-link {
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.sidebar.collapsed .nav-link span,
+.sidebar.collapsed .sidebar-logo span,
+.sidebar.collapsed .sidebar-perfil span {
+  display: none;
+}
+
+/* ===================== PERFIL USUARIO ===================== */
+.sidebar-perfil {
+  margin-top: auto;
+  text-align: center;
+  position: relative;
+  padding-top: 1rem;
+  border-top: 1px solid #d4efd4;
+}
+
+.sidebar-perfil button {
+  border-radius: 10px;
+  border: none;
+  background-color: #eaf6ea;
+  color: #3e7d3c;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.sidebar-perfil button:hover {
+  background-color: #d4efd4;
+}
+
+/* MENÚ DESPLEGABLE */
+.perfil-menu {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  list-style: none;
+  transition: all 0.3s ease;
+}
+
+.sidebar.collapsed .perfil-menu {
+  width: 60px;
+  text-align: center;
+}
+
+.perfil-menu li a {
+  color: #3e7d3c;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  justify-content: flex-start;
+}
+
+.sidebar.collapsed .perfil-menu li a {
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.perfil-menu li a:hover {
+  background-color: #e2f0e2;
+}
+
+.perfil-menu li a.text-danger:hover {
+  background-color: #f8d7da;
+}
+
+/* ===================== TABLAS Y BOTONES ===================== */
+table {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.btn {
+  border-radius: 10px;
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+    z-index: 1000;
+    height: 100%;
+    left: -220px;
+    top: 0;
+  }
+
+  .sidebar.collapsed {
+    left: 0;
+  }
+
+  main.flex-fill {
+    margin-left: 0 !important;
+  }
+
+  .dashboard {
+    padding: 2rem 1rem;
+  }
+}
+
+/* ===================== TRANSICIONES ===================== */
+main.flex-fill {
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar + main.flex-fill {
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+.sidebar.collapsed + main.flex-fill {
+  margin-left: 60px;
+}
+
+/* Contenido principal con scroll */
+.scrollspy-container {
+  height: 100vh;        /* ocupa toda la pantalla */
+  overflow-y: auto;     /* scroll SOLO aquí */
+  overflow-x: hidden;
+}
+
+/* Sidebar fijo */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
 }
