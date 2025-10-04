@@ -56,7 +56,7 @@
 }
 
 .sidebar.collapsed {
-  width: 60px;
+  width: 80px;
 }
 
 /* LOGO */
@@ -240,8 +240,8 @@ main.flex-fill {
 }
 
 .sidebar + main.flex-fill {
-  margin-left: 100px;
-  margin-right: 100px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .sidebar.collapsed + main.flex-fill {

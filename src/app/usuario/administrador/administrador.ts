@@ -5,7 +5,6 @@ import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { FormComp } from '../../shared/form/form.comp/form.comp';
 import { Solcitudes } from '../../solcitudes/solcitudes';
 
-
 @Component({
   selector: 'app-administrador',
   imports: [ COMPARTIR_IMPORTS, FormComp, Solcitudes],
@@ -21,15 +20,17 @@ export class Administrador {
   error: string = '';
   mensaje: string = '';
   rol: string = '';
-  vistaActual:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'noticias'| null = null;
+  vistaActual:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'noticias' = 'panel';;
 
 
   // 🔸 Ya no necesitamos las propiedades criterio y valorFiltro manuales
   constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
-    this.consultarUsuarios();
-  }
+  this.vistaActual = 'panel'; 
+  this.consultarUsuarios();   
+}
+
 
   cambiarVista(vista:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones'|'puntos'|'noticias') {
   this.vistaActual = vista;
