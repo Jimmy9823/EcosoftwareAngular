@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Service } from './solicitudes/service';
-import { ServiceModel } from './solicitudes/model';
+import { Service } from './solcitudes/service';
+import { ServiceModel } from './solcitudes/model';
 import { COMPARTIR_IMPORTS } from '../ImpCondYForms/imports';
 
 @Component({

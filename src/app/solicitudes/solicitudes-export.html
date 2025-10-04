@@ -1,0 +1,53 @@
+<div class="container mt-4">
+  <h2>Solicitudes</h2>
+
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label>Filtrar por Estado:</label>
+      <select class="form-control" [(ngModel)]="filtroEstado" (change)="filtrarSolicitudes()">
+        <option value="">Todos</option>
+        <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label>Filtrar por Localidad:</label>
+      <select class="form-control" [(ngModel)]="filtroLocalidad">
+        <option value="">Todas</option>
+        <option *ngFor="let loc of localidades" [value]="loc">{{ loc }}</option>
+      </select>
+    </div>
+
+    <div class="col-md-4 d-flex align-items-end">
+      <button class="btn btn-success mr-2" (click)="exportarExcel()">Exportar Excel</button>
+      <button class="btn btn-danger" (click)="exportarPDF()">Exportar PDF</button>
+    </div>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Tipo Residuo</th>
+        <th>Cantidad</th>
+        <th>Estado</th>
+        <th>Localidad</th>
+        <th>Fecha Programada</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sol of solicitudes">
+        <td>{{ sol.idSolicitud }}</td>
+        <td>{{ sol.usuarioId }}</td>
+        <td>{{ sol.tipoResiduo }}</td>
+        <td>{{ sol.cantidad }}</td>
+        <td>{{ sol.estadoPeticion }}</td>
+        <td>{{ sol.localidad }}</td>
+        <td>{{ sol.fechaProgramada | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="loading">Cargando...</div>
+</div>
