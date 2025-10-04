@@ -1,4 +1,3 @@
-<app-form-registro/>
 
 <div class="d-flex">
 
@@ -139,7 +138,30 @@
     <!-- SOLICITUDES -->
     <ng-container *ngIf="vistaActual === 'solicitudes'">
       <h3 class="fw-bold text-center verde-principal mb-4">Solicitudes</h3>
-      <p class="text-center">Aquí irán las solicitudes pendientes y en proceso.</p>
+      <p class="text-center">Consulta tus solicitudes</p>
+      
+      
+
+<div class="contenedor-toggle">
+  <button class="btn-toggle" (click)="toggleVista()">
+    {{ mostrarNuevaSolicitud ? 'Mostrar solicitudes pendientes' : 'Hacer nueva solicitud' }}
+  </button>
+
+  <!-- 🟢 Contenedor para hacer nueva solicitud -->
+  <ng-container *ngIf="mostrarNuevaSolicitud">
+    <div class="contenido-solicitud">
+      <app-form-registro/>
+    </div>
+  </ng-container>
+
+  <!-- 🟡 Contenedor para mostrar solicitudes pendientes -->
+  <ng-container *ngIf="!mostrarNuevaSolicitud">
+    <div class="contenido-solicitud">
+      <app-cards-solicitud/>
+    </div>
+  </ng-container>
+</div>
+
       
     </ng-container>
 

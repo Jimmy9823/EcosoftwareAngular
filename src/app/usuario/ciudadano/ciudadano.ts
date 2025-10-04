@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { FormRegistro } from '../../solcitudes/form-registro/form-registro';
+import { CardsSolicitud } from '../../solcitudes/cards-solicitud/cards-solicitud';
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormRegistro],
+  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })
@@ -21,6 +22,11 @@ export class Ciudadano {
   // ========================
   // MÉTODOS DEL SIDEBAR
   // ========================
+   mostrarNuevaSolicitud = false  // false = mostrar solicitudes pendientes
+
+  toggleVista(): void {
+    this.mostrarNuevaSolicitud = !this.mostrarNuevaSolicitud
+  }
 
   toggleMenu(): void {
     this.menuAbierto = !this.menuAbierto;

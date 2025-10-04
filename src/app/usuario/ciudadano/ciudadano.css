@@ -281,3 +281,44 @@ main.flex-fill {
   top: 0;
   height: 100vh;
 }
+
+.contenedor-toggle {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.btn-toggle {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 18px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-toggle:hover {
+  background-color: #218838;
+}
+
+.contenido-solicitud {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #f8fff9;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animación suave de aparición */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
