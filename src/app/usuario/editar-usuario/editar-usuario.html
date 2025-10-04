@@ -1,0 +1,26 @@
+<div class="form-container">
+  <h2>Editar Usuario</h2>
+
+  <!-- Botón Darse de baja -->
+  <button type="button" class="btn-baja" (click)="darseDeBaja()">
+    Darse de baja de la aplicación
+  </button>
+
+  <!-- Botón Mostrar formulario -->
+  <button *ngIf="!mostrarFormulario" type="button" class="btn-actualizar" (click)="mostrarForm()">
+    Actualizar Usuario
+  </button>
+
+  <!-- Formulario dinámico -->
+  <form *ngIf="mostrarFormulario" [formGroup]="usuarioForm" (ngSubmit)="actualizarUsuario()">
+    <div class="form-group" *ngFor="let campo of usuarioForm.controls | keyvalue">
+      <label>{{ campo.key }}</label>
+      <input [formControlName]="campo.key" type="text">
+    </div>
+
+    <button type="submit" class="btn-actualizar">Actualizar Usuario</button>
+  </form>
+
+  <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+</div>

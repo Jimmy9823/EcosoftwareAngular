@@ -9,6 +9,7 @@ import { Ciudadano } from './usuario/ciudadano/ciudadano';
 import { CardsSolicitud } from './solcitudes/cards-solicitud/cards-solicitud';
 import { CardARSolicitud } from './solcitudes/card-a-r-solicitud/card-a-r-solicitud';
 import { FormRegistro } from './solcitudes/form-registro/form-registro';
+import { EditarUsuario } from './usuario/editar-usuario/editar-usuario';
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -18,6 +19,7 @@ export const routes: Routes = [
     {path: 'registro', component:Registro},
     {path: 'administrador', component:Administrador},
     {path: 'ciudadano', component:Ciudadano},
+    {path: 'editar-usuario', component:EditarUsuario},
     {path: 'card-solicitud', component:CardsSolicitud},
     {path: 'card-re-acpt-solicitud', component:CardARSolicitud},
     {path: 'form-solicitud', component:FormRegistro},
