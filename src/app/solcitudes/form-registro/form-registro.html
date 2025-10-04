@@ -1,50 +1,37 @@
-<form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
-  <h2>Registro de Solicitud</h2>
+<div class="form-container">
+  <h2>Registrar Solicitud de Recolección</h2>
+  <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
 
-  <!-- ID Usuario -->
-  <label for="usuarioId">ID Usuario</label>
-  <input id="usuarioId" type="number" formControlName="usuarioId">
-  <div class="error-msg" *ngIf="isInvalid('usuarioId')">ID Usuario requerido</div>
+    <label>Tipo de Residuo</label>
+    <select formControlName="tipoResiduo">
+      <option value="" disabled selected>Seleccione...</option>
+      <option *ngFor="let tipo of tiposResiduo" [value]="tipo">{{ tipo }}</option>
+    </select>
 
-  <!-- Tipo de residuo -->
-  <label for="tipoResiduo">Tipo de residuo</label>
-  <select id="tipoResiduo" formControlName="tipoResiduo">
-    <option value="" disabled selected>Seleccione un tipo</option>
-    <option *ngFor="let tipo of tiposResiduo" [value]="tipo">{{ tipo }}</option>
-  </select>
-  <div class="error-msg" *ngIf="isInvalid('tipoResiduo')">Tipo de residuo requerido</div>
+    <label>Cantidad</label>
+    <input type="text" formControlName="cantidad" placeholder="Ej: 5 kg">
 
-  <!-- Cantidad -->
-  <label for="cantidad">Cantidad</label>
-  <input id="cantidad" type="text" formControlName="cantidad" placeholder="Cantidad de residuos">
-  <div class="error-msg" *ngIf="isInvalid('cantidad')">Cantidad inválida</div>
+    <label>Descripción</label>
+    <textarea formControlName="descripcion" placeholder="Detalle de la solicitud"></textarea>
 
-  <!-- Descripción -->
-  <label for="descripcion">Descripción</label>
-  <input id="descripcion" type="text" formControlName="descripcion" placeholder="Descripción de la solicitud">
-  <div class="error-msg" *ngIf="isInvalid('descripcion')">Descripción requerida</div>
+    <label>Localidad</label>
+    <select formControlName="localidad">
+      <option value="" disabled selected>Seleccione...</option>
+      <option *ngFor="let loc of localidades" [value]="loc">{{ loc }}</option>
+    </select>
 
-  <!-- Localidad -->
-  <label for="localidad">Localidad</label>
-  <select id="localidad" formControlName="localidad">
-    <option value="" disabled selected>Seleccione una localidad</option>
-    <option *ngFor="let loc of localidades" [value]="loc">{{ loc }}</option>
-  </select>
-  <div class="error-msg" *ngIf="isInvalid('localidad')">Localidad requerida</div>
+    <label>Ubicación</label>
+    <input type="text" formControlName="ubicacion" placeholder="Dirección completa">
 
-  <!-- Ubicación -->
-  <label for="ubicacion">Ubicación</label>
-  <input id="ubicacion" type="text" formControlName="ubicacion" placeholder="Dirección exacta">
-  <div class="error-msg" *ngIf="isInvalid('ubicacion')">Ubicación requerida</div>
+    <label>Evidencia (opcional)</label>
+    <input type="text" formControlName="evidencia" placeholder="URL o descripción">
 
-  <!-- Evidencia -->
-  <label for="evidencia">Evidencia (opcional)</label>
-  <input id="evidencia" type="text" formControlName="evidencia" placeholder="URL o descripción de evidencia">
+    <label>Fecha Programada</label>
+    <input type="date" formControlName="fechaProgramada">
 
-  <!-- Fecha programada -->
-  <label for="fechaProgramada">Fecha programada</label>
-  <input id="fechaProgramada" type="date" formControlName="fechaProgramada">
-  <div class="error-msg" *ngIf="isInvalid('fechaProgramada')">Fecha requerida</div>
+    <button type="submit">Registrar Solicitud</button>
+  </form>
 
-  <button type="submit">Registrar Solicitud</button>
-</form>
+  <div class="mensaje" *ngIf="mensaje">{{ mensaje }}</div>
+  <div class="error" *ngIf="error">{{ error }}</div>
+</div>

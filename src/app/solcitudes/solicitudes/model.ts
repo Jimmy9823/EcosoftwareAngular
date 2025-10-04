@@ -46,20 +46,18 @@ export enum TipoResiduo {
 
 
 export interface ServiceModel {
-  idSolicitud: number;
-  usuarioId: number;          // Id del ciudadano que crea la solicitud
-  aceptadaPorId: number;      // Id del usuario que acepta la solicitud (empresa/reciclador)
-
+  idSolicitud?: number;         // Se genera en backend, opcional al crear
+  usuarioId: number;            // Obligatorio
+  aceptadaPorId?: number | null;       // Opcional, null al crear
   tipoResiduo: TipoResiduo;
   cantidad: string;
-  estadoPeticion: EstadoPeticion;
+  estadoPeticion?: EstadoPeticion; // Opcional, backend asigna Pendiente
   descripcion: string;
   localidad: Localidad;
   ubicacion: string;
-  evidencia: string;
-  fechaCreacionSolicitud: string; // en Angular, OffsetDateTime llega como string ISO
-  fechaProgramada: string;        // igual, se maneja como string ISO y se parsea a Date si se requiere
-
-  recoleccionId: number;          // Relación con la recolección generada
+  evidencia?: string;           // Opcional
+  fechaCreacionSolicitud?: string; // Opcional, backend puede asignar
+  fechaProgramada: string;
+  recoleccionId?: number;       // Opcional
 }
 

@@ -1,58 +1,81 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Localidad, TipoResiduo, EstadoPeticion, ServiceModel } from '../solicitudes/model';
+import { Localidad, EstadoPeticion, TipoResiduo, ServiceModel } from '../solicitudes/model';
 import { Service } from '../solicitudes/service';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 
 @Component({
   selector: 'app-form-registro',
   templateUrl: './form-registro.html',
-  styleUrls: ['./form-registro.css'],
-  imports:[COMPARTIR_IMPORTS]
+  imports: [COMPARTIR_IMPORTS],
+  styleUrls: ['./form-registro.css']
 })
-export class FormRegistro implements OnInit {
+export class FormRegistro {
 
-  registroForm!: FormGroup;
+  registroForm: FormGroup;
+  tiposResiduo = Object.values(TipoResiduo);
   localidades = Object.values(Localidad);
-  tiposResiduo = Object.values(TipoResiduo).filter(t => t !== 'Otro'); // Excluir 'Otro'
+  mensaje = '';
+  error = '';
 
-  constructor(private fb: FormBuilder, private solicitudesService: Service) {}
+  constructor(private fb: FormBuilder, private solicitudService: Service) {
 
-  ngOnInit(): void {
     this.registroForm = this.fb.group({
-      usuarioId: ['', Validators.required],
+      usuarioId: [{ value: null, disabled: true }], // asigna desde login
+      aceptadaPorId: [{ value: null, disabled: true }], // se asigna luego al aceptar
       tipoResiduo: ['', Validators.required],
-      cantidad: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+      cantidad: ['', Validators.required],
+      estadoPeticion: [{ value: EstadoPeticion.Pendiente, disabled: true }],
       descripcion: ['', Validators.required],
       localidad: ['', Validators.required],
       ubicacion: ['', Validators.required],
       evidencia: [''],
-      fechaProgramada: ['', Validators.required],
-      estadoPeticion: [{ value: EstadoPeticion.Pendiente, disabled: true }]
+      fechaProgramada: ['', Validators.required]
     });
   }
 
   onSubmit(): void {
-    if (this.registroForm.valid) {
-      const nuevaSolicitud: ServiceModel = {
-        ...this.registroForm.value,
-        idSolicitud: 0,
-        aceptadaPorId: 0,
-        fechaCreacionSolicitud: new Date().toISOString(),
-        recoleccionId: 0,
-        estadoPeticion: EstadoPeticion.Pendiente
-      };
-      this.solicitudesService.crearSolicitud(nuevaSolicitud).subscribe({
-        next: () => alert('Solicitud registrada correctamente'),
-        error: () => alert('Error al registrar solicitud')
-      });
-    } else {
-      this.registroForm.markAllAsTouched();
+    if (this.registroForm.invalid) {
+      this.mensaje = '';
+      this.error = 'Por favor complete todos los campos obligatorios';
+      return;
     }
-  }
 
-  isInvalid(controlName: string): boolean {
-    const control = this.registroForm.get(controlName);
-    return !!(control && control.invalid && (control.dirty || control.touched));
+    const raw = this.registroForm.getRawValue();
+
+    if (!raw.usuarioId || raw.usuarioId <= 0) {
+      this.error = 'Usuario no válido. Debe estar logueado.';
+      return;
+    }
+
+    const fechaProgramada = raw.fechaProgramada.includes('T')
+      ? raw.fechaProgramada
+      : raw.fechaProgramada + 'T00:00:00';
+
+    const nuevaSolicitud: Partial<ServiceModel> = {
+      usuarioId: raw.usuarioId,
+      aceptadaPorId: null, // puede ser null al crear
+      tipoResiduo: raw.tipoResiduo as TipoResiduo,
+      cantidad: raw.cantidad,
+      estadoPeticion: EstadoPeticion.Pendiente,
+      descripcion: raw.descripcion,
+      localidad: raw.localidad as Localidad,
+      ubicacion: raw.ubicacion,
+      evidencia: raw.evidencia && raw.evidencia.trim() !== '' ? raw.evidencia : 'Sin evidencia',
+      fechaCreacionSolicitud: new Date().toISOString(),
+      fechaProgramada: fechaProgramada
+    };
+
+    this.solicitudService.crearSolicitud(nuevaSolicitud as ServiceModel).subscribe({
+      next: () => {
+        this.mensaje = 'Solicitud registrada correctamente';
+        this.error = '';
+        this.registroForm.reset();
+      },
+      error: (err) => {
+        this.mensaje = '';
+        this.error = 'Error al registrar la solicitud: ' + (err.error?.message || err.message || 'Servidor');
+      }
+    });
   }
 }
