@@ -1,18 +1,18 @@
-import { ServiceModel } from './solicitudes/model';
-import { Service } from './solicitudes/service';
 import { Component, OnInit } from '@angular/core';
+import { Service } from './solicitudes/service';
+import { ServiceModel } from './solicitudes/model';
 import { COMPARTIR_IMPORTS } from '../ImpCondYForms/imports';
-import { Header } from '../shared/header/header';
 
 @Component({
   selector: 'app-solcitudes',
-  imports: [COMPARTIR_IMPORTS, Header],
+  standalone: true,
+  imports: [COMPARTIR_IMPORTS],
   templateUrl: './solcitudes.html',
-  styleUrl: './solcitudes.css'
+  styleUrls: ['./solcitudes.css']
 })
 export class Solcitudes implements OnInit {
 
-  Servicios: ServiceModel[] = [];
+  solicitudes: ServiceModel[] = [];
   selectedSolicitud: ServiceModel | null = null;
   motivoRechazo: string = '';
   mostrarModalRechazo = false;
@@ -26,20 +26,20 @@ export class Solcitudes implements OnInit {
   listarSolicitudes(): void {
     this.solicitudesService.listar().subscribe({
       next: (lista: ServiceModel[]) => {
-        this.Servicios = lista;
+        this.solicitudes = lista;
       },
-      error: (err) => console.error('Error al listar solicitudes', err)
+      error: (err) => console.error('❌ Error al listar solicitudes', err)
     });
   }
 
   aceptarSolicitud(solicitud: ServiceModel): void {
-    const recolectorId = 3; // ⚠️ Aquí deberías usar el ID real del recolector (por sesión o similar)
+    const recolectorId = 3; // ⚠️ Cambiar por el ID real del recolector desde la sesión
     this.solicitudesService.aceptarSolicitud(solicitud.idSolicitud, solicitud, recolectorId).subscribe({
       next: () => {
         alert(`Solicitud #${solicitud.idSolicitud} aceptada correctamente ✅`);
-        this.listarSolicitudes(); // refrescar tabla
+        this.listarSolicitudes();
       },
-      error: (err) => console.error('Error al aceptar la solicitud', err)
+      error: (err) => console.error('❌ Error al aceptar la solicitud', err)
     });
   }
 
@@ -52,18 +52,13 @@ export class Solcitudes implements OnInit {
   confirmarRechazo(): void {
     if (!this.selectedSolicitud) return;
 
-    const solicitud = {
-      ...this.selectedSolicitud,
-      motivo: this.motivoRechazo
-    };
-
-    this.solicitudesService.rechazarSolicitud(this.selectedSolicitud.idSolicitud, solicitud).subscribe({
+    this.solicitudesService.rechazarSolicitud(this.selectedSolicitud.idSolicitud, this.motivoRechazo).subscribe({
       next: () => {
         alert(`Solicitud #${this.selectedSolicitud?.idSolicitud} rechazada correctamente ❌`);
         this.cerrarModalRechazo();
         this.listarSolicitudes();
       },
-      error: (err) => console.error('Error al rechazar la solicitud', err)
+      error: (err) => console.error('❌ Error al rechazar la solicitud', err)
     });
   }
 

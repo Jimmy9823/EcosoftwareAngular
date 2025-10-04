@@ -1,50 +1,27 @@
+<div class="solicitudes-container">
+  <h2 class="titulo-seccion">📋 Solicitudes de Recolección</h2>
 
-<div class="container mt-4">
-  <h2 class="mb-3">📋 Solicitudes de Recolección</h2>
-
-  <table class="table table-striped table-bordered text-center">
-    <thead class="table-success">
-      <tr>
-        <th>ID</th>
-        <th>Tipo Residuo</th>
-        <th>Cantidad</th>
-        <th>Localidad</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let s of Servicios">
-        <td>{{ s.idSolicitud }}</td>
-        <td>{{ s.tipoResiduo }}</td>
-        <td>{{ s.cantidad }}</td>
-        <td>{{ s.localidad }}</td>
-        <td>{{ s.estadoPeticion }}</td>
-        <td>
-          <button class="btn btn-sm btn-success me-2" (click)="aceptarSolicitud(s)" [disabled]="s.estadoPeticion !== 'Pendiente'">Aceptar</button>
-          <button class="btn btn-sm btn-danger" (click)="abrirModalRechazo(s)" [disabled]="s.estadoPeticion !== 'Pendiente'">Rechazar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- 📝 Modal Rechazo -->
-  <div class="modal-backdrop" *ngIf="mostrarModalRechazo">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content p-3">
-        <div class="modal-header">
-          <h5 class="modal-title">Rechazar Solicitud #{{ selectedSolicitud?.idSolicitud }}</h5>
-          <button type="button" class="btn-close" (click)="cerrarModalRechazo()"></button>
-        </div>
-        <div class="modal-body">
-          <label for="motivo" class="form-label">Motivo del rechazo</label>
-          <textarea id="motivo" class="form-control" [(ngModel)]="motivoRechazo"></textarea>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" (click)="cerrarModalRechazo()">Cancelar</button>
-          <button class="btn btn-danger" (click)="confirmarRechazo()" [disabled]="!motivoRechazo.trim()">Confirmar Rechazo</button>
-        </div>
-      </div>
-    </div>
+  <div class="tabla-wrapper">
+    <table class="tabla-solicitudes">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tipo Residuo</th>
+          <th>Cantidad</th>
+          <th>Localidad</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of solicitudes">
+          <td>{{ s.idSolicitud }}</td>
+          <td>{{ s.tipoResiduo }}</td>
+          <td>{{ s.cantidad }}</td>
+          <td>{{ s.localidad }}</td>
+          <td>{{ s.estadoPeticion }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

@@ -1,0 +1,33 @@
+<div class="cards-container">
+  <div *ngFor="let solicitud of solicitudes" class="solicitud-card">
+    <div class="card-header">
+      📝 Solicitud #{{ solicitud.idSolicitud }}
+    </div>
+
+    <div class="card-body">
+      <p><strong>Tipo Residuo:</strong> {{ solicitud.tipoResiduo }}</p>
+      <p><strong>Cantidad:</strong> {{ solicitud.cantidad }}</p>
+      <p><strong>Localidad:</strong> {{ solicitud.localidad }}</p>
+      <p><strong>Estado:</strong> 
+        <span class="badge" [ngClass]="{
+          'pendiente': solicitud.estadoPeticion === 'Pendiente',
+          'aceptada': solicitud.estadoPeticion === 'Aceptada',
+          'rechazada': solicitud.estadoPeticion === 'Rechazada'
+        }">
+          {{ solicitud.estadoPeticion }}
+        </span>
+      </p>
+      <p><strong>Ubicación:</strong> {{ solicitud.ubicacion || 'No especificada' }}</p>
+      <p><strong>ID Usuario:</strong> {{ solicitud.usuarioId }}</p>
+    </div>
+
+    <div class="card-footer" *ngIf="solicitud.estadoPeticion === 'Pendiente'">
+      <button class="btn-aceptar" (click)="aceptarSolicitud(solicitud)">Aceptar</button>
+      <button class="btn-rechazar" (click)="rechazarSolicitud(solicitud)">Rechazar</button>
+    </div>
+  </div>
+
+  <div *ngIf="solicitudes.length === 0" class="no-data">
+    No hay solicitudes pendientes por mostrar.
+  </div>
+</div>

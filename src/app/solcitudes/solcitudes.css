@@ -1,12 +1,67 @@
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1050;
+.solicitudes-container {
+  padding: 1.5rem;
+  background-color: #f9fdf9;
+  border-radius: 1rem;
 }
+
+.titulo-seccion {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tabla-wrapper {
+  overflow-x: auto;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.tabla-solicitudes {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.tabla-solicitudes th {
+  background-color: #d8f3dc;
+  color: #2d6a4f;
+  padding: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.tabla-solicitudes td {
+  padding: 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.tabla-solicitudes tr:hover {
+  background-color: #f1fdf5;
+}
+
+.badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge.pendiente {
+  background-color: #ffdd57;
+  color: #7a5c00;
+}
+
+.badge.aceptada {
+  background-color: #2d6a4f;
+  color: white;
+}
+
+.badge.rechazada {
+  background-color: #d62828;
+  color: white;
+}
+
