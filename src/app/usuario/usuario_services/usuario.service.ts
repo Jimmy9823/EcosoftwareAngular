@@ -22,7 +22,7 @@ export class UsuarioService {
   //  OBTENER POR ID
   // ========================
   obtenerPorId(id: number): Observable<UsuarioModel> {
-    return this.http.get<UsuarioModel>(`${this.apiUrlSpringboot}/filtrar-id/${id}`)
+    return this.http.get<UsuarioModel>(`${this.apiUrlSpringboot}/${id}`)
   }
 
   // ========================

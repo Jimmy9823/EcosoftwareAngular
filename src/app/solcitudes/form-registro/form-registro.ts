@@ -21,7 +21,7 @@ export class FormRegistro {
   constructor(private fb: FormBuilder, private solicitudService: Service) {
 
     this.registroForm = this.fb.group({
-      usuarioId: [{ value: null, disabled: true }], // asigna desde login
+      usuarioId: [{ value: 3, disabled: true }], // ⚡ ID fijo para prueba
       aceptadaPorId: [{ value: null, disabled: true }], // se asigna luego al aceptar
       tipoResiduo: ['', Validators.required],
       cantidad: ['', Validators.required],
@@ -43,11 +43,7 @@ export class FormRegistro {
 
     const raw = this.registroForm.getRawValue();
 
-    if (!raw.usuarioId || raw.usuarioId <= 0) {
-      this.error = 'Usuario no válido. Debe estar logueado.';
-      return;
-    }
-
+    // ⚡ Ya no hace falta validar usuarioId porque ahora siempre es 3
     const fechaProgramada = raw.fechaProgramada.includes('T')
       ? raw.fechaProgramada
       : raw.fechaProgramada + 'T00:00:00';
