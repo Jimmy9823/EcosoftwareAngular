@@ -1,27 +1,119 @@
 <div class="solicitudes-container">
-  <h2 class="titulo-seccion">📋 Solicitudes de Recolección</h2>
 
-  <div class="tabla-wrapper">
-    <table class="tabla-solicitudes">
-      <thead>
+  <!-- TABLA -->
+  <div class="table-container shadow rounded mt-3" *ngIf="solicitudes.length > 0">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-success text-center">
         <tr>
           <th>ID</th>
           <th>Tipo Residuo</th>
           <th>Cantidad</th>
           <th>Localidad</th>
           <th>Estado</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let s of solicitudes">
+        <tr *ngFor="let s of solicitudes" class="text-center">
           <td>{{ s.idSolicitud }}</td>
           <td>{{ s.tipoResiduo }}</td>
           <td>{{ s.cantidad }}</td>
           <td>{{ s.localidad }}</td>
-          <td>{{ s.estadoPeticion }}
+          <td>
+            <span class="badge"
+              [ngClass]="{
+                'bg-success': s.estadoPeticion === 'Aceptada',
+                'bg-danger': s.estadoPeticion === 'Rechazada',
+                'bg-warning text-dark': s.estadoPeticion === 'Pendiente'
+              }">
+              {{ s.estadoPeticion }}
+            </span>
+          </td>
+          <td>
+            <!-- Aceptar -->
+            <button class="btn btn-success btn-sm me-2"
+              (click)="aceptarSolicitud(s)"
+              [disabled]="s.estadoPeticion !== 'Pendiente'">
+              <i class="bi bi-check-circle"></i>
+            </button>
+
+            <!-- Rechazar -->
+            <button class="btn btn-outline-danger btn-sm me-2"
+              (click)="abrirModalRechazo(s)"
+              [disabled]="s.estadoPeticion !== 'Pendiente'">
+              <i class="bi bi-x-circle"></i>
+            </button>
+
+            <!-- Detalle -->
+            <button class="btn btn-outline-success btn-sm"
+              (click)="selectedSolicitud = s">
+              <i class="bi bi-eye"></i>
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- SIN RESULTADOS -->
+  <div *ngIf="!solicitudes.length" 
+       class="alert alert-warning text-center shadow-sm rounded-pill py-2 mt-3">
+    No hay solicitudes registradas.
+  </div>
+</div>
+
+<!-- MODAL RECHAZO -->
+<div class="modal fade show d-block" *ngIf="mostrarModalRechazo" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Rechazar Solicitud</h5>
+        <button type="button" class="btn-close" (click)="cerrarModalRechazo()"></button>
+      </div>
+      <div class="modal-body">
+        <label for="motivo" class="form-label">Motivo del rechazo:</label>
+        <textarea id="motivo" [(ngModel)]="motivoRechazo" rows="3" class="form-control"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary text-white" (click)="cerrarModalRechazo()">Cancelar</button>
+        <button class="btn btn-danger" (click)="confirmarRechazo()" [disabled]="!motivoRechazo.trim()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="modal fade show d-block" *ngIf="selectedSolicitud && !mostrarModalRechazo" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content modal-detalle">
+      <div class="modal-header header-suave">
+        <h5 class="modal-title">
+          <i class="bi bi-info-circle me-2"></i> Detalle de Solicitud
+        </h5>
+        <button type="button" class="btn-close" (click)="selectedSolicitud = null"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>ID:</strong> {{ selectedSolicitud?.idSolicitud }}</li>
+          <li class="list-group-item"><strong>Tipo Residuo:</strong> {{ selectedSolicitud?.tipoResiduo }}</li>
+          <li class="list-group-item"><strong>Cantidad:</strong> {{ selectedSolicitud?.cantidad }}</li>
+          <li class="list-group-item"><strong>Localidad:</strong> {{ selectedSolicitud?.localidad }}</li>
+          <li class="list-group-item">
+            <strong>Estado:</strong>
+            <span class="badge"
+              [ngClass]="{
+                'bg-success': selectedSolicitud?.estadoPeticion === 'Aceptada',
+                'bg-danger': selectedSolicitud?.estadoPeticion === 'Rechazada',
+                'bg-warning text-dark': selectedSolicitud?.estadoPeticion === 'Pendiente'
+              }">
+              {{ selectedSolicitud?.estadoPeticion }}
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-success" (click)="selectedSolicitud = null">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>

@@ -6,7 +6,7 @@
     <!-- LOGO -->
     <div class="sidebar-logo mb-4 text-center">
       <a routerLink="/" class="d-flex align-items-center justify-content-center gap-2">
-        <i class="bi bi-arrow-repeat fs-3"></i>
+        <i class="bi bi-recycle fs-3"></i>
         <span *ngIf="menuAbierto" class="ms-2 fw-bold fs-4 verde-principal">EcoSoftware</span>
       </a>
     </div>
@@ -206,7 +206,7 @@
 
     <!-- SOLICITUDES -->
     <ng-container *ngIf="vistaActual === 'solicitudes'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Solicitudes</h3>
+      <h3 class="fw-bold text-center verde-principal mb-4">Solicitudes de Recolección</h3>
       <app-solcitudes/>
 
     </ng-container>
