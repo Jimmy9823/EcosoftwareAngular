@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
 import { UsuarioService } from '../usuario_services/usuario.service';
 import { UsuarioModel } from '../usuario_models/usuario';
-import { Header } from '../../shared/header/header';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { FormComp } from '../../shared/form/form.comp/form.comp';
 import { Solcitudes } from '../../solcitudes/solcitudes';
-import { Boton } from "../../shared/botones/boton/boton";
 
 @Component({
   selector: 'app-administrador',
-  imports: [Header, COMPARTIR_IMPORTS, FormComp, Solcitudes, Boton],
+  imports: [ COMPARTIR_IMPORTS, FormComp, Solcitudes,],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
@@ -22,15 +20,17 @@ export class Administrador {
   error: string = '';
   mensaje: string = '';
   rol: string = '';
-  vistaActual:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'noticias'| null = null;
+  vistaActual:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'noticias' = 'panel';;
 
 
   // 🔸 Ya no necesitamos las propiedades criterio y valorFiltro manuales
   constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
-    this.consultarUsuarios();
-  }
+  this.vistaActual = 'panel'; 
+  this.consultarUsuarios();   
+}
+
 
   cambiarVista(vista:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones'|'puntos'|'noticias') {
   this.vistaActual = vista;
