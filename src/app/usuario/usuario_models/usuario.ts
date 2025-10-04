@@ -1,7 +1,7 @@
 // src/app/usuario_models/usuario.model.ts
 export interface UsuarioModel {
   idUsuario?: number;
-  rolId: number;           // ID del rol (1 = admin, 2 = ciudadano, etc.)
+  rolId?: number;           // ID del rol (1 = admin, 2 = ciudadano, etc.)
   nombre: string;
   contrasena: string;
   correo: string;

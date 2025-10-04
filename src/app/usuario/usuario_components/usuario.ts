@@ -2,104 +2,92 @@ import { Component, OnInit } from '@angular/core'
 import { UsuarioService } from '../usuario_services/usuario.service'
 import { UsuarioModel } from '../usuario_models/usuario'
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports'
-import { Header } from '../../shared/header/header'
 
 @Component({
-  selector: 'app-usuarios',
-  imports: [COMPARTIR_IMPORTS, Header],
+  selector: 'app-usuario-tabla',
   templateUrl: './usuario.html',
+  imports:[COMPARTIR_IMPORTS],
   styleUrls: ['./usuario.css']
 })
 export class Usuario implements OnInit {
   usuarios: UsuarioModel[] = []
-  cargando: boolean = false
-  error: string = ''
-  mensaje: string = ''
-  rol: string = ''
+  editandoId: number | null = null
+  usuarioEditado: Partial<UsuarioModel> = {}
+  cargando = false
+  mensaje = ''
+  error = ''
 
-  // Filtros
-  criterio: string = 'nombre'
-  valorFiltro: string = ''
+  roles = [
+    { id: 1, nombre: 'Administrador' },
+    { id: 2, nombre: 'Ciudadano' },
+    { id: 3, nombre: 'Empresa' },
+    { id: 4, nombre: 'Reciclador' }
+  ]
 
   constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
-    this.consultarUsuarios()
+    this.cargarUsuarios()
   }
 
-  // ========================
-  // CONSULTAR TODOS LOS USUARIOS
-  // ========================
-  consultarUsuarios(): void {
+  cargarUsuarios(): void {
     this.cargando = true
     this.usuarioService.listar().subscribe({
-      next: (lista) => {
-        // 🔹 Mapeamos la lista para agregar el nombre de rol
-        this.usuarios = lista.map(usuario => ({
-          ...usuario,
-          rol: this.obtenerNombreRol(usuario.rolId)
-        }))
-
+      next: (data) => {
+        this.usuarios = data
         this.cargando = false
-        this.mensaje = `Se cargaron ${lista.length} usuario(s)`
-        this.error = ''
       },
       error: (err) => {
         console.error('Error al cargar usuarios:', err)
-        this.error = 'Error al cargar la lista de usuarios'
-        this.mensaje = ''
+        this.error = 'Error al cargar usuarios'
         this.cargando = false
       }
     })
   }
 
-  // ========================
-  // FILTRAR USUARIOS
-  // ========================
-  aplicarFiltro(): void {
-    if (!this.valorFiltro.trim()) {
-      this.consultarUsuarios()
-      return
-    }
+  activarEdicion(usuario: UsuarioModel): void {
+    this.editandoId = usuario.idUsuario!
+    this.usuarioEditado = { ...usuario }
+  }
 
-    this.cargando = true
-    this.usuarioService.filtrar(this.criterio, this.valorFiltro).subscribe({
-      next: (usuariosFiltrados) => {
-        this.usuarios = usuariosFiltrados.map(usuario => ({
-          ...usuario,
-          rol: this.obtenerNombreRol(usuario.rolId)
-        }))
-        this.mensaje = ` ${usuariosFiltrados.length} usuario(s) encontrado(s)`
-        this.error = ''
-        this.cargando = false
+  cancelarEdicion(): void {
+    this.editandoId = null
+    this.usuarioEditado = {}
+  }
+
+  guardarCambios(usuario: UsuarioModel): void {
+    if (!this.editandoId) return
+
+    this.usuarioService.actualizar(this.editandoId, this.usuarioEditado as UsuarioModel).subscribe({
+      next: () => {
+        this.mensaje = 'Usuario actualizado correctamente'
+        this.cancelarEdicion()
+        this.cargarUsuarios()
       },
       error: (err) => {
-        console.error('Error al filtrar usuarios:', err)
-        this.error = 'Error al filtrar usuarios'
-        this.mensaje = ''
-        this.cargando = false
+        console.error('Error al actualizar:', err)
+        this.error = 'No se pudo actualizar el usuario'
       }
     })
   }
 
-  // ========================
-  // LIMPIAR FILTRO
-  // ========================
-  limpiarFiltro(): void {
-    this.valorFiltro = ''
-    this.consultarUsuarios()
+  eliminarUsuario(id: number): void {
+    if (confirm('¿Está seguro de que desea eliminar este usuario?')) {
+      this.usuarioService.eliminarLogico(id).subscribe({
+        next: () => {
+          this.mensaje = 'Usuario eliminado correctamente'
+          this.cargarUsuarios()
+        },
+        error: (err) => {
+          console.error('Error al eliminar:', err)
+          this.error = 'No se pudo eliminar el usuario'
+        }
+      })
+    }
   }
 
-  // ========================
-  // OBTENER NOMBRE DE ROL
-  // ========================
-  private obtenerNombreRol(rolId: number): string {
-    switch (rolId) {
-      case 1: return 'Administrador'
-      case 2: return 'Ciudadano'
-      case 3: return 'Empresa'
-      case 4: return 'Reciclador'
-      default: return 'Desconocido'
-    }
+  obtenerNombreRol(rolId: number | undefined): string {
+    const rol = this.roles.find(r => r.id === rolId)
+    return rol ? rol.nombre : 'Desconocido'
   }
 }
