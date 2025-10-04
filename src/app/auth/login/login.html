@@ -1,2 +1,20 @@
+<div class="login-page">
+  <div class="login-content">
+    <!-- Contenedor central del login -->
+    <div class="login-card">
+      <div class="lock-icon">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h2 class="form-title">Iniciar Sesión</h2>
+      <p class="welcome-text">
+        Ingresa tus credenciales para continuar y descubrir todas las funcionalidades que tenemos para ti.
+      </p>
 
-<app-form-comp mode="login" (formSubmit)="login($event)"></app-form-comp>
+      <!-- Formulario (puede ser tu app-form-comp) -->
+      <app-form-comp mode="login" (formSubmit)="login($event)"></app-form-comp>
+
+      <!-- Botón extra opcional si quieres -->
+      <!-- <button class="login-btn">Entrar</button> -->
+    </div>
+  </div>
+</div>
