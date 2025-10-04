@@ -11,6 +11,8 @@ import { CardsSolicitud } from './solcitudes/cards-solicitud/cards-solicitud';
 import { CardARSolicitud } from './solcitudes/card-a-r-solicitud/card-a-r-solicitud';
 import { FormRegistro } from './solcitudes/form-registro/form-registro';
 import { EditarUsuario } from './usuario/editar-usuario/editar-usuario';
+import { Error} from './pages/error/error';
+
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -26,6 +28,6 @@ export const routes: Routes = [
     {path: 'card-re-acpt-solicitud', component:CardARSolicitud},
     {path: 'form-solicitud', component:FormRegistro},
 
-    {path: '**', redirectTo: ''} //cualquier otra ruta redirecciona a inicio
+  { path: '**', component: Error }
 ];
 
