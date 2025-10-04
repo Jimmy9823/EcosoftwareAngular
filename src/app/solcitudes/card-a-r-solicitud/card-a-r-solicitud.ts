@@ -32,7 +32,7 @@ export class CardARSolicitud implements OnInit {
   }
 
   aceptarSolicitud(solicitud: ServiceModel): void {
-    this.service.aceptarSolicitud(solicitud.idSolicitud, solicitud, this.idRecolector).subscribe({
+    this.service.aceptarSolicitud(solicitud.idSolicitud!, solicitud, this.idRecolector).subscribe({
       next: () => {
         alert(`✅ Solicitud #${solicitud.idSolicitud} aceptada correctamente`);
         this.cargarSolicitudes();
@@ -44,7 +44,7 @@ export class CardARSolicitud implements OnInit {
   rechazarSolicitud(solicitud: ServiceModel): void {
     const motivo = prompt(`Ingrese el motivo de rechazo para la solicitud #${solicitud.idSolicitud}:`);
     if (motivo && motivo.trim().length > 0) {
-      this.service.rechazarSolicitud(solicitud.idSolicitud, motivo).subscribe({
+      this.service.rechazarSolicitud(solicitud.idSolicitud!, motivo).subscribe({
         next: () => {
           alert(`❌ Solicitud #${solicitud.idSolicitud} rechazada`);
           this.cargarSolicitudes();

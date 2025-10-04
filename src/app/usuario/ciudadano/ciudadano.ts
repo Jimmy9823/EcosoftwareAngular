@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
+import { FormRegistro } from '../../solcitudes/form-registro/form-registro';
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS, FormRegistro],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })

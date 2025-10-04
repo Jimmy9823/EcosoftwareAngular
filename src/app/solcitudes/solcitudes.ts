@@ -34,7 +34,7 @@ export class Solcitudes implements OnInit {
 
   aceptarSolicitud(solicitud: ServiceModel): void {
     const recolectorId = 3; // ⚠️ Cambiar por el ID real del recolector desde la sesión
-    this.solicitudesService.aceptarSolicitud(solicitud.idSolicitud, solicitud, recolectorId).subscribe({
+    this.solicitudesService.aceptarSolicitud(solicitud.idSolicitud!, solicitud, recolectorId).subscribe({
       next: () => {
         alert(`Solicitud #${solicitud.idSolicitud} aceptada correctamente ✅`);
         this.listarSolicitudes();
@@ -52,7 +52,7 @@ export class Solcitudes implements OnInit {
   confirmarRechazo(): void {
     if (!this.selectedSolicitud) return;
 
-    this.solicitudesService.rechazarSolicitud(this.selectedSolicitud.idSolicitud, this.motivoRechazo).subscribe({
+    this.solicitudesService.rechazarSolicitud(this.selectedSolicitud.idSolicitud!, this.motivoRechazo).subscribe({
       next: () => {
         alert(`Solicitud #${this.selectedSolicitud?.idSolicitud} rechazada correctamente ❌`);
         this.cerrarModalRechazo();
