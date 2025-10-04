@@ -6,7 +6,7 @@ import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports'
 @Component({
   selector: 'app-usuario-tabla',
   templateUrl: './usuario.html',
-  imports:[COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS],
   styleUrls: ['./usuario.css']
 })
 export class Usuario implements OnInit {
@@ -16,6 +16,12 @@ export class Usuario implements OnInit {
   cargando = false
   mensaje = ''
   error = ''
+
+  // 🔸 Filtros
+  filtroNombre: string = ''
+  filtroCorreo: string = ''
+  filtroDocumento: string = ''
+  criterioSeleccionado: string = 'nombre' // valor inicial por defecto
 
   roles = [
     { id: 1, nombre: 'Administrador' },
@@ -30,6 +36,9 @@ export class Usuario implements OnInit {
     this.cargarUsuarios()
   }
 
+  // ========================
+  // CONSULTAR USUARIOS
+  // ========================
   cargarUsuarios(): void {
     this.cargando = true
     this.usuarioService.listar().subscribe({
@@ -45,6 +54,96 @@ export class Usuario implements OnInit {
     })
   }
 
+  // ========================
+  // APLICAR FILTRO
+  // ========================
+  aplicarFiltroDesdeForm(): void {
+    const criterio = this.criterioSeleccionado
+    let valor = ''
+    if (criterio === 'nombre') valor = this.filtroNombre
+    else if (criterio === 'correo') valor = this.filtroCorreo
+    else if (criterio === 'documento') valor = this.filtroDocumento
+
+    if (!valor || !valor.trim()) {
+      this.cargarUsuarios()
+      return
+    }
+
+    this.cargando = true
+    this.usuarioService.filtrar(criterio, valor).subscribe({
+      next: (usuariosFiltrados) => {
+        this.usuarios = usuariosFiltrados
+        this.mensaje = `${usuariosFiltrados.length} usuario(s) encontrado(s)`
+        this.error = ''
+        this.cargando = false
+        setTimeout(() => (this.mensaje = ''), 2500)
+      },
+      error: (err) => {
+        console.error('Error al filtrar usuarios:', err)
+        this.error = 'Error al filtrar usuarios'
+        this.mensaje = ''
+        this.cargando = false
+        setTimeout(() => {
+          this.mensaje = ''
+          this.error = ''
+        }, 2500)
+      }
+    })
+  }
+
+  // ========================
+  // LIMPIAR FILTRO
+  // ========================
+  limpiarFiltro(): void {
+    this.filtroNombre = ''
+    this.filtroCorreo = ''
+    this.filtroDocumento = ''
+    this.cargarUsuarios()
+  }
+
+  // ========================
+  // EXPORTAR PDF
+  // ========================
+  exportarPDF(): void {
+    const filtros = {
+      nombre: this.filtroNombre || undefined,
+      correo: this.filtroCorreo || undefined,
+      documento: this.filtroDocumento || undefined
+    }
+
+    this.usuarioService.descargarPDF(filtros).subscribe((data: Blob) => {
+      const blob = new Blob([data], { type: 'application/pdf' })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'usuarioReporte.pdf'
+      link.click()
+    })
+  }
+
+  // ========================
+  // EXPORTAR EXCEL
+  // ========================
+  exportarExcel(): void {
+    const filtros = {
+      nombre: this.filtroNombre || undefined,
+      correo: this.filtroCorreo || undefined,
+      documento: this.filtroDocumento || undefined
+    }
+
+    this.usuarioService.descargarExcel(filtros).subscribe((data: Blob) => {
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'usuarioReporte.xlsx'
+      link.click()
+    })
+  }
+
+  // ========================
+  // EDICIÓN / ELIMINACIÓN (ya existente)
+  // ========================
   activarEdicion(usuario: UsuarioModel): void {
     this.editandoId = usuario.idUsuario!
     this.usuarioEditado = { ...usuario }

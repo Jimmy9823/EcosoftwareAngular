@@ -1,10 +1,46 @@
 <div class="tabla-container">
   <h2>Gestión de Usuarios</h2>
 
+  <!-- 🔸 FILTRO -->
+  <div class="filtros">
+    <select [(ngModel)]="criterioSeleccionado">
+      <option value="nombre">Nombre</option>
+      <option value="correo">Correo</option>
+      <option value="documento">Documento</option>
+    </select>
+
+    <!-- Campo de entrada dinámico -->
+    <input
+      *ngIf="criterioSeleccionado === 'nombre'"
+      [(ngModel)]="filtroNombre"
+      placeholder="Buscar por nombre"
+    />
+    <input
+      *ngIf="criterioSeleccionado === 'correo'"
+      [(ngModel)]="filtroCorreo"
+      placeholder="Buscar por correo"
+    />
+    <input
+      *ngIf="criterioSeleccionado === 'documento'"
+      [(ngModel)]="filtroDocumento"
+      placeholder="Buscar por documento"
+    />
+<div class="botones">
+  <button class="filtrar" (click)="aplicarFiltroDesdeForm()"><i class="bi bi-funnel"></i> Filtrar</button>
+  <button class="limpiar" (click)="limpiarFiltro()"><i class="bi bi-eraser"></i> Limpiar</button>
+  <button class="exportar-pdf" (click)="exportarPDF()"><i class="bi bi-file-earmark-pdf"></i> PDF</button>
+  <button class="exportar-excel" (click)="exportarExcel()"><i class="bi bi-file-earmark-excel"></i> Excel</button>
+</div>
+
+ 
+  </div>
+
+  <!-- Mensajes -->
   <div *ngIf="cargando" class="mensaje info">Cargando usuarios...</div>
   <div *ngIf="mensaje" class="mensaje exito">{{ mensaje }}</div>
   <div *ngIf="error" class="mensaje error">{{ error }}</div>
 
+  <!-- Tabla -->
   <table class="tabla-usuarios" *ngIf="usuarios.length > 0">
     <thead>
       <tr>
