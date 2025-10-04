@@ -99,19 +99,53 @@ button:hover {
 .filter-form .form-select:focus,
 .filter-form .form-control:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #a7f3d0;
 }
 
-.filter-form button {
-  border-radius: 0.5rem;
+/* Formulario de filtro */
+.filter-form {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Botones verdes suaves */
+.btn-buscar {
+  background-color: #3e7d3c; /* verde suave */
+  color: #ffffff; /* verde oscuro para texto */
+  border: none;
+  border-radius: 8px;
   font-weight: 500;
-  padding: 0.6rem 1rem;
+  transition: all 0.3s ease;
 }
 
-.filter-form button:hover {
-  opacity: 0.9;
-  transition: 0.2s;
+.btn-buscar:hover {
+  background-color: #eaf6ea; 
+    color: #3e7d3c;
+
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(6, 95, 70, 0.2);
 }
+
+
+.btn-limpiar {
+  background-color: #3e7d3c; 
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-limpiar:hover {
+  background-color: #eaf6ea;
+  color: #3e7d3c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(6, 95, 70, 0.15);
+}
+
 
 /* Responsive para filtro */
 @media (max-width: 767.98px) {
