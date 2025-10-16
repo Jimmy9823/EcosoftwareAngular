@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Localidad, EstadoPeticion, TipoResiduo, ServiceModel } from '../solcitudes/model';
-import { Service } from '../solcitudes/solicitudes/service';
+import { Localidad, EstadoPeticion, TipoResiduo, ServiceModel } from '../solicitudes/model';
+import { Service } from '../solicitudes/service';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form-registro',
@@ -18,7 +19,7 @@ export class FormRegistro {
   mensaje = '';
   error = '';
 
-  constructor(private fb: FormBuilder, private solicitudService: Service) {
+  constructor(private fb: FormBuilder, private solicitudService: Service, private router:Router) {
 
     this.registroForm = this.fb.group({
       usuarioId: [{ value: 3, disabled: true }], // ⚡ ID fijo para prueba
@@ -67,6 +68,7 @@ export class FormRegistro {
         this.mensaje = 'Solicitud registrada correctamente';
         this.error = '';
         this.registroForm.reset();
+        this.router.navigate(['/ciudadano']);
       },
       error: (err) => {
         this.mensaje = '';

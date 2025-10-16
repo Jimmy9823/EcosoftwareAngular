@@ -1,40 +1,63 @@
+// src/app/usuario/administrador/administrador.ts
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { UsuarioService } from '../usuario_services/usuario.service';
 import { UsuarioModel } from '../usuario_models/usuario';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { Solcitudes } from '../../solcitudes/solcitudes';
 import { Usuario } from "../usuario_components/usuario";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, Solcitudes, Usuario],
+  imports: [COMPARTIR_IMPORTS, Solcitudes, Usuario, RouterLink],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
 export class Administrador {
   usuarios: UsuarioModel[] = [];
+  usuarioActual: UsuarioModel | null = null;
+  nombreUsuario: string = '';
+  nombreRol: string = '';
+
   filtroNombre: string = '';
   filtroCorreo: string = '';
   filtroDocumento: string = '';
   cargando: boolean = false;
   error: string = '';
   mensaje: string = '';
-  rol: string = '';
-  vistaActual:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'capacitaciones'|'noticias' = 'panel';;
 
+  vistaActual:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'capacitaciones'|'noticias' = 'panel';
 
-  // 🔸 Ya no necesitamos las propiedades criterio y valorFiltro manuales
-  constructor(private usuarioService: UsuarioService) {}
+  menuAbierto = true;
+  perfilMenuAbierto = false;
+
+  constructor(
+    private usuarioService: UsuarioService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-  this.vistaActual = 'panel'; 
-  this.consultarUsuarios();   
-}
+    this.vistaActual = 'panel';
+    this.consultarUsuarios();
 
+    // 🔸 Recuperar usuario logueado
+    this.usuarioActual = this.usuarioService.obtenerUsuarioActual();
+    if (this.usuarioActual) {
+      this.nombreUsuario = this.usuarioActual.nombre;
+      this.nombreRol = this.obtenerNombreRol(this.usuarioActual.rolId!);
+    } else {
+      // Si no hay sesión, redirige al login
+     
+    }
+  }
 
-  cambiarVista(vista:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones'|'puntos'|'capacitaciones'|'noticias') {
-  this.vistaActual = vista;
-}
+  // ========================
+  // CAMBIAR VISTA
+  // ========================
+  cambiarVista(vista: 'panel'|'usuarios'|'solicitudes'|'recolecciones'|'puntos'|'capacitaciones'|'noticias') {
+    this.vistaActual = vista;
+  }
 
   // ========================
   // CONSULTAR TODOS LOS USUARIOS
@@ -50,76 +73,15 @@ export class Administrador {
 
         this.cargando = false;
         this.mensaje = `Se cargaron ${lista.length} usuario(s)`;
-        this.error = '';
-        setTimeout(() => {
-        this.mensaje = '';
-      }, 2500);
+        setTimeout(() => this.mensaje = '', 2500);
       },
       error: (err) => {
         console.error('Error al cargar usuarios:', err);
         this.error = 'Error al cargar la lista de usuarios';
-        this.mensaje = '';
         this.cargando = false;
-        setTimeout(() => {
-        this.mensaje = '';
-        this.error = '';
-      }, 2500);
+        setTimeout(() => this.error = '', 2500);
       }
     });
-  }
-
-  // ========================
-  // APLICAR FILTRO (desde FormComp)
-  // ========================
-  aplicarFiltroDesdeForm(filtro: { criterio: string; valor: string }): void {
-  const { criterio, valor } = filtro;
-
-  // 🔸 Guardar el filtro aplicado
-  if (criterio === 'nombre') {
-    this.filtroNombre = valor;
-  } else if (criterio === 'correo') {
-    this.filtroCorreo = valor;
-  } else if (criterio === 'documento') {
-    this.filtroDocumento = valor;
-  }
-
-  if (!valor || !valor.trim()) {
-    this.consultarUsuarios();
-    return;
-  }
-
-  this.cargando = true;
-  this.usuarioService.filtrar(criterio, valor).subscribe({
-    next: (usuariosFiltrados) => {
-      this.usuarios = usuariosFiltrados.map(usuario => ({
-        ...usuario,
-        rol: this.obtenerNombreRol(usuario.rolId!)
-      }));
-      this.mensaje = `${usuariosFiltrados.length} usuario(s) encontrado(s)`;
-      this.error = '';
-      this.cargando = false;
-      setTimeout(() => {
-        this.mensaje = '';
-      }, 2500);
-    },
-    error: (err) => {
-      console.error('Error al filtrar usuarios:', err);
-      this.error = 'Error al filtrar usuarios';
-      this.mensaje = '';
-      this.cargando = false;
-      setTimeout(() => {
-        this.mensaje = '';
-        this.error = '';
-      }, 2500);
-    }
-  });
-}
-
-  // ========================
-  // LIMPIAR FILTRO (desde FormComp)
-  // ========================
-  limpiarFiltro(): void {
-    this.consultarUsuarios();
   }
 
   // ========================
@@ -135,53 +97,20 @@ export class Administrador {
     }
   }
 
-  exportarPDF(): void {
-      const filtros = {
-        nombre: this.filtroNombre || undefined,
-        correo: this.filtroCorreo || undefined,
-        documento: this.filtroDocumento || undefined
-      };
-  
-      this.usuarioService.descargarPDF(filtros).subscribe((data: Blob) => {
-        const blob = new Blob([data], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'usuarioReporte.pdf';
-        link.click();
-      });
-    }
+  // ========================
+  // CERRAR SESIÓN
+  // ========================
+  cerrarSesion(): void {
+    this.usuarioService.logout();
+    this.router.navigate(['/login']);
+  }
 
-  // 📊 Exportar Excel con filtros
-    exportarExcel(): void {
-      const filtros = {
-        nombre: this.filtroNombre || undefined,
-        correo: this.filtroCorreo || undefined,
-        documento: this.filtroDocumento || undefined
-      };
-  
-      this.usuarioService.descargarExcel(filtros).subscribe((data: Blob) => {
-        const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'usuarioReporte.xlsx';
-        link.click();
-      });
-    }
+  toggleMenu() {
+    this.menuAbierto = !this.menuAbierto;
+    if (!this.menuAbierto) this.perfilMenuAbierto = false;
+  }
 
-     menuAbierto = true;
-perfilMenuAbierto = false;
-
-toggleMenu() {
-  this.menuAbierto = !this.menuAbierto;
-  if(!this.menuAbierto) this.perfilMenuAbierto = false; // cierra perfil al colapsar
+  togglePerfilMenu() {
+    this.perfilMenuAbierto = !this.perfilMenuAbierto;
+  }
 }
-
-togglePerfilMenu() {
-  this.perfilMenuAbierto = !this.perfilMenuAbierto;
-}
-
-
-}
-

@@ -1,138 +1,24 @@
-<app-header/>
+<app-header />
 
 <main>
-<!-- Hero Section Mejorado -->
-<section class="hero-section" id="hero">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6 hero-content">
-        <h1 class="hero-title">Transforma el Mundo con Soluciones Sostenibles</h1>
-        <p class="hero-subtitle">
-          Únete a la revolución del reciclaje inteligente. Gestiona residuos, 
-          aprende y contribuye a un planeta más verde.
-        </p>
-        <div class="hero-buttons">
-          <button class="btn btn-primary-custom btn-lg" routerLink="/capacitacion">
-            Comenzar Ahora
-            <i class="bi bi-arrow-right ms-2"></i>
-          </button>
-        </div>
-      </div>
+  <section class="hero-section" id="hero">
+    <app-hero />
+  </section>
 
-      <div class="col-lg-6 hero-image">
-        <div class="hero-illustration">
-          <i class="bi bi-recycle"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- Services Section -->
+  <section class="services-section" id="servicios">
+    <app-servicios-section/>
+  </section>
 
+  <section class="waste-carousel">
+    <app-waste-carrusel />
+  </section>
 
-<!-- Services Section -->
-<section class="services-section" id="servicios">
-  <div class="container">
-    <h2 class="section-title">Nuestros Servicios</h2>
-    <div class="row g-4">
-      <div class="col-md-6 col-lg-3">
-        <div class="card service-card">
-          <div class="service-icon">
-            <i class="bi bi-mortarboard-fill"></i> <!-- Capacitaciones -->
-          </div>
-          <h3 class="service-title">Capacitaciones</h3>
-          <p>Programas educativos sobre reciclaje, sostenibilidad y gestión ambiental para individuos y empresas.</p>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="card service-card">
-          <div class="service-icon">
-            <i class="bi bi-map"></i> <!-- Puntos de Reciclaje -->
-          </div>
-          <h3 class="service-title">Puntos de Reciclaje</h3>
-          <p>Accede a nuestro mapa interactivo con todos los puntos de reciclaje cercanos a tu ubicación.</p>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="card service-card">
-          <div class="service-icon">
-            <i class="bi bi-truck"></i> <!-- Recolección -->
-          </div>
-          <h3 class="service-title">Recolección</h3>
-          <p>Solicita recolección de residuos reciclables directamente desde tu hogar o empresa de forma fácil.</p>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="card service-card">
-          <div class="service-icon">
-            <i class="bi bi-newspaper"></i> <!-- Noticias -->
-          </div>
-          <h3 class="service-title">Noticias</h3>
-          <p>Mantente informado con las últimas noticias y tendencias en sostenibilidad y medio ambiente.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section class="waste-carousel">
-  <div class="container">
-    <h2 class="section-title">Tipos de Residuos Aprovechables</h2>
-  </div>
-  <div class="waste-slider">
-    <div class="waste-item" *ngFor="let waste of wasteTypes">
-      <div class="waste-icon-box">{{ waste.icon }}</div>
-      <h5>{{ waste.name }}</h5>
-    </div>
-    <!-- Duplicate for seamless loop -->
-    <div class="waste-item" *ngFor="let waste of wasteTypes.slice(0, 8)">
-      <div class="waste-icon-box">{{ waste.icon }}</div>
-      <h5>{{ waste.name }}</h5>
-    </div>
-  </div>
-</section>
-
-
-<!-- Consejos Section -->
-<section class="tips-section" id="consejos">
-  <div class="container">
-    <h2 class="section-title">Consejos Ecológicos</h2>
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="tip-card">
-          <h4>
-            <i class="bi bi-lightbulb-fill text-warning me-2 fs-3"></i>Reduce tu Consumo
-          </h4>
-          <p>Antes de reciclar, piensa en reducir. Compra solo lo necesario y opta por productos con menos empaque.</p>
-        </div>
-        <div class="tip-card">
-          <h4>
-            <i class="bi bi-arrow-repeat text-danger-emphasis me-2 fs-3"></i>Reutiliza Creativamente
-          </h4>
-          <p>Dale una segunda vida a los objetos. Frascos, botellas y cajas pueden tener múltiples usos antes del reciclaje.</p>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="tip-card">
-          <h4>
-            <i class="bi bi-trash3-fill text-primary me-2 fs-3"></i>Separa Correctamente
-          </h4>
-          <p>Clasifica tus residuos por tipo. Un reciclaje efectivo comienza con una buena separación en origen.</p>
-        </div>
-        <div class="tip-card">
-          <h4>
-            <i class="bi bi-leaf-fill text-success me-2 fs-3"></i>Compostaje Casero
-          </h4>
-          <p>Transforma residuos orgánicos en abono natural. Es fácil, económico y reduce significativamente tu basura.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
+  <!-- Consejos Section -->
+  <section class="tips-section" id="consejos">
+    <app-consejos />
+  </section>
 
 </main>
 
-<app-footer/>
+<app-footer />

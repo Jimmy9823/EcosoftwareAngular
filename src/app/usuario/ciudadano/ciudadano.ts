@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { FormRegistro } from '../../solcitudes/form-registro/form-registro';
 import { CardsSolicitud } from '../../solcitudes/cards-solicitud/cards-solicitud';
-
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud],
+  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, RouterLink],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })

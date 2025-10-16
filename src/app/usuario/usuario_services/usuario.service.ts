@@ -1,21 +1,40 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Observable } from 'rxjs'
+import { Observable, map, throwError } from 'rxjs'
+import { catchError } from 'rxjs/operators'
 import { UsuarioModel } from '../usuario_models/usuario'
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrlSpringboot = 'http://localhost:8082/api/personas'
+  private apiUrlSpringboot = 'http://localhost:8080/api/personas'
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // ========================
   //  LISTAR TODOS
   // ========================
   listar(): Observable<UsuarioModel[]> {
     return this.http.get<UsuarioModel[]>(this.apiUrlSpringboot)
+  }
+
+  // ========================
+  //  LOGIN
+  // ========================
+  login(correo: string, contrasena: string): Observable<UsuarioModel | null> {
+    return this.listar().pipe(
+      map(usuarios => {
+        const encontrado = usuarios.find(
+          u => u.correo === correo && u.contrasena === contrasena
+        )
+        return encontrado || null
+      }),
+      catchError(err => {
+        console.error('❌ Error en login', err)
+        return throwError(() => err)
+      })
+    )
   }
 
   // ========================
@@ -40,20 +59,14 @@ export class UsuarioService {
     return this.http.get<UsuarioModel[]>(`${this.apiUrlSpringboot}/filtrar-correo?correo=${correo}`)
   }
 
-  // ========================
-  //  FILTRO CONDICIONAL CENTRALIZADO
-  // ========================
   filtrar(criterio: string, valor: string): Observable<UsuarioModel[]> {
     switch (criterio) {
-      case 'nombre':
-        return this.filtrarPorNombre(valor)
-      case 'documento':
-        return this.filtrarPorDocumento(valor)
-      case 'correo':
-        return this.filtrarPorCorreo(valor)
+      case 'nombre': return this.filtrarPorNombre(valor)
+      case 'documento': return this.filtrarPorDocumento(valor)
+      case 'correo': return this.filtrarPorCorreo(valor)
       default:
         console.warn('Criterio de filtro no reconocido:', criterio)
-        return this.listar() // Si no hay criterio válido, devolvemos todo
+        return this.listar()
     }
   }
 
@@ -75,6 +88,7 @@ export class UsuarioService {
   eliminarLogico(id: number): Observable<string> {
     return this.http.patch<string>(`${this.apiUrlSpringboot}/eliminar/${id}`, null)
   }
+
   generarReporte(): Observable<UsuarioModel[]> {
     return this.http.get<UsuarioModel[]>(`${this.apiUrlSpringboot}/export/excel`)
   }
@@ -86,14 +100,9 @@ export class UsuarioService {
       if (filtros.correo) params = params.set('correo', filtros.correo);
       if (filtros.documento) params = params.set('documento', filtros.documento);
     }
-
-    return this.http.get(`${this.apiUrlSpringboot}/export/pdf`, {
-      responseType: 'blob',
-      params
-    });
+    return this.http.get(`${this.apiUrlSpringboot}/export/pdf`, { responseType: 'blob', params })
   }
 
-  // ✅ Excel con filtros opcionales
   descargarExcel(filtros?: { nombre?: string; correo?: string; documento?: string }): Observable<Blob> {
     let params = new HttpParams();
     if (filtros) {
@@ -101,10 +110,17 @@ export class UsuarioService {
       if (filtros.correo) params = params.set('correo', filtros.correo);
       if (filtros.documento) params = params.set('documento', filtros.documento);
     }
+    return this.http.get(`${this.apiUrlSpringboot}/export/excel`, { responseType: 'blob', params })
+  }
+   obtenerUsuarioActual(): UsuarioModel | null {
+    const data = localStorage.getItem('usuarioLogueado');
+    return data ? JSON.parse(data) : null;
+  }
 
-    return this.http.get(`${this.apiUrlSpringboot}/export/excel`, {
-      responseType: 'blob',
-      params
-    });
+  // ========================
+  // CERRAR SESIÓN
+  // ========================
+  logout(): void {
+    localStorage.removeItem('usuarioLogueado');
   }
 }

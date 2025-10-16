@@ -11,7 +11,41 @@
       </p>
 
       <!-- Formulario (puede ser tu app-form-comp) -->
-      <app-form-comp mode="login" (formSubmit)="login($event)"></app-form-comp>
+      <div class="login-container">
+  <div class="login-card">
+    <h2>Iniciar Sesión</h2>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="correo">Correo</label>
+        <input
+          type="email"
+          id="correo"
+          [(ngModel)]="correo"
+          name="correo"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="contrasena">Contraseña</label>
+        <input
+          type="password"
+          id="contrasena"
+          [(ngModel)]="contrasena"
+          name="contrasena"
+          required
+        />
+      </div>
+
+      <button type="submit" [disabled]="cargando">
+        {{ cargando ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+
+      <p class="error" *ngIf="mensajeError">{{ mensajeError }}</p>
+    </form>
+  </div>
+</div>
 
       <!-- Botón extra opcional si quieres -->
       <!-- <button class="login-btn">Entrar</button> -->

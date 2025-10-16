@@ -11,7 +11,7 @@ import { CardsSolicitud } from './solcitudes/cards-solicitud/cards-solicitud';
 import { CardARSolicitud } from './solcitudes/card-a-r-solicitud/card-a-r-solicitud';
 import { FormRegistro } from './solcitudes/form-registro/form-registro';
 import { EditarUsuario } from './usuario/editar-usuario/editar-usuario';
-import { Error} from './pages/error/error';
+import { Error} from './core/error/error';
 
 
 export const routes: Routes = [

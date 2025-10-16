@@ -28,8 +28,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/solicitudes" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: false}">
+          <a class="nav-link" routerLink="/hf">
             Solicitudes
           </a>
         </li>
@@ -87,11 +86,11 @@
 
       <!-- Botón de Mi Perfil -->
       <div class="d-flex align-items-center">
-        <a class="btn btn-outline-success me-2" routerLink="/perfil">
-          Mi Perfil
+        <a class="btn btn-outline-success me-2" routerLink="/login">
+          Login
         </a>
-        <button class="btn btn-danger" (click)="onLogoutClick()">
-          Cerrar Sesión
+        <button class="btn btn-danger" (click)="onLogoutClick()" routerLink="/registro">
+          Registrarse
         </button>
       </div>
     </div>

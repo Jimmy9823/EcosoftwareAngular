@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Service } from '../solcitudes/solicitudes/service';
-import { ServiceModel } from '../solcitudes/model';
+import { Service } from '../solicitudes/service';
+import { ServiceModel } from '../solicitudes/model';
 
 @Component({
   selector: 'app-card-a-r-solicitud',

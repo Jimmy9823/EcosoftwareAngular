@@ -4,11 +4,14 @@ import { UsuarioModel } from '../usuario_models/usuario';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { FormComp } from '../../shared/form/form.comp/form.comp';
 import { Solcitudes } from '../../solcitudes/solcitudes';
+import { RouterLink } from '@angular/router';
+import { CardARSolicitud } from '../../solcitudes/card-a-r-solicitud/card-a-r-solicitud';
+
 
 @Component({
   selector: 'app-empresa',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormComp, Solcitudes],
+  imports: [COMPARTIR_IMPORTS, FormComp, Solcitudes, CardARSolicitud, RouterLink],
   templateUrl: './empresa.html',
   styleUrls: ['./empresa.css']
 })

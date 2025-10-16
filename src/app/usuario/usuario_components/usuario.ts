@@ -50,6 +50,7 @@ export class Usuario implements OnInit {
         console.error('Error al cargar usuarios:', err)
         this.error = 'Error al cargar usuarios'
         this.cargando = false
+        setTimeout(() => this.error = '', 2500);
       }
     })
   }
@@ -162,6 +163,7 @@ export class Usuario implements OnInit {
         this.mensaje = 'Usuario actualizado correctamente'
         this.cancelarEdicion()
         this.cargarUsuarios()
+        setTimeout(() => this.mensaje = '', 2500);
       },
       error: (err) => {
         console.error('Error al actualizar:', err)
@@ -176,10 +178,12 @@ export class Usuario implements OnInit {
         next: () => {
           this.mensaje = 'Usuario eliminado correctamente'
           this.cargarUsuarios()
+          setTimeout(() => this.mensaje = '', 2500);
         },
         error: (err) => {
           console.error('Error al eliminar:', err)
           this.error = 'No se pudo eliminar el usuario'
+          setTimeout(() => this.error = '', 2500);
         }
       })
     }

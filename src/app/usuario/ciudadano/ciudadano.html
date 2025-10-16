@@ -68,14 +68,14 @@
       <button class="btn w-100 d-flex align-items-center justify-content-center gap-2"
               (click)="togglePerfilMenu()">
         <i class="bi bi-person-circle fs-3"></i>
-        <span *ngIf="menuAbierto">Paula Sofía</span>
+        <span *ngIf="menuAbierto">Ciudadano</span>
         <i *ngIf="menuAbierto" class="bi ms-auto"
            [ngClass]="perfilMenuAbierto ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
       </button>
 
       <ul *ngIf="perfilMenuAbierto" class="perfil-menu list-unstyled shadow rounded">
         <li>
-          <a class="dropdown-item d-flex align-items-center justify-content-center" href="#">
+          <a class="dropdown-item d-flex align-items-center justify-content-center" href="#" routerLink="/editar-usuario">
             <i class="bi bi-pencil"></i>
             <span *ngIf="menuAbierto" class="ms-2">Editar Perfil</span>
           </a>
