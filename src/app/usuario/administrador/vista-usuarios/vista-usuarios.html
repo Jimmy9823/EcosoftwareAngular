@@ -1,16 +1,7 @@
-<h3>Gestión de Usuarios</h3>
-<table>
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Rol</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let u of usuarios">
-      <td>{{ u.nombre }}</td>
-      <td>{{ u.rol }}</td>
-    </tr>
-  </tbody>
-</table>
+<h2>Listado de Usuarios</h2>
+
+<app-tabla
+  [columns]="columns"
+  [data]="usuarios">
+</app-tabla>
 
