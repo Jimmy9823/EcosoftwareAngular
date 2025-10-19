@@ -1,0 +1,12 @@
+<nav class="sidebar">
+  <h2>Panel de Control</h2>
+  <ul>
+    <li
+      *ngFor="let item of items"
+      (click)="seleccionarVista(item.id)"
+      [class.activo]="selected === item.id">
+      <span *ngIf="item.icon">{{ item.icon }}</span>
+      {{ item.label }}
+    </li>
+  </ul>
+</nav>

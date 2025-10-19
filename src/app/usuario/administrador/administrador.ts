@@ -7,10 +7,11 @@ import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { Solcitudes } from '../../solcitudes/solcitudes';
 import { Usuario } from "../usuario_components/usuario";
 import { RouterLink } from '@angular/router';
+import { PanelDeControl } from '../../core/panel-de-control/panel-de-control';
 
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, Solcitudes, Usuario, RouterLink],
+  imports: [COMPARTIR_IMPORTS, Solcitudes, Usuario, RouterLink, PanelDeControl],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
