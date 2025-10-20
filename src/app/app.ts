@@ -14,7 +14,7 @@ import {COMPARTIR_IMPORTS} from './ImpCondYForms/imports'
 })
 export class App implements OnInit {
 
-  protected readonly title = signal('EscosoftwareAngular');
+  protected readonly title = signal('Escosoftware');
 
   modoOscuroActivo: boolean = true;
 
