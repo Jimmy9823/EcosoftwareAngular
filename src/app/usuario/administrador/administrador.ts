@@ -8,7 +8,7 @@ import { Solcitudes } from '../../solcitudes/solcitudes';
 import { Usuario } from "../usuario_components/usuario";
 import { RouterLink } from '@angular/router';
 import { PanelDeControl } from '../../core/panel-de-control/panel-de-control';
-
+import { AuthService } from '../../auth/auth.service';
 @Component({
   selector: 'app-administrador',
   imports: [COMPARTIR_IMPORTS, Solcitudes, Usuario, RouterLink, PanelDeControl],
@@ -35,7 +35,8 @@ export class Administrador {
 
   constructor(
     private usuarioService: UsuarioService,
-    private router: Router
+    private router: Router,
+    private authService : AuthService
   ) {}
 
   ngOnInit(): void {
@@ -101,8 +102,8 @@ export class Administrador {
   // ========================
   // CERRAR SESIÓN
   // ========================
-  cerrarSesion(): void {
-    this.usuarioService.logout();
+   logout(): void {
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 

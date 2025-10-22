@@ -3,6 +3,7 @@ import { UsuarioService } from '../../usuario/usuario_services/usuario.service';
 import { Router } from '@angular/router';
 import { UsuarioModel } from '../../usuario/usuario_models/usuario';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-login',
   standalone:true,
@@ -11,46 +12,38 @@ import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
   styleUrl: './login.css'
 })
 export class Login {
-  login(data:any){
-
-  }
-
-  correo = '';
+   correo = '';
   contrasena = '';
-  mensajeError = '';
-  cargando = false;
+  errorMessage = '';
 
-  constructor(
-    private usuarioService: UsuarioService,
-    private router: Router
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  onSubmit(): void {
-    this.mensajeError = '';
-    this.cargando = true;
+  onLogin(): void {
+    const credenciales = { correo: this.correo, contrasena: this.contrasena };
 
-    this.usuarioService.login(this.correo, this.contrasena).subscribe({
-      next: (usuario: UsuarioModel | null) => {
-        this.cargando = false;
-        if (usuario) {
-          localStorage.setItem('usuario', JSON.stringify(usuario));
+    this.authService.login(credenciales).subscribe({
+      next: (response) => {
+        console.log('✅ Login exitoso');
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('rol', response.rol);
 
-          // Redirección por rol
-          switch (usuario.rolId) {
-            case 1: this.router.navigate(['/administrador']); break;
-            case 2: this.router.navigate(['/ciudadano']); break;
-            case 3: this.router.navigate(['/empresa']); break;
-            case 4: this.router.navigate(['/reciclador']); break;
-            default: this.router.navigate(['/']);
-          }
+         if (response.rol === 'Administrador') {
+          this.router.navigate(['/administrador']);
+        } else if (response.rol === 'Ciudadano') {
+          this.router.navigate(['/ciudadano']);
+        } else if (response.rol === 'Empresa') {
+          this.router.navigate(['/empresa']);
+        } else if (response.rol === 'Reciclador') {
+          this.router.navigate(['/reciclador']);
         } else {
-          this.mensajeError = 'Correo o contraseña incorrectos';
+          console.warn('Rol no reconocido, redirigiendo al login');
+          this.router.navigate(['/login'])
         }
       },
-      error: () => {
-        this.cargando = false;
-        this.mensajeError = 'Error de conexión con el servidor';
-      }
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = 'Credenciales incorrectas o usuario no encontrado';
+      },
     });
   }
 }
