@@ -27,7 +27,6 @@ export const routes: Routes = [
     {path: 'card-solicitud', component:CardsSolicitud},
     {path: 'card-re-acpt-solicitud', component:CardARSolicitud},
     {path: 'form-solicitud', component:FormRegistro},
-
   { path: '**', component: Error }
 ];
 

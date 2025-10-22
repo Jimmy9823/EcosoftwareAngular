@@ -4,7 +4,7 @@ import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 export interface BarraLateralItem {
   id: string
   label: string
-  icon?: string
+  icon?: IconDefinition 
 }
 
 @Component({
