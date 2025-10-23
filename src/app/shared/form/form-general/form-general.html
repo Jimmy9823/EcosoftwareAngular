@@ -1,12 +1,15 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
   <div *ngFor="let field of fields">
-    
-    <!-- Input normal -->
-    <ng-container *ngIf="field.type === 'text' || field.type === 'email'">
+
+    <!-- Input normal (text, email, password, number, etc.) -->
+    <ng-container *ngIf="['text', 'email', 'password', 'number'].includes(field.type)">
       <label>{{ field.label }}</label>
-      <input [type]="field.type" [formControlName]="field.name">
+      <input
+        [type]="field.type"
+        [formControlName]="field.name"
+        [placeholder]="field.placeholder || ('Ingrese ' + field.label.toLowerCase())">
     </ng-container>
-    
+
     <!-- Select -->
     <ng-container *ngIf="field.type === 'select'">
       <label>{{ field.label }}</label>
@@ -14,7 +17,7 @@
         <option *ngFor="let option of field.options" [value]="option">{{ option }}</option>
       </select>
     </ng-container>
-    
+
     <!-- Radio -->
     <ng-container *ngIf="field.type === 'radio'">
       <label>{{ field.label }}</label>
@@ -26,10 +29,13 @@
     <!-- Textarea -->
     <ng-container *ngIf="field.type === 'textarea'">
       <label>{{ field.label }}</label>
-      <textarea [formControlName]="field.name"></textarea>
+      <textarea
+        [formControlName]="field.name"
+        [placeholder]="field.placeholder || ('Ingrese ' + field.label.toLowerCase())">
+      </textarea>
     </ng-container>
 
   </div>
 
-  <app-boton class="Enviar" click="onSubmit()" label="Enviar"></app-boton>
+  <app-boton class="Enviar" (click)="onSubmit()" label="Enviar"></app-boton>
 </form>
