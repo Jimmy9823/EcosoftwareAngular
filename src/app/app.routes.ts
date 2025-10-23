@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Inicio } from './inicio/inicio';
+import { Inicio } from './pages/inicio/inicio';
 import { Solcitudes } from './solcitudes/solcitudes';
 import { Usuario } from './usuario/usuario_components/usuario';
 import { Login } from './auth/login/login';
