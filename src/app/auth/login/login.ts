@@ -24,7 +24,9 @@ export class Login {
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin(formValue: any): void {
+    console.log('📥 Datos recibidos en Login:', formValue);
   const credenciales = {
+    
     correo: formValue.correo,
     contrasena: formValue.contrasena
   };

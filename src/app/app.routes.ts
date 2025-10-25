@@ -19,8 +19,9 @@ export const routes: Routes = [
   { path: '', component: Inicio },
   { path: 'solicitudes', component: Solcitudes },
   { path: 'usuarios', component: Usuario },
-  { path: 'login', component: Login},
   { path: 'registro', component: Registro },
+  { path: 'login', component: Login},
+
   {
     path: 'administrador', component: Administrador,
     canActivate: [AuthGuard],  data: { rol: 'Administrador' }

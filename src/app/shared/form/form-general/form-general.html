@@ -1,41 +1,40 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <div *ngFor="let field of fields">
+<form [formGroup]="form" (ngSubmit)="onFormSubmit()" class="form-general">
+  <div *ngFor="let field of fields" class="form-group">
+    <label>{{ field.label }}</label>
 
-    <!-- Input normal (text, email, password, number, etc.) -->
-    <ng-container *ngIf="['text', 'email', 'password', 'number'].includes(field.type)">
-      <label>{{ field.label }}</label>
-      <input
-        [type]="field.type"
-        [formControlName]="field.name"
-        [placeholder]="field.placeholder || ('Ingrese ' + field.label.toLowerCase())">
-    </ng-container>
+    <!-- Campo de texto -->
+    <input *ngIf="field.type === 'text' || field.type === 'email' || field.type === 'password'|| field.type === 'number'" [attr.type]="field.type"
+      [formControlName]="field.name" [placeholder]="field.placeholder" class="form-control"
+      (change)="onFieldChange.emit({ name: field.name, value: form.get(field.name)?.value })" />
 
-    <!-- Select -->
-    <ng-container *ngIf="field.type === 'select'">
-      <label>{{ field.label }}</label>
-      <select [formControlName]="field.name">
-        <option *ngFor="let option of field.options" [value]="option">{{ option }}</option>
-      </select>
-    </ng-container>
+    <select *ngIf="field.type === 'select'" [formControlName]="field.name" class="form-control"
+      (change)="onFieldChange.emit({ name: field.name, value: form.get(field.name)?.value })">
+      <option value="">Seleccione una opción</option>
+      <option *ngFor="let opt of field.options" [value]="opt.value">
+        {{ opt.label }}
+      </option>
+    </select>
 
-    <!-- Radio -->
-    <ng-container *ngIf="field.type === 'radio'">
-      <label>{{ field.label }}</label>
-      <div *ngFor="let option of field.options">
-        <input type="radio" [formControlName]="field.name" [value]="option"> {{ option }}
-      </div>
-    </ng-container>
-
-    <!-- Textarea -->
-    <ng-container *ngIf="field.type === 'textarea'">
-      <label>{{ field.label }}</label>
-      <textarea
-        [formControlName]="field.name"
-        [placeholder]="field.placeholder || ('Ingrese ' + field.label.toLowerCase())">
-      </textarea>
-    </ng-container>
-
+    <!-- Validaciones -->
+    <small *ngIf="form.get(field.name)?.hasError('required') && form.get(field.name)?.touched">
+      Este campo es obligatorio.
+    </small>
+    <small *ngIf="form.get(field.name)?.hasError('email') && form.get(field.name)?.touched">
+      Correo electrónico no válido.
+    </small>
+    <small *ngIf="form.get(field.name)?.hasError('minlength') && form.get(field.name)?.touched">
+      Mínimo {{ field.minLength }} caracteres.
+    </small>
+    <small *ngIf="form.get(field.name)?.hasError('maxlength') && form.get(field.name)?.touched">
+      Máximo {{ field.maxLength }} caracteres.
+    </small>
+    <small *ngIf="form.get(field.name)?.hasError('min') && form.get(field.name)?.touched">
+      El valor mínimo permitido es {{ field.min }}.
+    </small>
+    <small *ngIf="form.get(field.name)?.hasError('max') && form.get(field.name)?.touched">
+      El valor máximo permitido es {{ field.max }}.
+    </small>
   </div>
-
-  <app-boton class="Enviar" (click)="onSubmit()" label="Enviar"></app-boton>
+<button type="submit" class="btn-submit">Enviar</button>
+ 
 </form>

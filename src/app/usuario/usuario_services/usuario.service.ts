@@ -74,7 +74,9 @@ export class UsuarioService {
   // CRUD
   // ========================
   guardar(usuario: UsuarioModel): Observable<UsuarioModel> {
-    return this.http.post<UsuarioModel>(this.apiUrlSpringboot, usuario)
+     console.log('📤 Enviando al backend:', usuario)
+  console.log('🔗 URL:', `${this.apiUrlSpringboot}/registro`)
+    return this.http.post<UsuarioModel>(`${this.apiUrlSpringboot}/registro`, usuario)
   }
 
   actualizar(id: number, usuario: UsuarioModel): Observable<UsuarioModel> {

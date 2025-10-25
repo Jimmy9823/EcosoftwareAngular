@@ -1,51 +1,66 @@
-import { Component, Output, Input, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, Input, EventEmitter } from '@angular/core';
 import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Boton } from '../../botones/boton/boton';
+
+export interface FieldConfig {
+  name: string;
+  label: string;
+  type: string;
+  placeholder?: string;
+  options?: { label: string; value: any }[];
+  value?: any;
+  required?: boolean;
+  email?: boolean;
+  min?: number;
+  max?: number;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+}
 
 @Component({
   selector: 'app-form-general',
-  imports: [COMPARTIR_IMPORTS, Boton],
   standalone: true,
+  imports: [COMPARTIR_IMPORTS, Boton],
   templateUrl: './form-general.html',
   styleUrl: './form-general.css'
 })
-export class FormGeneral implements OnInit {
-  @Input() fields: any[] = [];
-  @Output() submitForm = new EventEmitter<any>();
+export class FormGeneral {
+  @Input() fields: FieldConfig[] = [];
+  @Output() submitForm = new EventEmitter<any>(); // <-- nombre cambiado
+  @Output() onFieldChange = new EventEmitter<{ name: string; value: any }>();
+  form!: FormGroup;
 
-  /** Evento opcional para notificar cambios en campos (como el rol) */
-  @Output() fieldChange = new EventEmitter<{ name: string; value: any }>();
-
-  formGroup!: FormGroup;
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    this.generarFormulario();
-  }
+    const formGroup: any = {};
 
-  /** Permite regenerar el formulario si cambian los campos desde el padre */
-  ngOnChanges() {
-    if (this.fields && this.fields.length) {
-      this.generarFormulario();
-    }
-  }
-
-  private generarFormulario() {
-    const group: any = {};
     this.fields.forEach(field => {
-      group[field.name] = new FormControl('');
-    });
-    this.formGroup = new FormGroup(group);
+      const validations = [];
 
-    // Escucha cambios en el campo "rol" para notificar al padre
-    if (this.formGroup.get('rol')) {
-      this.formGroup.get('rol')!.valueChanges.subscribe(value => {
-        this.fieldChange.emit({ name: 'rol', value });
-      });
-    }
+      if (field.required) validations.push(Validators.required);
+      if (field.email) validations.push(Validators.email);
+      if (field.minLength) validations.push(Validators.minLength(field.minLength));
+      if (field.maxLength) validations.push(Validators.maxLength(field.maxLength));
+      if (field.min !== undefined) validations.push(Validators.min(field.min));
+      if (field.max !== undefined) validations.push(Validators.max(field.max));
+      if (field.pattern) validations.push(Validators.pattern(field.pattern));
+
+      formGroup[field.name] = [field.value || '', validations];
+    });
+
+    this.form = this.fb.group(formGroup);
   }
 
-  onSubmit() {
-    this.submitForm.emit(this.formGroup.value);
+  onFormSubmit() {
+    console.log('📤 Formulario enviado:', this.form.value);
+
+    if (this.form.valid) {
+      this.submitForm.emit(this.form.value);
+    } else {
+      this.form.markAllAsTouched();
+    }
   }
 }
