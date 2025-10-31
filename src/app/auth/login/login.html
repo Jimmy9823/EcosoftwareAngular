@@ -1,12 +1,34 @@
-<div class="login-container">
-  <h2>Iniciar Sesión</h2>
+<div class="login-principal container-fluid">
+  <div class="login-wrapper d-flex">
 
-  <form (ngSubmit)="onLogin()">
-    <input type="email" placeholder="Correo" [(ngModel)]="correo" name="correo" required />
-    <input type="password" placeholder="Contraseña" [(ngModel)]="contrasena" name="contrasena" required />
+    <!-- Mitad izquierda: anuncio dividido en dos secciones -->
+    <div class="anuncio-login d-flex flex-column">
+      <!-- Parte superior: círculo con animación -->
+      <div class="anuncio-superior d-flex align-items-center justify-content-center">
+        <div class="plant-animation-circle">
+          <!-- aquí van las imágenes animadas como fondo o <img> secuenciales -->
+          <!-- puedes usar <img> dentro o background-image animado vía CSS -->
+          <img src="assets/imagen.png" alt="plant step 1" class="plant-step plant-step1">
+          <img src="assets/plant-step2.png" alt="plant step 2" class="plant-step plant-step2">
+          <img src="assets/plant-step3.png" alt="plant step 3" class="plant-step plant-step3">
+          <img src="assets/plant-step4.png" alt="plant step 4" class="plant-step plant-step4">
+        </div>
+      </div>
+      <!-- Parte inferior: texto -->
+      <div class="anuncio-inferior text-center text-light">
+        <h3 class="fw-bold mb-3">Bienvenido a EcoSoftware</h3>
+        <p class="">Conecta, gestiona y transforma tu entorno de manera sostenible 🌱</p>
+      </div>
+    </div>
 
-    <button type="submit">Ingresar</button>
+    <!-- Mitad derecha: formulario de login -->
+    <div class="login-container d-flex flex-column align-items-center justify-content-center">
+      <h2 class="fw-bold mb-4">Iniciar Sesión</h2>
+      <app-form-general
+        [fields]="campos"
+        (submitForm)="onLogin($event)">
+      </app-form-general>
+    </div>
 
-    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
-  </form>
+  </div>
 </div>

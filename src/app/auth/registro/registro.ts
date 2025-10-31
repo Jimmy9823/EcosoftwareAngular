@@ -1,103 +1,84 @@
 import { Component } from '@angular/core';
 import { UsuarioService } from '../../usuario/usuario_services/usuario.service';
-import { FormComp } from '../../shared/form/form.comp/form.comp';
-import { UsuarioModel } from '../../usuario/usuario_models/usuario';
+import { UsuarioModel, Localidad } from '../../usuario/usuario_models/usuario';
 import { Router } from '@angular/router';
-import { FormGeneral } from "../../shared/form/form-general/form-general";
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router'; // ← AGREGAR ESTO
 
 @Component({
   selector: 'app-registro',
-  imports: [FormComp, FormGeneral],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule], // ← AGREGAR RouterModule
   templateUrl: './registro.html',
   styleUrls: ['./registro.css']
 })
 export class Registro {
 
-  constructor(private usuarioService: UsuarioService, private router: Router) {}
+  usuario: UsuarioModel = {
+    rolId: 2,
+    nombre: '',
+    contrasena: '',
+    correo: '',
+    cedula: '',
+    telefono: '',
+    direccion: '',
+    localidad: '' as Localidad,
+    estado: true,
+    fechaCreacion: new Date().toISOString()
+  };
 
-  registro(data: any) {
-    console.log('Datos del formulario crudo:', data);
+  localidades = Object.values(Localidad);
+  enviando = false;
 
-    // Mapeo del rol (de texto → número) según DTO backend
-    const rolMap: Record<string, number> = {
-      'admin': 1,
-      'ciudadano': 2,
-      'empresa': 3,
-      'reciclador': 4
-    };
+  constructor(
+    private usuarioService: UsuarioService,
+    private router: Router
+  ) {}
 
-    // Construcción del payload según el DTO del backend
-    const payload: UsuarioModel = {
-      rolId: rolMap[data.rol] ?? 2,
-      nombre: data.nombre,
-      contrasena: data.contrasena,
-      correo: data.correo,
-      cedula: data.cedula,
-      telefono: data.telefono,
-      direccion: data.direccion,
-      barrio: data.barrio,
-      localidad: data.localidad,
-      nit: data.nit || undefined,
-      representanteLegal: data.representanteLegal || undefined,
-      zona_de_trabajo: data.zonaTrabajo || undefined,
-      horario: data.horario || undefined,
-      tipoMaterial: (data.tipoMaterial || []).join(', ') || undefined,
-      cantidad_minima: data.cantidadMinima ? Number(data.cantidadMinima) : undefined,
-      imagen_perfil: undefined,
-      certificaciones: undefined,
-      estado: true,
-      fechaCreacion: new Date().toISOString()
-    };
+  registrar() {
+    if (this.enviando) return;
+    
+    this.enviando = true;
+    console.log('Datos a enviar:', this.usuario);
 
-    console.log('Payload final al backend:', payload);
-
-    // Llamada al servicio para registrar el usuario
-    this.usuarioService.guardar(payload).subscribe({
-      next: (res) => {
-        console.log('Usuario registrado correctamente:', res);
-        alert('Usuario registrado con éxito');
-
-        // 🔸 Redirección según el rol elegido
-        switch (payload.rolId) {
-          case 1:
-            this.router.navigate(['/administrador']);
-            break;
-          case 2:
-            this.router.navigate(['/ciudadano']);
-            break;
-          case 3:
-            this.router.navigate(['/empresa']);
-            break;
-          case 4:
-            this.router.navigate(['/reciclador']);
-            break;
-          default:
-            this.router.navigate(['/']);
-            break;
-        }
+    this.usuarioService.guardar(this.usuario).subscribe({
+      next: (response) => {
+        console.log('Registro exitoso:', response);
+        this.enviando = false;
+        alert('Usuario registrado correctamente');
+        
+        // Redirección según el rol
+        this.redirigirSegunRol(this.usuario.rolId!);
       },
-      error: (err) => {
-        console.error('Error al registrar usuario:', err);
-        alert('Error al registrar usuario');
+      error: (error) => {
+        console.error('Error:', error);
+        this.enviando = false;
+        
+        if (error.status === 409) {
+          alert('El usuario ya existe (correo o cédula duplicados)');
+        } else if (error.status === 400) {
+          alert('Datos inválidos. Verifique la información.');
+        } else {
+          alert('Error al registrar usuario');
+        }
       }
     });
   }
 
-
-
-
-  formFields = [
-  { name: 'nombre', label: 'Nombre', type: 'text' },
-  { name: 'correo', label: 'Correo', type: 'email' },
-  { name: 'rol', label: 'Rol', type: 'select', options: ['Usuario', 'Administrador', 'Reciclador', 'Empresa'] },
-  { name: 'genero', label: 'Género', type: 'radio', options: ['Masculino', 'Femenino'] }
-];
-
-registrarUsuario(data: any) {
-  console.log('Datos del formulario:', data);
+  private redirigirSegunRol(rolId: number) {
+    switch (rolId) {
+      case 2: // Ciudadano
+        this.router.navigate(['/ciudadano']);
+        break;
+      case 3: // Empresa
+        this.router.navigate(['/empresa']);
+        break;
+      case 4: // Reciclador
+        this.router.navigate(['/reciclador']);
+        break;
+      default:
+        this.router.navigate(['/login']);
+    }
+  }
 }
-}
-
-
-
-
