@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { UsuarioService } from '../../usuario/usuario_services/usuario.service';
+import { UsuarioService } from '../../Services/usuario.service';
 import { Router } from '@angular/router';
-import { UsuarioModel } from '../../usuario/usuario_models/usuario';
+import { UsuarioModel } from '../../Models/usuario';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { AuthService } from '../auth.service';
 import { FormGeneral } from '../../shared/form/form-general/form-general';

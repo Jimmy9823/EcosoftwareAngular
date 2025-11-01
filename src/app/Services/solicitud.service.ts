@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ServiceModel } from './model';
+import { ServiceModel } from '../Models/model';
 
 @Injectable({
   providedIn: 'root'
@@ -51,9 +51,9 @@ export class Service {
   // ================================
 
   // Aceptar solicitud
-  aceptarSolicitud(id: number, solicitud: ServiceModel, idRecolector: number): Observable<ServiceModel> {
-    return this.http.post<ServiceModel>(`${this.api}/${id}/aceptar/${idRecolector}`, solicitud);
-  }
+  aceptarSolicitud(id: number): Observable<ServiceModel> {
+  return this.http.post<ServiceModel>(`${this.api}/${id}/aceptar`, {});
+}
 
   // Rechazar solicitud con motivo
  rechazarSolicitud(id: number, motivo: string): Observable<ServiceModel> {

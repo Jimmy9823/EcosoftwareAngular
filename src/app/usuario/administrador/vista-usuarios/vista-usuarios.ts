@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports';
 import { Tabla } from '../../../shared/tabla/tabla';
-import { UsuarioService } from '../../usuario_services/usuario.service';
-import {UsuarioModel} from '../../../usuario/usuario_models/usuario'
+import { UsuarioService } from '../../../Services/usuario.service';
+import {UsuarioModel} from '../../../Models/usuario'
 @Component({
   selector: 'app-vista-usuarios',
   imports: [COMPARTIR_IMPORTS, Tabla ],

@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
-import { UsuarioService } from '../usuario_services/usuario.service';
-import { UsuarioModel } from '../usuario_models/usuario';
+import { UsuarioService } from '../../Services/usuario.service';
+import { UsuarioModel } from '../../Models/usuario';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
-import { FormComp } from '../../shared/form/form.comp/form.comp';
-import { Solcitudes } from '../../solcitudes/solcitudes';
 import { RouterLink } from '@angular/router';
 import { CardARSolicitud } from '../../solcitudes/card-a-r-solicitud/card-a-r-solicitud';
-
+import { CardsRecoleccion } from '../../Logic/recolecciones-comp/cards-recoleccion/cards-recoleccion';
+import { CapacitacionesCrudComponent } from '../../Logic/capacitaciones/card-crud-capacitacion/card-crud-capacitacion';
+import { CapacitacionExcelComponent } from '../../Logic/capacitaciones/carga-masiva/carga-masiva';
 
 @Component({
   selector: 'app-empresa',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormComp, Solcitudes, CardARSolicitud, RouterLink],
+  imports: [COMPARTIR_IMPORTS, CardARSolicitud, RouterLink, CardsRecoleccion, CapacitacionesCrudComponent, CapacitacionExcelComponent],
   templateUrl: './empresa.html',
   styleUrls: ['./empresa.css']
 })

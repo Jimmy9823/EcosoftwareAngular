@@ -1,17 +1,20 @@
 // src/app/usuario/administrador/administrador.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { UsuarioService } from '../usuario_services/usuario.service';
-import { UsuarioModel } from '../usuario_models/usuario';
+import { UsuarioService } from '../../Services/usuario.service';
+import { UsuarioModel } from '../../Models/usuario';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { Solcitudes } from '../../solcitudes/solcitudes';
 import { Usuario } from "../usuario_components/usuario";
 import { RouterLink } from '@angular/router';
 import { PanelDeControl } from '../../core/panel-de-control/panel-de-control';
 import { AuthService } from '../../auth/auth.service';
+import { ListarTabla } from '../../Logic/recolecciones-comp/listar-tabla/listar-tabla';
+import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitaciones/listar-capacitaciones';
+
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, Solcitudes, Usuario, RouterLink, PanelDeControl],
+  imports: [COMPARTIR_IMPORTS, Solcitudes, Usuario, RouterLink, PanelDeControl, ListarTabla, CapacitacionesLista],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })

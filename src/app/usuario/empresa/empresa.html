@@ -51,7 +51,7 @@
            [ngClass]="{'active-link': vistaActual==='puntos'}"
            (click)="cambiarVista('puntos')">
           <i class="bi bi-geo-alt"></i>
-          <span *ngIf="menuAbierto">Puntos de Reciclaje</span>
+          <a *ngIf="menuAbierto">Capacitaciones</a>
         </a>
       </li>
       <li class="nav-item mb-2">
@@ -147,12 +147,16 @@
     <ng-container *ngIf="vistaActual === 'recolecciones'">
       <h3 class="fw-bold text-center verde-principal mb-4">Campañas y Recolecciones</h3>
       <p class="text-center">Vista para gestionar campañas y recolecciones.</p>
-    </ng-container>
+      <app-cards-recoleccion></app-cards-recoleccion>
+      </ng-container>
+   
 
     <!-- PUNTOS DE RECICLAJE -->
     <ng-container *ngIf="vistaActual === 'puntos'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Puntos de Reciclaje</h3>
-      <p class="text-center">Mapa e información de los puntos de reciclaje.</p>
+      <h3 class="fw-bold text-center verde-principal mb-4">Capacitaciones</h3>
+      <p class="text-center">Tu modulo de gestion de capacitaciones</p>
+      <app-carga-masiva-capacitacion></app-carga-masiva-capacitacion>
+      <app-card-crud-capacitacion></app-card-crud-capacitacion>
     </ng-container>
 
     <!-- NOTICIAS -->

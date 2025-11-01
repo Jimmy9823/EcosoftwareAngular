@@ -1,0 +1,17 @@
+.card {
+  border-radius: 10px;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  font-size: 14px;
+}
+
+.card-body p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.card-footer button {
+  width: 48%;
+}

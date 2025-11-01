@@ -1,0 +1,19 @@
+<div class="container mt-3">
+  <h3 class="text-center">📚 Lista de Capacitaciones</h3>
+
+  <!-- ✅ Mensajes de carga o error -->
+  <div *ngIf="cargando" class="text-center">Cargando...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <!-- ✅ Mostrar tabla solo si hay datos -->
+  <app-tabla
+    *ngIf="!cargando && data.length > 0"
+    [columns]="columns"
+    [data]="data">
+  </app-tabla>
+
+  <!-- ✅ Sin datos -->
+  <p *ngIf="!cargando && data.length === 0" class="text-center">
+    No hay capacitaciones registradas.
+  </p>
+</div>
