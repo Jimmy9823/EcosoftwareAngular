@@ -1,0 +1,55 @@
+<div class="row" *ngIf="recolecciones.length > 0; else sinRecolecciones">
+  <div class="col-md-4 mb-3" *ngFor="let reco of recolecciones">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6><strong>Estado:</strong> {{ reco.estado }}</h6>
+        <p *ngIf="reco.observaciones"><strong>Observaciones:</strong> {{ reco.observaciones }}</p>
+        <p *ngIf="reco.evidencia"><strong>Evidencia:</strong> {{ reco.evidencia }}</p>
+        <p><strong>Fecha:</strong> {{ reco.fechaCreacionRecoleccion | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+      </div>
+
+      <div class="card-footer d-flex justify-content-between" *ngIf="mostrarBotones(reco.estado)">
+        <button class="btn btn-warning btn-sm" (click)="abrirModalEdicion(reco)"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-danger btn-sm" (click)="cancelarRecoleccion(reco.idRecoleccion)"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Modal Bootstrap -->
+<div class="modal fade" id="modalEdicion" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Recolección</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" *ngIf="recoleccionSeleccionada">
+        <label>Estado:</label>
+        <select class="form-control" [(ngModel)]="estadoEditable">
+          <option [ngValue]="EstadoRecoleccion.Pendiente">Pendiente</option>
+          <option [ngValue]="EstadoRecoleccion.Cancelada">Cancelada</option>
+        </select>
+
+        <label class="mt-2">Fecha Programada:</label>
+        <input type="datetime-local" [(ngModel)]="fechaProgramadaEditable" class="form-control">
+
+        <label class="mt-2">Observaciones:</label>
+        <textarea [(ngModel)]="recoleccionSeleccionada.observaciones" class="form-control"></textarea>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn btn-success" (click)="guardarEdicion()">Guardar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<ng-template #sinRecolecciones>
+  <p class="text-center mt-3">No tienes recolecciones asignadas.</p>
+</ng-template>

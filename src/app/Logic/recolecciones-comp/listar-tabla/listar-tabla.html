@@ -1,0 +1,8 @@
+<div *ngIf="cargando">Cargando recolecciones...</div>
+<div *ngIf="error">{{ error }}</div>
+
+<app-tabla
+  *ngIf="!cargando && !error"
+  [columns]="columnas"
+  [data]="datos">
+</app-tabla>
