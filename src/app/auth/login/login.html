@@ -1,29 +1,34 @@
 <div class="login-principal container-fluid">
-  <div class="login-wrapper d-flex">
+  <div class="login-wrapper d-flex flex-wrap">
 
-    <!-- Mitad izquierda: anuncio dividido en dos secciones -->
-    <div class="anuncio-login d-flex flex-column">
+    <!-- Mitad izquierda -->
+    <div class="anuncio-login d-flex flex-column position-relative">
+
+      <!-- Hojas flotantes -->
+      <i class="bi bi-recycle floating-leaves icon-1"></i>
+      <i class="bi bi-recycle floating-leaves icon-2"></i>
+      <i class="bi bi-recycle floating-leaves icon-3"></i>
+
       <!-- Parte superior: círculo con animación -->
-      <div class="anuncio-superior d-flex align-items-center justify-content-center">
-        <div class="plant-animation-circle">
-          <!-- aquí van las imágenes animadas como fondo o <img> secuenciales -->
-          <!-- puedes usar <img> dentro o background-image animado vía CSS -->
-          <img src="assets/imagen.png" alt="plant step 1" class="plant-step plant-step1">
-          <img src="assets/plant-step2.png" alt="plant step 2" class="plant-step plant-step2">
-          <img src="assets/plant-step3.png" alt="plant step 3" class="plant-step plant-step3">
-          <img src="assets/plant-step4.png" alt="plant step 4" class="plant-step plant-step4">
+      <div class="anuncio-superior d-flex align-items-center justify-content-center flex-grow-1">
+        <div class="plant-animation-circle position-relative">
+          <div class="plant-icon" [class.fade-out]="fade" [innerHTML]="currentResidue.icon"></div>
+          <div class="residue-label" [style.color]="currentResidue.color" [class.fade-out]="fade">
+            {{ currentResidue.name }}
+          </div>
         </div>
       </div>
+
       <!-- Parte inferior: texto -->
-      <div class="anuncio-inferior text-center text-light">
+      <div class="anuncio-inferior text-center text-light p-4">
         <h3 class="fw-bold mb-3">Bienvenido a EcoSoftware</h3>
-        <p class="">Conecta, gestiona y transforma tu entorno de manera sostenible 🌱</p>
+        <p>Conecta, gestiona y transforma tu entorno de manera sostenible 🌱</p>
       </div>
     </div>
 
-    <!-- Mitad derecha: formulario de login -->
-    <div class="login-container d-flex flex-column align-items-center justify-content-center">
-      <h2 class="fw-bold mb-4">Iniciar Sesión</h2>
+    <!-- Mitad derecha: formulario -->
+    <div class="login-container d-flex flex-column align-items-center justify-content-center flex-grow-1 p-5">
+      <h2 class="fw-bold mb-4 text-success">Iniciar Sesión</h2>
       <app-form-general
         [fields]="campos"
         (submitForm)="onLogin($event)">

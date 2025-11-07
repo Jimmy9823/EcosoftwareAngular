@@ -1,57 +1,105 @@
-import { Component } from '@angular/core';
-import { UsuarioService } from '../../usuario/usuario_services/usuario.service';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UsuarioModel } from '../../usuario/usuario_models/usuario';
-import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { AuthService } from '../auth.service';
+import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { FormGeneral } from '../../shared/form/form-general/form-general';
+
 @Component({
   selector: 'app-login',
-  standalone:true,
-  imports: [ COMPARTIR_IMPORTS, FormGeneral],
+  standalone: true,
+  imports: [COMPARTIR_IMPORTS, FormGeneral],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-export class Login {
+export class Login implements OnInit {
+
   correo = '';
   contrasena = '';
   errorMessage = '';
+
+  // Campos del formulario (siguen igual)
   campos = [
-  { name: 'correo', label: 'Correo', type: 'email', placeholder: 'Ingrese su correo' },
-  { name: 'contrasena', label: 'Contraseña', type: 'password', placeholder: 'Ingrese su contraseña' }
-]
+    { name: 'correo', label: 'Correo', type: 'email', placeholder: 'Ingrese su correo' },
+    { name: 'contrasena', label: 'Contraseña', type: 'password', placeholder: 'Ingrese su contraseña' }
+  ];
+
+  // 🌱 Propiedades para la animación ecológica
+  fade = false;
+  residues = [
+    { icon: '🗑️', name: 'Residuos Ordinarios', color: '#6b7280' },
+    { icon: '♻️', name: 'Residuos Reciclables', color: '#3b82f6' },
+    { icon: '🍎', name: 'Residuos Orgánicos', color: '#84cc16' },
+    { icon: '🔋', name: 'Residuos Peligrosos', color: '#ef4444' },
+    { icon: '🏥', name: 'Residuos Hospitalarios', color: '#f59e0b' },
+    { icon: '💻', name: 'Residuos Electrónicos', color: '#8b5cf6' },
+    { icon: '🧪', name: 'Residuos Químicos', color: '#ec4899' },
+    { icon: '🏗️', name: 'Residuos de Construcción', color: '#78716c' }
+  ];
+  currentIndex = 0;
+  currentResidue = this.residues[0];
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  // 🌿 Animación al iniciar el componente
+  ngOnInit(): void {
+    setInterval(() => this.rotateResidue(), 3000);
+  }
+
+  // 🔄 Cambia ícono y texto de residuos
+  rotateResidue() {
+    this.fade = true;
+    setTimeout(() => {
+      this.currentIndex = (this.currentIndex + 1) % this.residues.length;
+      this.currentResidue = this.residues[this.currentIndex];
+      this.fade = false;
+    }, 500);
+  }
+
+  // 🧠 Login (igual que el tuyo)
   onLogin(formValue: any): void {
     console.log('📥 Datos recibidos en Login:', formValue);
-  const credenciales = {
-    
-    correo: formValue.correo,
-    contrasena: formValue.contrasena
-  };
 
-  this.authService.login(credenciales).subscribe({
-    next: (response) => {
-      console.log('✅ Login exitoso');
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('rol', response.rol);
+    const credenciales = {
+      correo: formValue.correo,
+      contrasena: formValue.contrasena
+    };
 
-      switch (response.rol) {
-        case 'Administrador': this.router.navigate(['/administrador']); break;
-        case 'Ciudadano': this.router.navigate(['/ciudadano']); break;
-        case 'Empresa': this.router.navigate(['/empresa']); break;
-        case 'Reciclador': this.router.navigate(['/reciclador']); break;
-        default:
-          console.warn('Rol no reconocido, redirigiendo al login');
-          this.router.navigate(['/login']);
-      }
-    },
-    error: (err) => {
-      console.error(err);
-      this.errorMessage = 'Credenciales incorrectas o usuario no encontrado';
-    },
-  });
-}
+    this.authService.login(credenciales).subscribe({
+      next: (response) => {
+        console.log('✅ Login exitoso');
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('rol', response.rol);
+
+        switch (response.rol) {
+          case 'Administrador': this.router.navigate(['/administrador']); break;
+          case 'Ciudadano': this.router.navigate(['/ciudadano']); break;
+          case 'Empresa': this.router.navigate(['/empresa']); break;
+          case 'Reciclador': this.router.navigate(['/reciclador']); break;
+          default:
+            console.warn('Rol no reconocido, redirigiendo al login');
+            this.router.navigate(['/login']);
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = 'Credenciales incorrectas o usuario no encontrado';
+      },
+    });
+  }
+
+  // 🍃 Efecto visual de movimiento de hojas con el mouse
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(e: MouseEvent) {
+    const leaves = document.querySelectorAll('.floating-leaves');
+    const mouseX = e.clientX / window.innerWidth;
+    const mouseY = e.clientY / window.innerHeight;
+
+    leaves.forEach((leaf, index) => {
+      const speed = (index + 1) * 10;
+      const x = mouseX * speed;
+      const y = mouseY * speed;
+      (leaf as HTMLElement).style.transform = `translate(${x}px, ${y}px) rotate(${x}deg)`;
+    });
+  }
 }
 

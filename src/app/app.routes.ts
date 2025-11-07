@@ -13,6 +13,7 @@ import { FormRegistro } from './solcitudes/form-registro/form-registro';
 import { EditarUsuario } from './usuario/editar-usuario/editar-usuario';
 import { Error } from './core/error/error';
 import { AuthGuard } from './auth/auth.guard'
+import { Noticias } from './paginas/noticias/noticias';
 
 
 export const routes: Routes = [
@@ -20,8 +21,8 @@ export const routes: Routes = [
   { path: 'solicitudes', component: Solcitudes },
   { path: 'usuarios', component: Usuario },
   { path: 'registro', component: Registro },
+  { path: 'noticias', component: Noticias },
   { path: 'login', component: Login},
-
   {
     path: 'administrador', component: Administrador,
     canActivate: [AuthGuard],  data: { rol: 'Administrador' }
