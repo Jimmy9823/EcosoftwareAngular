@@ -1,18 +1,24 @@
 <div class="cards-container">
-  <h2 class="titulo-seccion">Solicitudes Registradas</h2>
+  
 
   <div class="grid-cards">
     <div class="card" *ngFor="let solicitud of solicitudes">
-      <div class="card-header">
-        <h6>SOLICITUD DE RECOLECCION</h6>
+      <div class="card-content">
+        
+        <!-- 🟩 MITAD IZQUIERDA -->
+        <div class="card-left">
+          <h6 class="titulo-card">SOLICITUD DE RECOLECCIÓN</h6>
+          <p class="fecha">{{ solicitud.fechaProgramada | date:'mediumDate' }}</p>
+        </div>
 
-      <div class="card-body">
-        <p><strong>📊 Tipo:</strong> {{ solicitud.tipoResiduo }}</p>
-        <p><strong>📊 Cantidad:</strong> {{ solicitud.estadoPeticion }}</p>
-        <p><strong>📊 Cantidad:</strong> {{ solicitud.cantidad }}</p>
-        <p><strong>📍 Localidad:</strong> {{ solicitud.localidad }}</p>
-        <p><strong>🗺️ Ubicación:</strong> {{ solicitud.ubicacion }}</p>
-        <p><strong>👤 ID Usuario:</strong> {{ solicitud.usuarioId }}</p>
+        <!-- 🟩 MITAD DERECHA -->
+        <div class="card-right">
+          <p><strong>Tipo:</strong> {{ solicitud.tipoResiduo }}</p>
+          <p><strong>Estado:</strong> {{ solicitud.estadoPeticion }}</p>
+          <p><strong>Cantidad:</strong> {{ solicitud.cantidad }}</p>
+          <p><strong>Localidad:</strong> {{ solicitud.localidad }}</p>
+        </div>
+
       </div>
     </div>
   </div>

@@ -1,4 +1,3 @@
-
 <div class="d-flex">
 
   <!-- SIDEBAR LATERAL -->
@@ -21,42 +20,37 @@
     <!-- Menú principal -->
     <ul class="nav flex-column mt-2" id="sidebarMenu">
       <li class="nav-item mb-2">
-        <a class="nav-link d-flex align-items-center"
-           [ngClass]="{'active-link': vistaActual==='panel'}"
-           (click)="cambiarVista('panel')">
+        <a class="nav-link d-flex align-items-center" [ngClass]="{'active-link': vistaActual==='panel'}"
+          (click)="cambiarVista('panel')">
           <i class="bi bi-speedometer2"></i>
           <span *ngIf="menuAbierto">Panel de Control</span>
         </a>
       </li>
-      
+
       <li class="nav-item mb-2">
-        <a class="nav-link d-flex align-items-center"
-           [ngClass]="{'active-link': vistaActual==='solicitudes'}"
-           (click)="cambiarVista('solicitudes')">
+        <a class="nav-link d-flex align-items-center" [ngClass]="{'active-link': vistaActual==='solicitudes'}"
+          (click)="cambiarVista('solicitudes')">
           <i class="bi bi-bar-chart-line"></i>
           <span *ngIf="menuAbierto">Solicitudes</span>
         </a>
       </li>
       <li class="nav-item mb-2">
-        <a class="nav-link d-flex align-items-center"
-           [ngClass]="{'active-link': vistaActual==='recolecciones'}"
-           (click)="cambiarVista('recolecciones')">
+        <a class="nav-link d-flex align-items-center" [ngClass]="{'active-link': vistaActual==='recolecciones'}"
+          (click)="cambiarVista('recolecciones')">
           <i class="bi bi-truck"></i>
           <span *ngIf="menuAbierto">Recolecciones</span>
         </a>
       </li>
       <li class="nav-item mb-2">
-        <a class="nav-link d-flex align-items-center"
-           [ngClass]="{'active-link': vistaActual==='capacitaciones'}"
-           (click)="cambiarVista('capacitaciones')">
+        <a class="nav-link d-flex align-items-center" [ngClass]="{'active-link': vistaActual==='capacitaciones'}"
+          (click)="cambiarVista('capacitaciones')">
           <i class="bi bi-geo-alt"></i>
           <span *ngIf="menuAbierto">Capacitaciones</span>
         </a>
       </li>
       <li class="nav-item mb-2">
-        <a class="nav-link d-flex align-items-center"
-           [ngClass]="{'active-link': vistaActual==='noticias'}"
-           (click)="cambiarVista('noticias')">
+        <a class="nav-link d-flex align-items-center" [ngClass]="{'active-link': vistaActual==='noticias'}"
+          (click)="cambiarVista('noticias')">
           <i class="bi bi-newspaper"></i>
           <span *ngIf="menuAbierto">Noticias</span>
         </a>
@@ -65,17 +59,17 @@
 
     <!-- PERFIL USUARIO -->
     <div class="sidebar-perfil mt-auto text-center position-relative">
-      <button class="btn w-100 d-flex align-items-center justify-content-center gap-2"
-              (click)="togglePerfilMenu()">
+      <button class="btn w-100 d-flex align-items-center justify-content-center gap-2" (click)="togglePerfilMenu()">
         <i class="bi bi-person-circle fs-3"></i>
         <span *ngIf="menuAbierto">Ciudadano</span>
         <i *ngIf="menuAbierto" class="bi ms-auto"
-           [ngClass]="perfilMenuAbierto ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
+          [ngClass]="perfilMenuAbierto ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
       </button>
 
       <ul *ngIf="perfilMenuAbierto" class="perfil-menu list-unstyled shadow rounded">
         <li>
-          <a class="dropdown-item d-flex align-items-center justify-content-center" href="#" routerLink="/editar-usuario">
+          <a class="dropdown-item d-flex align-items-center justify-content-center" href="#"
+            routerLink="/editar-usuario">
             <i class="bi bi-pencil"></i>
             <span *ngIf="menuAbierto" class="ms-2">Editar Perfil</span>
           </a>
@@ -87,11 +81,14 @@
           </a>
         </li>
         <li>
-          <a class="dropdown-item d-flex align-items-center justify-content-center text-danger" href="#">
+          <button
+            class="dropdown-item d-flex align-items-center justify-content-center text-danger w-100 border-0 bg-transparent"
+            (click)="cerrarSesion()">
             <i class="bi bi-box-arrow-right"></i>
             <span *ngIf="menuAbierto" class="ms-2">Cerrar Sesión</span>
-          </a>
+          </button>
         </li>
+
       </ul>
     </div>
   </nav>
@@ -133,36 +130,38 @@
       </div>
     </ng-container>
 
-    
+
 
     <!-- SOLICITUDES -->
     <ng-container *ngIf="vistaActual === 'solicitudes'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Solicitudes</h3>
-      <p class="text-center">Consulta tus solicitudes</p>
-      
-      
+      <!-- CABECERA CON TÍTULO Y BOTÓN -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h3 class="fw-bold verde-principal mb-1">Solicitudes</h3>
+          <p class="text-muted mb-0">Consulta tus solicitudes</p>
+        </div>
+        <button class="btn btn-success d-flex align-items-center gap-2" (click)="toggleVista()">
+          <i class="bi bi-plus-circle"></i>
+          {{ mostrarNuevaSolicitud ? 'Mostrar solicitudes' : 'Hacer nueva solicitud' }}
+        </button>
+      </div>
 
-<div class="contenedor-toggle">
-  <button class="btn-toggle" (click)="toggleVista()">
-    {{ mostrarNuevaSolicitud ? 'Mostrar solicitudes pendientes' : 'Hacer nueva solicitud' }}
-  </button>
+      <!-- CONTENIDO PRINCIPAL DE SOLICITUDES -->
+      <div class="contenedor-toggle">
+        <!-- 🟢 Contenedor para hacer nueva solicitud -->
+        <ng-container *ngIf="mostrarNuevaSolicitud">
+          <div class="contenido-solicitud">
+            <app-form-registro></app-form-registro>
+          </div>
+        </ng-container>
 
-  <!-- 🟢 Contenedor para hacer nueva solicitud -->
-  <ng-container *ngIf="mostrarNuevaSolicitud">
-    <div class="contenido-solicitud">
-      <app-form-registro/>
-    </div>
-  </ng-container>
-
-  <!-- 🟡 Contenedor para mostrar solicitudes pendientes -->
-  <ng-container *ngIf="!mostrarNuevaSolicitud">
-    <div class="contenido-solicitud">
-      <app-cards-solicitud/>
-    </div>
-  </ng-container>
-</div>
-
-      
+        <!-- 🟡 Contenedor para mostrar solicitudes pendientes -->
+        <ng-container *ngIf="!mostrarNuevaSolicitud">
+          <div class="contenido-solicitud">
+            <app-cards-solicitud></app-cards-solicitud>
+          </div>
+        </ng-container>
+      </div>
     </ng-container>
 
     <!-- RECOLECCIONES -->

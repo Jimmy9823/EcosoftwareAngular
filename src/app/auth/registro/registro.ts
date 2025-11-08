@@ -81,4 +81,10 @@ export class Registro {
         this.router.navigate(['/login']);
     }
   }
+  validarFuerte(valor: string): boolean {
+  if (!valor) return false;
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[{\]};:<>|./?]).+$/;
+  return regex.test(valor);
+}
+
 }

@@ -11,21 +11,32 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: #14532d; /* tono verde más oscuro */
 }
 
+/* 🟩 Grid: dos tarjetas por fila */
 .grid-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr); /* exactamente dos tarjetas */
+  gap: 1.5rem;
 }
 
+@media (max-width: 900px) {
+  .grid-cards {
+    grid-template-columns: 1fr; /* una sola tarjeta en pantallas pequeñas */
+  }
+}
+
+/* 🟩 Tarjetas */
 .card {
   background: #ffffff;
   border-radius: 1rem;
   box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-  padding: 1rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: 230px; /* fija la altura */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -34,19 +45,46 @@
   box-shadow: 0 6px 12px rgba(0,0,0,0.12);
 }
 
-.card-header {
+/* 🟩 Estructura interna: dos columnas dentro de la tarjeta */
+.card-content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap; /* evita desbordes */
 }
 
-.card-header h3 {
-  font-size: 1.1rem;
+/* 🟩 Mitad izquierda */
+.card-left {
+  flex: 1;
+  min-width: 160px;
+}
+
+.card-left h6 {
+  font-size: 1rem;
+  font-weight: 700;
   color: #2d6a4f;
+  margin-bottom: 0.3rem;
+}
+
+.card-left .fecha {
+  color: #6b7280;
+  font-size: 0.9rem;
   margin: 0;
 }
 
+/* 🟩 Mitad derecha */
+.card-right {
+  flex: 1;
+  min-width: 180px;
+}
+
+.card-right p {
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+/* 🟩 Estado con color */
 .estado {
   font-size: 0.8rem;
   font-weight: 600;
@@ -55,7 +93,6 @@
   text-transform: capitalize;
 }
 
-.card-body p {
-  font-size: 0.9rem;
-  margin: 0.25rem 0;
-}
+.estado.en-proceso { background: #fef3c7; color: #b45309; }
+.estado.completada { background: #dcfce7; color: #166534; }
+.estado.pendiente  { background: #fee2e2; color: #b91c1c; }

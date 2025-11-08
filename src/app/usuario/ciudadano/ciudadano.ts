@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { UsuarioService } from '../usuario_services/usuario.service'; // ajusta ruta según tu estructura
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { FormRegistro } from '../../solcitudes/form-registro/form-registro';
 import { CardsSolicitud } from '../../solcitudes/cards-solicitud/cards-solicitud';
 import { RouterLink } from '@angular/router';
+
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
@@ -12,20 +15,18 @@ import { RouterLink } from '@angular/router';
 })
 export class Ciudadano {
 
-  // ========================
-  // PROPIEDADES
-  // ========================
   menuAbierto: boolean = true;       
   perfilMenuAbierto: boolean = false; 
-  vistaActual: 'panel' | 'solicitudes' | 'recolecciones' | 'capacitaciones' | 'noticias' = 'panel'; // vista inicial
+  vistaActual: 'panel' | 'solicitudes' | 'recolecciones' | 'capacitaciones' | 'noticias' = 'panel'; 
+  mostrarNuevaSolicitud = false;
 
-  // ========================
-  // MÉTODOS DEL SIDEBAR
-  // ========================
-   mostrarNuevaSolicitud = false  // false = mostrar solicitudes pendientes
+  constructor(
+    private usuarioService: UsuarioService,
+    private router: Router
+  ) {}
 
   toggleVista(): void {
-    this.mostrarNuevaSolicitud = !this.mostrarNuevaSolicitud
+    this.mostrarNuevaSolicitud = !this.mostrarNuevaSolicitud;
   }
 
   toggleMenu(): void {
@@ -42,5 +43,16 @@ export class Ciudadano {
 
   togglePerfilMenu(): void {
     this.perfilMenuAbierto = !this.perfilMenuAbierto;
+  }
+
+  // ========================
+  // 🚪 CERRAR SESIÓN
+  // ========================
+  cerrarSesion(): void {
+    this.usuarioService.logout(); // limpia el localStorage
+    this.router.navigate(['/']); // redirige al index
+
+    // Opcional: mensaje de confirmación
+    alert('Sesión cerrada correctamente');
   }
 }

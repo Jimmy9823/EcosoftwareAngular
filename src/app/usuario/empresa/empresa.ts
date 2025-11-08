@@ -11,7 +11,7 @@ import { CardARSolicitud } from '../../solcitudes/card-a-r-solicitud/card-a-r-so
 @Component({
   selector: 'app-empresa',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormComp, Solcitudes, CardARSolicitud, RouterLink],
+  imports: [COMPARTIR_IMPORTS,  CardARSolicitud, RouterLink],
   templateUrl: './empresa.html',
   styleUrls: ['./empresa.css']
 })

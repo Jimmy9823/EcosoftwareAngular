@@ -4,6 +4,7 @@ import { AuthService } from '../auth.service';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { FormGeneral } from '../../shared/form/form-general/form-general';
 
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -38,7 +39,7 @@ export class Login implements OnInit {
   currentIndex = 0;
   currentResidue = this.residues[0];
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   // 🌿 Animación al iniciar el componente
   ngOnInit(): void {
@@ -81,8 +82,15 @@ export class Login implements OnInit {
         }
       },
       error: (err) => {
-        console.error(err);
-        this.errorMessage = 'Credenciales incorrectas o usuario no encontrado';
+        console.error('❌ Error en login:', err);
+
+        if (err.status === 401) {
+          this.errorMessage = 'Correo o contraseña incorrectos. Por favor, verifique sus credenciales.';
+        } else if (err.status === 500) {
+          this.errorMessage = 'Error en el servidor. Intente de nuevo más tarde.';
+        } else {
+          this.errorMessage = 'Ha ocurrido un error inesperado. Intente nuevamente.';
+        }
       },
     });
   }
