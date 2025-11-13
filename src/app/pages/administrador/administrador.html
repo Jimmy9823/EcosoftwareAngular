@@ -179,6 +179,7 @@
     <ng-container *ngIf="vistaActual === 'recolecciones'">
       <h3 class="fw-bold text-center verde-principal mb-4">Recolecciones</h3>
       <p class="text-center">Vista para gestionar campañas y recolecciones.</p>
+      <app-listar-tabla></app-listar-tabla>
     </ng-container>
 
     <!-- PUNTOS DE RECICLAJE -->
@@ -190,7 +191,9 @@
     <!-- PUNTOS DE CAPACITACIONES -->
     <ng-container *ngIf="vistaActual === 'capacitaciones'">
       <h3 class="fw-bold text-center verde-principal mb-4">Capacitaciones</h3>
-      <p class="text-center">Todas las capacitaciones sobre reciclaje.</p>
+      <app-carga-masiva-capacitacion></app-carga-masiva-capacitacion>
+      
+      <app-listar-capacitaciones> </app-listar-capacitaciones>
     </ng-container>
 
     <!-- NOTICIAS -->

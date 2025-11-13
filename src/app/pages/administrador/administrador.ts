@@ -9,9 +9,13 @@ import { Usuario } from "../../Logic/usuarios.comp/listar-filtrar-usuarios/usuar
 import { RouterLink } from '@angular/router';
 import { PanelDeControl } from '../../core/panel-de-control/panel-de-control';
 import { AuthService } from '../../auth/auth.service';
+import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitaciones/listar-capacitaciones';
+import { CapacitacionExcelComponent } from '../../Logic/capacitaciones/carga-masiva/carga-masiva';
+import { ListarTabla } from '../../Logic/recolecciones-comp/listar-tabla/listar-tabla';
+
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, Usuario, Solcitudes, RouterLink, PanelDeControl],
+  imports: [COMPARTIR_IMPORTS, Usuario, ListarTabla, Solcitudes, RouterLink, PanelDeControl, CapacitacionesLista, CapacitacionExcelComponent],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })

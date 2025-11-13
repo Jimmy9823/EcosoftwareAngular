@@ -6,12 +6,12 @@ import { COMPARTIR_IMPORTS } from '../../shared/imports';
 
 import { RouterLink } from '@angular/router';
 import { CardARSolicitud } from '../../Logic/solicitudes-comp/card-a-r-solicitud/card-a-r-solicitud';
-
+import {CardsRecoleccion} from '../../Logic/recolecciones-comp/cards-recoleccion/cards-recoleccion';
 
 @Component({
   selector: 'app-empresa',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS,  CardARSolicitud, RouterLink],
+  imports: [COMPARTIR_IMPORTS,  CardARSolicitud, RouterLink, CardsRecoleccion],
   templateUrl: './empresa.html',
   styleUrls: ['./empresa.css']
 })

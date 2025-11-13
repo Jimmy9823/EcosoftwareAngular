@@ -5,11 +5,12 @@ import { COMPARTIR_IMPORTS } from '../../shared/imports';
 import { FormRegistro } from '../../Logic/solicitudes-comp/vista-solicitudes/form-registro/form-registro';
 import { CardsSolicitud } from '../../Logic/solicitudes-comp/cards-solicitud/cards-solicitud';
 import { RouterLink } from '@angular/router';
+import { CardsRecoleccionCiudadano } from '../../Logic/recolecciones-comp/cards-recoleccion-ciudadano/cards-recoleccion-ciudadano';
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, RouterLink],
+  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, RouterLink, CardsRecoleccionCiudadano],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })

@@ -9,8 +9,8 @@
       </div>
 
       <div class="card-footer d-flex justify-content-between" *ngIf="mostrarBotones(reco.estado)">
-        <button class="btn btn-warning btn-sm" (click)="abrirModalEdicion(reco)"><i class="fas fa-edit"></i></button>
-        <button class="btn btn-danger btn-sm" (click)="cancelarRecoleccion(reco.idRecoleccion)"><i class="fas fa-trash"></i></button>
+        <button class="btn btn-warning btn-sm" (click)="abrirModalEdicion(reco)">Editar<i class="fas fa-edit"></i></button>
+        <button class="btn btn-danger btn-sm" (click)="cancelarRecoleccion(reco.idRecoleccion)">Eliminar<i class="fas fa-trash"></i></button>
       </div>
     </div>
   </div>
