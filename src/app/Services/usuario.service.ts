@@ -8,7 +8,7 @@ import { UsuarioModel } from '../Models/usuario'
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrlSpringboot = 'http://localhost:8082/api/personas'
+  private apiUrlSpringboot = 'http://localhost:8080/api/personas'
 
   constructor(private http: HttpClient) {}
 

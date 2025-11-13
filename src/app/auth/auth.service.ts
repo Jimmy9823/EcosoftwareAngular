@@ -6,7 +6,7 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8082/api/auth';
+  private apiUrl = 'http://localhost:8080/api/auth';
   private TOKEN_KEY = 'jwt_token';
   private USER_KEY = 'user_data';
 

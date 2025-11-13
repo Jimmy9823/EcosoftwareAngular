@@ -1,7 +1,7 @@
 // solicitudes.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Service } from '../solcitudes/solicitudes/service';
-import { ServiceModel } from './solicitudes/model';
+import { Service } from '../Services/solicitud.service';
+import { ServiceModel } from '../Models/solicitudes.model';
 import { COMPARTIR_IMPORTS } from '../ImpCondYForms/imports';
 
 @Component({
@@ -41,7 +41,7 @@ export class Solcitudes implements OnInit {
 
   aceptarSolicitud(solicitud: ServiceModel): void {
     const recolectorId = 3; // Cambiar por ID real desde sesión
-    this.solicitudesService.aceptarSolicitud(solicitud.idSolicitud!, solicitud, recolectorId).subscribe({
+    this.solicitudesService.aceptarSolicitud(solicitud.idSolicitud!).subscribe({
       next: () => {
         alert(`Solicitud #${solicitud.idSolicitud} aceptada correctamente ✅`);
         this.listarSolicitudes();

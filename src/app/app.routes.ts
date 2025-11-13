@@ -4,16 +4,16 @@ import { Solcitudes } from './solcitudes/solcitudes';
 import { Usuario } from './usuario/usuario_components/usuario';
 import { Login } from './auth/login/login';
 import { Registro } from './auth/registro/registro';
-import { Administrador } from './usuario/administrador/administrador';
-import { Ciudadano } from './usuario/ciudadano/ciudadano';
-import { Empresa } from './usuario/empresa/empresa';
+import { Administrador } from './pages/administrador/administrador';
+import { Ciudadano } from './pages/ciudadano/ciudadano';
+import { Empresa } from './pages/empresa/empresa';
 import { CardsSolicitud } from './solcitudes/cards-solicitud/cards-solicitud';
 import { CardARSolicitud } from './solcitudes/card-a-r-solicitud/card-a-r-solicitud';
 import { FormRegistro } from './solcitudes/form-registro/form-registro';
 import { EditarUsuario } from './usuario/editar-usuario/editar-usuario';
 import { Error } from './core/error/error';
 import { AuthGuard } from './auth/auth.guard'
-import { Noticias } from './paginas/noticias/noticias';
+
 
 
 export const routes: Routes = [
@@ -21,7 +21,7 @@ export const routes: Routes = [
   { path: 'solicitudes', component: Solcitudes },
   { path: 'usuarios', component: Usuario },
   { path: 'registro', component: Registro },
-  { path: 'noticias', component: Noticias },
+
   { path: 'login', component: Login},
   {
     path: 'administrador', component: Administrador,

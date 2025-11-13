@@ -1,14 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ServiceModel } from '../Models/model';
+import { ServiceModel } from '../Models/solicitudes.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Service {
 
-  private api = 'http://localhost:8082/api/solicitudes';
+  private api = 'http://localhost:8080/api/solicitudes';
   solicitud: ServiceModel[] = [];
 
   constructor(private http: HttpClient) {}

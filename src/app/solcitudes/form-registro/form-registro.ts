@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Localidad, EstadoPeticion, TipoResiduo, ServiceModel } from '../solicitudes/model';
-import { Service } from '../solicitudes/service';
+import { Localidad, EstadoPeticion, TipoResiduo, ServiceModel } from '../../Models/solicitudes.model';
+import { Service } from '../../Services/solicitud.service';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 import { Router } from '@angular/router';
 

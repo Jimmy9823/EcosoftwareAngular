@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-import { UsuarioService } from '../usuario_services/usuario.service'
-import { UsuarioModel } from '../usuario_models/usuario'
+import { UsuarioService } from '../../Services/usuario.service'
+import { UsuarioModel } from '../../Models/usuario'
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports'
 
 @Component({

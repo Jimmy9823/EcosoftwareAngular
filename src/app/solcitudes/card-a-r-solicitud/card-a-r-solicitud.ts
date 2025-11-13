@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Service } from '../solicitudes/service';
-import { ServiceModel } from '../solicitudes/model';
+import { Service } from '../../Services/solicitud.service';
+import { ServiceModel } from '../../Models/solicitudes.model';
 
 @Component({
   selector: 'app-card-a-r-solicitud',
@@ -32,7 +32,7 @@ export class CardARSolicitud implements OnInit {
   }
 
   aceptarSolicitud(solicitud: ServiceModel): void {
-    this.service.aceptarSolicitud(solicitud.idSolicitud!, solicitud, this.idRecolector).subscribe({
+    this.service.aceptarSolicitud(solicitud.idSolicitud!).subscribe({
       next: () => {
         alert(`✅ Solicitud #${solicitud.idSolicitud} aceptada correctamente`);
         this.cargarSolicitudes();

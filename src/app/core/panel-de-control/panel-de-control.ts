@@ -1,13 +1,14 @@
 import { Component, ViewChild, computed } from '@angular/core';
-import { VistaSolicitudes } from '../../usuario/administrador/vista-solicitudes/vista-solicitudes';
-import { VistaUsuarios } from '../../usuario/administrador/vista-usuarios/vista-usuarios';
+import { VistaSolicitudes } from '../../Logic/solicitudes-comp/vista-solicitudes/vista-solicitudes';
+import { VistaUsuarios } from '../../Logic/usuarios.comp/vista-usuarios/vista-usuarios';
 import { BarraLateral, BarraLateralItem } from '../../shared/barra-lateral/barra-lateral';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 
 
 @Component({
   selector: 'app-panel-de-control-admin',
-  imports: [VistaSolicitudes, VistaUsuarios, BarraLateral, COMPARTIR_IMPORTS],
+  standalone: true,
+  imports: [VistaSolicitudes, BarraLateral, COMPARTIR_IMPORTS, VistaUsuarios],
   templateUrl: './panel-de-control.html',
   styleUrl: './panel-de-control.css'
 })

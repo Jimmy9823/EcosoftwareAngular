@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { UsuarioService } from '../usuario_services/usuario.service';
-import { UsuarioModel } from '../usuario_models/usuario';
+import { UsuarioService } from '../../Services/usuario.service';
+import { UsuarioModel } from '../../Models/usuario';
 import { Router } from '@angular/router';
 import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
 
