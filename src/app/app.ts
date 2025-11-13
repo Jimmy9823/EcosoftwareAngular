@@ -2,7 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet,} from '@angular/router';
 import { CommonModule } from '@angular/common';
  //  IMPORTAR
-import {COMPARTIR_IMPORTS} from './ImpCondYForms/imports'
+import {COMPARTIR_IMPORTS} from './shared/imports'
 
 
 @Component({

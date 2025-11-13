@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../../shared/imports';
 import { FormGeneral } from '../../shared/form/form-general/form-general';
 
 

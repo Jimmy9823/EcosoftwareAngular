@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgStyle } from '@angular/common';
-import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../../imports';
 
 @Component({
   standalone: true,

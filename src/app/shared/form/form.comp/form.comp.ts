@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms'
 import { CommonModule } from '@angular/common'
-import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports'  // 👈 Tu archivo central de imports
+import { COMPARTIR_IMPORTS } from '../../imports'  // 👈 Tu archivo central de imports
 
 @Component({
   selector: 'app-form-comp',

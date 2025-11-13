@@ -1,7 +1,6 @@
 import { Component, Output, Input, EventEmitter } from '@angular/core';
-import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../../imports';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Boton } from '../../botones/boton/boton';
 
 export interface FieldConfig {
   name: string;
@@ -22,7 +21,7 @@ export interface FieldConfig {
 @Component({
   selector: 'app-form-general',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, Boton],
+  imports: [COMPARTIR_IMPORTS],
   templateUrl: './form-general.html',
   styleUrl: './form-general.css'
 })

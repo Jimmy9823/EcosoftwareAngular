@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CapacitacionesService } from '../../../Services/capacitacion.service';
-import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 
 @Component({
   selector: 'app-carga-masiva-capacitacion',

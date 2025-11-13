@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Service } from '../../Services/solicitud.service';
-import { ServiceModel } from '../../Models/solicitudes.model';
+import { Service } from '../../../Services/solicitud.service';
+import { ServiceModel } from '../../../Models/solicitudes.model';
+import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 
 @Component({
   selector: 'app-cards-solicitud',
   standalone: true,              // 👈 importante si estás usando standalone
-  imports: [CommonModule],       // 👈 aquí agregamos CommonModule para usar *ngFor y *ngIf
+  imports: [CommonModule, COMPARTIR_IMPORTS],       // 👈 aquí agregamos CommonModule para usar *ngFor y *ngIf
   templateUrl: './cards-solicitud.html',
   styleUrls: ['./cards-solicitud.css']
 })

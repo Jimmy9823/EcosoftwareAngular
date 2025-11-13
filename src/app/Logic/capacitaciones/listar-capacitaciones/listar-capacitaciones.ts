@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CapacitacionesService } from '../../../Services/capacitacion.service';
 import { Capacitacion } from '../../../Models/capacitacion.model';
-import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { Tabla } from '../../../shared/tabla/tabla';
 
 @Component({

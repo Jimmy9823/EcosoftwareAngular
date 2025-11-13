@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RecoleccionService } from '../../../Services/recoleccion.service';
 import { ModeloRecoleccion } from '../../../Models/modelo-recoleccion';
-import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { Tabla } from '../../../shared/tabla/tabla';
 
 @Component({

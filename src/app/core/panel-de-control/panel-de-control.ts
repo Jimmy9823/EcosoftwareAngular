@@ -2,7 +2,7 @@ import { Component, ViewChild, computed } from '@angular/core';
 import { VistaSolicitudes } from '../../Logic/solicitudes-comp/vista-solicitudes/vista-solicitudes';
 import { VistaUsuarios } from '../../Logic/usuarios.comp/vista-usuarios/vista-usuarios';
 import { BarraLateral, BarraLateralItem } from '../../shared/barra-lateral/barra-lateral';
-import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../../shared/imports';
 
 
 @Component({

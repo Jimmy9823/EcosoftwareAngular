@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { RecoleccionService } from '../../../Services/recoleccion.service';
 import { ModeloRecoleccion, EstadoRecoleccion } from '../../../Models/modelo-recoleccion';
 

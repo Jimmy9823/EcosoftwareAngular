@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../imports';
 
 @Component({
   selector: 'app-tabla',

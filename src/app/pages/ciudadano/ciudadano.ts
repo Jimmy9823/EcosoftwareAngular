@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../Services/usuario.service'; // ajusta ruta según tu estructura
-import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
-import { FormRegistro } from '../../solcitudes/form-registro/form-registro';
-import { CardsSolicitud } from '../../solcitudes/cards-solicitud/cards-solicitud';
+import { COMPARTIR_IMPORTS } from '../../shared/imports';
+import { FormRegistro } from '../../Logic/solicitudes-comp/vista-solicitudes/form-registro/form-registro';
+import { CardsSolicitud } from '../../Logic/solicitudes-comp/cards-solicitud/cards-solicitud';
 import { RouterLink } from '@angular/router';
 
 @Component({

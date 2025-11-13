@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
-import { UsuarioService } from '../../Services/usuario.service'
-import { UsuarioModel } from '../../Models/usuario'
-import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports'
+import { UsuarioService } from '../../../Services/usuario.service'
+import { UsuarioModel } from '../../../Models/usuario'
+import { COMPARTIR_IMPORTS } from '../../../shared/imports'
 
 @Component({
   selector: 'app-usuario-tabla',

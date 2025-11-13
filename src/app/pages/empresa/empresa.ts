@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { UsuarioService } from '../../Services/usuario.service';
 import { UsuarioModel } from '../../Models/usuario';
-import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../../shared/imports';
 
 
 import { RouterLink } from '@angular/router';
-import { CardARSolicitud } from '../../solcitudes/card-a-r-solicitud/card-a-r-solicitud';
+import { CardARSolicitud } from '../../Logic/solicitudes-comp/card-a-r-solicitud/card-a-r-solicitud';
 
 
 @Component({

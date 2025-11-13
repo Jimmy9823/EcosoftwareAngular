@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { Tabla } from '../../../shared/tabla/tabla';
 import { UsuarioService } from '../../../Services/usuario.service';
 import {UsuarioModel} from '../../../Models/usuario';

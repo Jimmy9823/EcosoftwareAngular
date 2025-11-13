@@ -1,8 +1,8 @@
 // solicitudes.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Service } from '../Services/solicitud.service';
-import { ServiceModel } from '../Models/solicitudes.model';
-import { COMPARTIR_IMPORTS } from '../ImpCondYForms/imports';
+import { Service } from '../../../Services/solicitud.service';
+import { ServiceModel } from '../../../Models/solicitudes.model';
+import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 
 @Component({
   selector: 'app-solcitudes',

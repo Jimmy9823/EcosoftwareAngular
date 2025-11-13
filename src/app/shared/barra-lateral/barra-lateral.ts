@@ -1,6 +1,6 @@
 import { Component, Input,  Output, EventEmitter } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { COMPARTIR_IMPORTS } from '../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../imports';
 
 export interface BarraLateralItem {
   id: string

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { COMPARTIR_IMPORTS } from '../../../ImpCondYForms/imports';
+import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 
 @Component({
   selector: 'app-vista-solicitudes',

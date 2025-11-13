@@ -117,18 +117,18 @@
         </div>
         <div class="modal-body">
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"><strong>ID:</strong> {{ selectedSolicitud?.idSolicitud }}</li>
-            <li class="list-group-item"><strong>Tipo Residuo:</strong> {{ selectedSolicitud?.tipoResiduo }}</li>
-            <li class="list-group-item"><strong>Cantidad:</strong> {{ selectedSolicitud?.cantidad }}</li>
-            <li class="list-group-item"><strong>Localidad:</strong> {{ selectedSolicitud?.localidad }}</li>
+            <li class="list-group-item"><strong>ID:</strong> {{ selectedSolicitud.idSolicitud }}</li>
+            <li class="list-group-item"><strong>Tipo Residuo:</strong> {{ selectedSolicitud.tipoResiduo }}</li>
+            <li class="list-group-item"><strong>Cantidad:</strong> {{ selectedSolicitud.cantidad }}</li>
+            <li class="list-group-item"><strong>Localidad:</strong> {{ selectedSolicitud.localidad }}</li>
             <li class="list-group-item"><strong>Estado:</strong>
               <span class="badge"
                 [ngClass]="{
-                  'bg-success': selectedSolicitud?.estadoPeticion === 'Aceptada',
-                  'bg-danger': selectedSolicitud?.estadoPeticion === 'Rechazada',
-                  'bg-warning text-dark': selectedSolicitud?.estadoPeticion === 'Pendiente'
+                  'bg-success': selectedSolicitud.estadoPeticion === 'Aceptada',
+                  'bg-danger': selectedSolicitud.estadoPeticion === 'Rechazada',
+                  'bg-warning text-dark': selectedSolicitud.estadoPeticion === 'Pendiente'
                 }">
-                {{ selectedSolicitud?.estadoPeticion }}
+                {{ selectedSolicitud.estadoPeticion }}
               </span>
             </li>
           </ul>
