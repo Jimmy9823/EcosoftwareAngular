@@ -16,12 +16,12 @@ export class CapacitacionesLista implements OnInit {
   // ✅ Configuración de columnas para app-tabla
   columns = [
     { key: 'id', label: 'ID' },
-    { key: 'titulo', label: 'Título' },
+    { key: 'nombre', label: 'Título' },
     { key: 'descripcion', label: 'Descripción' },
-    { key: 'fechaInicio', label: 'Inicio' },
-    { key: 'fechaFin', label: 'Fin' },
+    { key: 'numeroDeClases', label: '# Clases' },
+    { key: 'duracion', label: 'Duracion' },
     { key: 'lugar', label: 'Lugar' }
-  ];
+  ]; 
 
   // ✅ Datos recibidos del backend
   data: Capacitacion[] = [];

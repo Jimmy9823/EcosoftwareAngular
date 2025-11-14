@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 // ✅ Importa tus modelos
-import { Capacitacion, EstadoCurso, Modulo, Inscripcion, Progreso } from '../Models/capacitacion.model';
+import { Capacitacion, EstadoCurso, Modulo, Inscripcion, Progreso, UploadResultDto } from '../Models/capacitacion.model';
 
 
 @Injectable({
@@ -41,12 +41,32 @@ export class CapacitacionesService {
   // ===========================
   // CARGA MASIVA EXCEL
   // ===========================
-  cargarCapacitacionesDesdeExcel(file: File): Observable<string> {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.http.post(`${this.apiUrl}/cargar-excel`, formData, { responseType: 'text' });
-  }
+  cargarCapacitacionesDesdeExcel(file: File): Observable<UploadResultDto> {
+  const formData = new FormData();
+  formData.append('file', file);
+  return this.http.post<UploadResultDto>(`${this.apiUrl}/cargar-excel`, formData);
+}
 
+  validarCapacitacion(nombre?: string, descripcion?: string): Observable<boolean> {
+  let params = new HttpParams();
+  if (nombre) params = params.set('nombre', nombre);
+  if (descripcion) params = params.set('descripcion', descripcion);
+  return this.http.get<boolean>(`${this.apiUrl}/validar`, { params });
+}
+validarCapacitacionPorNombre(nombre: string): Observable<boolean> {
+  return this.http.get<boolean>(`${this.apiUrl}/validar`, { params: { nombre } });
+}
+
+// valida el excel sin intentar cargarlo (llama al endpoint /validar-excel)
+validarExcel(file: File): Observable<Capacitacion[]> {
+  const formData = new FormData();
+  formData.append('file', file);
+  return this.http.post<Capacitacion[]>(`${this.apiUrl}/validar-excel`, formData);
+}
+
+obtenerCapacitacionPorNombre(nombre: string): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/buscarPorNombre`, { params: { nombre } });
+}
   generarPlantillaExcel(): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/plantilla`, { responseType: 'blob' });
   }

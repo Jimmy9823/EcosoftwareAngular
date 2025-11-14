@@ -4,8 +4,19 @@ export interface Capacitacion {
   descripcion: string;
   numeroDeClases: string;
   duracion: string;
-  imagen?: string;               // Lo agregamos porque está en la entidad
+  imagen?: string | null;               // Lo agregamos porque está en la entidad
   modulos?: Modulo[];        // Relación con módulos si deseas traerlos
+  observacion?: string;
+}
+
+export interface UploadResultDto {
+  totalFilasLeidas: number;
+  insertadas: number;
+  rechazadas: number;
+  warnings: number;
+  errores: Capacitacion[]; // filas bloqueantes
+  avisos: Capacitacion[];  // warnings
+  mensaje: string;
 }
 
 export enum EstadoCurso {
