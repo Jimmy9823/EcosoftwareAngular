@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 // ✅ Importa tus modelos
 import { Capacitacion, EstadoCurso, Modulo, Inscripcion, Progreso, UploadResultDto } from '../Models/capacitacion.model';

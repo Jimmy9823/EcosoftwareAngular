@@ -12,7 +12,8 @@ import { CardARSolicitud } from './Logic/solicitudes-comp/card-a-r-solicitud/car
 import { FormRegistro } from './Logic/solicitudes-comp/vista-solicitudes/form-registro/form-registro';
 import { EditarUsuario } from './Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { Error } from './core/error/error';
-import { AuthGuard } from './auth/auth.guard'
+import { AuthGuard } from './auth/auth.guard';
+import { Mapa } from './Logic/puntos-recoleccion/mapa/mapa';
 
 
 
@@ -39,6 +40,7 @@ export const routes: Routes = [
   { path: 'card-solicitud', component: CardsSolicitud },
   { path: 'card-re-acpt-solicitud', component: CardARSolicitud },
   { path: 'form-solicitud', component: FormRegistro },
+  { path: 'mapa', component: Mapa },
   { path: '**', component: Error }
 ];
 

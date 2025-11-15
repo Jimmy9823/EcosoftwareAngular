@@ -6,11 +6,12 @@ import { FormRegistro } from '../../Logic/solicitudes-comp/vista-solicitudes/for
 import { CardsSolicitud } from '../../Logic/solicitudes-comp/cards-solicitud/cards-solicitud';
 import { RouterLink } from '@angular/router';
 import { CardsRecoleccionCiudadano } from '../../Logic/recolecciones-comp/cards-recoleccion-ciudadano/cards-recoleccion-ciudadano';
+import { Mapa } from '../../Logic/puntos-recoleccion/mapa/mapa';
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, RouterLink, CardsRecoleccionCiudadano],
+  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, RouterLink, CardsRecoleccionCiudadano, Mapa],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })
