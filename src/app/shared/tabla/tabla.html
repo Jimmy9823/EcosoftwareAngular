@@ -1,13 +1,97 @@
-<table>
-  <thead>
-    <tr>
-      <th *ngFor="let col of columns">{{ col.label }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of data">
-      <td *ngFor="let col of columns">{{ item[col.key] }}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="container-table">
 
+    <!-- HEADER -->
+    <div class="table-header">
+        <h2 class="table-title">
+            <i class="fas fa-table"></i>
+            {{ titulo }}
+        </h2>
+
+        <div class="table-actions">
+            <button class="btn-action btn-export" (click)="exportar.emit()">
+                <i class="fas fa-download"></i>
+                Exportar
+            </button>
+
+            <button class="btn-action btn-add" (click)="nuevo.emit()">
+                <i class="fas fa-plus"></i>
+                Nuevo
+            </button>
+        </div>
+    </div>
+
+    <!-- TABLA -->
+    <div class="table-wrapper">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th *ngFor="let col of columnas">
+                        {{ col.titulo }}
+                    </th>
+
+                    <!-- Columna acciones -->
+                    <th style="text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let item of datosPaginados">
+
+                    <td *ngFor="let col of columnas">
+                        {{ item[col.campo] }}
+                    </td>
+
+                    <!-- Acciones -->
+                    <td style="text-align: right;" class="table-actions-cell">
+
+    <button class="btn-table-icon btn-view-table" (click)="ver.emit(item)">
+        <i class="bi bi-eye"></i>
+    </button>
+
+    <button class="btn-table-icon btn-edit-table" (click)="editar.emit(item)">
+        <i class="bi bi-pencil"></i>
+    </button>
+
+    <button class="btn-table-icon btn-delete-table" (click)="eliminar.emit(item)">
+        <i class="bi bi-trash"></i>
+    </button>
+
+</td>
+
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="table-footer">
+        <div class="pagination-info">
+            Mostrando <strong>{{ showingFrom }}</strong>
+            a <strong>{{ showingTo }}</strong>
+            de <strong>{{ data.length }}</strong> registros
+        </div>
+
+        <div class="pagination-controls">
+
+            <!-- Select items por página -->
+            <select class="pagination-select"
+                    [(ngModel)]="porPagina"
+                    (change)="pagina = 1">
+                <option [value]="10">10 por página</option>
+                <option [value]="20">20 por página</option>
+                <option [value]="50">50 por página</option>
+            </select>
+
+            <!-- Botones de paginación -->
+            <div class="pagination-buttons">
+                <button
+                    *ngFor="let p of totalPaginasArray"
+                    [class.active]="p === pagina"
+                    (click)="cambiarPagina(p)">
+                    {{ p }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
