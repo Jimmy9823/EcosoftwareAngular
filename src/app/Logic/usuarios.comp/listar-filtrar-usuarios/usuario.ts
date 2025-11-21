@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core'
 import { UsuarioService } from '../../../Services/usuario.service'
 import { UsuarioModel } from '../../../Models/usuario'
 import { COMPARTIR_IMPORTS } from '../../../shared/imports'
+import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla'
 
 @Component({
   selector: 'app-usuario-tabla',
   templateUrl: './usuario.html',
-  imports: [COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS,Tabla],
   styleUrls: ['./usuario.css']
 })
 export class Usuario implements OnInit {
@@ -29,6 +30,25 @@ export class Usuario implements OnInit {
     { id: 3, nombre: 'Empresa' },
     { id: 4, nombre: 'Reciclador' }
   ]
+
+  columnasUsuarios: ColumnaTabla[] = [
+  { campo: 'idUsuario', titulo: 'ID' },
+  { campo: 'nombre', titulo: 'Nombre' },
+  { campo: 'correo', titulo: 'Correo' },
+  { campo: 'telefono', titulo: 'Teléfono' },
+  { campo: 'rolId', titulo: 'Rol' },
+  { campo: 'estado', titulo: 'Estado' }
+];
+
+cellTemplatesUsuarios = {
+  rolId: (item: UsuarioModel) => this.obtenerNombreRol(item.rolId),
+  estado: (item: UsuarioModel) => {
+    const clase = item.estado ? 'activo' : 'inactivo';
+    const texto = item.estado ? 'Activo' : 'Inactivo';
+    return `<span class="${clase}">${texto}</span>`;
+  }
+};
+
 
   constructor(private usuarioService: UsuarioService) {}
 

@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { Service } from '../../../Services/solicitud.service';
 import { ServiceModel } from '../../../Models/solicitudes.model';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
+import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla';
 
 @Component({
   selector: 'app-solcitudes',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS,Tabla],
   templateUrl: './solcitudes.html',
   styleUrls: ['./solcitudes.css']
 })
@@ -27,6 +28,49 @@ export class Solcitudes implements OnInit {
   cargandoExport = false;
 
   constructor(private solicitudesService: Service) {}
+
+  // justo dentro de tu clase Solcitudes
+columnasSolicitudes: ColumnaTabla[] = [
+  { campo: 'idSolicitud', titulo: 'ID' },
+  { campo: 'tipoResiduo', titulo: 'Tipo Residuo' },
+  { campo: 'cantidad', titulo: 'Cantidad' },
+  { campo: 'localidad', titulo: 'Localidad' },
+  { campo: 'estadoPeticion', titulo: 'Estado' }
+];
+
+cellTemplates = {
+  estadoPeticion: (item: ServiceModel): string => {
+    const estado = item.estadoPeticion || '';
+    let icon = '';
+    let clase = '';
+
+    switch (estado) {
+      case 'Pendiente':
+        icon = '<i class="bi bi-clock"></i>';
+        clase = 'status-pendiente';
+        break;
+      case 'Aceptada':
+        icon = '<i class="bi bi-check-circle"></i>';
+        clase = 'status-aceptada';
+        break;
+      case 'Cancelada':
+        icon = '<i class="bi bi-x-circle"></i>';
+        clase = 'status-cancelada';
+        break;
+      case 'Rechazada':
+        icon = '<i class="bi bi-slash-circle"></i>';
+        clase = 'status-rechazada';
+        break;
+    }
+
+    return `<span class="status-badge ${clase}">${icon} ${estado}</span>`;
+  }
+};
+
+
+
+
+
 
   ngOnInit(): void { 
     this.listarSolicitudes();
@@ -143,6 +187,10 @@ export class Solcitudes implements OnInit {
       },
       error: (err) => { console.error('❌ Error exportando PDF', err); this.cargandoExport = false; }
     });
+  }
+
+  abrirModalEdicion(solicitud: ServiceModel): void {
+    console.log('✏️ Editar solicitud:', solicitud);
   }
 
   private downloadBlob(blob: Blob, filename: string) {

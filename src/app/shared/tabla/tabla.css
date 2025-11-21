@@ -315,4 +315,32 @@
                 width: 100%;
                 justify-content: center;
             }
-        }
+        }/* Hover filas más suave */
+.custom-table tbody tr:hover {
+  background: #f0f9ff;
+  transform: scale(1.01);
+  transition: all 0.2s ease;
+}
+
+/* Focus accesible para botones */
+.btn-action:focus, .btn-table-icon:focus {
+  outline: 2px solid #22c55e;
+  outline-offset: 2px;
+}
+
+/* Scroll horizontal con sombra */
+.table-wrapper {
+  overflow-x: auto;
+  position: relative;
+}
+
+.table-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255,0));
+}

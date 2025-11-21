@@ -2,7 +2,12 @@
 <div *ngIf="error">{{ error }}</div>
 
 <app-tabla
-  *ngIf="!cargando && !error"
-  [columns]="columnas"
-  [data]="datos">
+  *ngIf="!cargando && data.length > 0"
+    [titulo]="'Listado de Recolecciones'"
+
+  [columnas]="columnas"
+  [data]="data"
+  (ver)="ver($event)"
+  (editar)="editar($event)"
+  (eliminar)="eliminar($event)">
 </app-tabla>

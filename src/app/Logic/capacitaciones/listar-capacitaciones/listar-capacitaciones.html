@@ -6,11 +6,16 @@
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
   <!-- ✅ Mostrar tabla solo si hay datos -->
-  <app-tabla
-    *ngIf="!cargando && data.length > 0"
-    [columns]="columns"
-    [data]="data">
-  </app-tabla>
+<app-tabla
+  *ngIf="!cargando && data.length > 0"
+  [titulo]="'Listado de Capacitaciones'"
+  [columnas]="columnas"
+  [data]="data"
+  (ver)="ver($event)"
+  (editar)="editar($event)"
+  (eliminar)="eliminar($event)">
+</app-tabla>
+
 
   <!-- ✅ Sin datos -->
   <p *ngIf="!cargando && data.length === 0" class="text-center">

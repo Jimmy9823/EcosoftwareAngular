@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RecoleccionService } from '../../../Services/recoleccion.service';
 import { ModeloRecoleccion } from '../../../Models/modelo-recoleccion';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
-import { Tabla } from '../../../shared/tabla/tabla';
+import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla';
 
 @Component({
   selector: 'app-listar-tabla',
@@ -11,17 +11,19 @@ import { Tabla } from '../../../shared/tabla/tabla';
   styleUrl: './listar-tabla.css'
 })
 export class ListarTabla {
-  columnas = [
-    { key: 'idRecoleccion', label: 'ID' },
-    { key: 'solicitudId', label: 'Solicitud' },
-    { key: 'recolectorId', label: 'Recolector' },
-    { key: 'rutaId', label: 'Ruta' },
-    { key: 'estado', label: 'Estado' },
-    { key: 'fechaRecoleccion', label: 'Fecha Recolección' },
-    { key: 'observaciones', label: 'Observaciones' }
+  columnas: ColumnaTabla[] = [
+    { campo: 'idRecoleccion', titulo: 'ID' },
+    { campo: 'solicitudId', titulo: 'Solicitud' },
+    { campo: 'recolectorId', titulo: 'Recolector' },
+    { campo: 'rutaId', titulo: 'Ruta' },
+    { campo: 'estado', titulo: 'Estado' },
+    { campo: 'fechaRecoleccion', titulo: 'Fecha Recolección' },
+    { campo: 'observaciones', titulo: 'Observaciones' }
   ];
 
-  datos: ModeloRecoleccion[] = [];
+  
+
+  data: ModeloRecoleccion[] = [];
   cargando = true;
   error = '';
 
@@ -30,7 +32,7 @@ export class ListarTabla {
   ngOnInit() {
     this.recoleccionService.listarActivas().subscribe({
       next: (res) => {
-        this.datos = res;
+        this.data = res;
         this.cargando = false;
       },
       error: () => {
@@ -38,5 +40,15 @@ export class ListarTabla {
         this.cargando = false;
       }
     });
+  }
+
+  ver(item: any) {
+    console.log("VER:", item);
+  }
+  editar(item: any) {
+    console.log("EDITAR:", item);
+  }
+  eliminar(item: any) {
+    console.log("ELIMINAR:", item);
   }
 }

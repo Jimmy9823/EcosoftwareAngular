@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CapacitacionesService } from '../../../Services/capacitacion.service';
 import { Capacitacion } from '../../../Models/capacitacion.model';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
-import { Tabla } from '../../../shared/tabla/tabla';
+import { Tabla, ColumnaTabla } from '../../../shared/tabla/tabla';
 
 @Component({
   selector: 'app-listar-capacitaciones',
@@ -13,17 +13,14 @@ import { Tabla } from '../../../shared/tabla/tabla';
 })
 export class CapacitacionesLista implements OnInit {
 
-  // ✅ Configuración de columnas para app-tabla
-  columns = [
-    { key: 'id', label: 'ID' },
-    { key: 'nombre', label: 'Título' },
-    { key: 'descripcion', label: 'Descripción' },
-    { key: 'numeroDeClases', label: '# Clases' },
-    { key: 'duracion', label: 'Duracion' },
-    { key: 'lugar', label: 'Lugar' }
-  ]; 
+  columnas: ColumnaTabla[] = [
+    { campo: 'id', titulo: 'ID' },
+    { campo: 'nombre', titulo: 'Título' },
+    { campo: 'descripcion', titulo: 'Descripción' },
+    { campo: 'numeroDeClases', titulo: '# Clases' },
+    { campo: 'duracion', titulo: 'Duración' },
+  ];
 
-  // ✅ Datos recibidos del backend
   data: Capacitacion[] = [];
 
   cargando = true;
@@ -46,5 +43,26 @@ export class CapacitacionesLista implements OnInit {
         this.cargando = false;
       }
     });
+  }
+  // 🔵 EVENTOS DEL COMPONENTE ---------------------
+
+  ver(item: any) {
+    console.log("VER:", item);
+  }
+
+  editar(item: any) {
+    console.log("EDITAR:", item);
+  }
+
+  eliminar(item: any) {
+    console.log("ELIMINAR:", item);
+  }
+
+  crear() {
+    console.log("NUEVA CAPACITACION");
+  }
+
+  exportarCapacitaciones() {
+    console.log("EXPORTAR");
   }
 }

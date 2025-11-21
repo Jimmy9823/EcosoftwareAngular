@@ -1,7 +1,10 @@
+
+
+
 <div class="tabla-container">
   <h2>Gestión de Usuarios</h2>
 
-  <!-- 🔸 FILTRO -->
+  <!-- Filtros -->
   <div class="filtros">
     <select [(ngModel)]="criterioSeleccionado">
       <option value="nombre">Nombre</option>
@@ -9,98 +12,27 @@
       <option value="documento">Documento</option>
     </select>
 
-    <!-- Campo de entrada dinámico -->
-    <input
-      *ngIf="criterioSeleccionado === 'nombre'"
-      [(ngModel)]="filtroNombre"
-      placeholder="Buscar por nombre"
-    />
-    <input
-      *ngIf="criterioSeleccionado === 'correo'"
-      [(ngModel)]="filtroCorreo"
-      placeholder="Buscar por correo"
-    />
-    <input
-      *ngIf="criterioSeleccionado === 'documento'"
-      [(ngModel)]="filtroDocumento"
-      placeholder="Buscar por documento"
-    />
-<div class="botones">
+    <input *ngIf="criterioSeleccionado==='nombre'" [(ngModel)]="filtroNombre" placeholder="Buscar por nombre">
+    <input *ngIf="criterioSeleccionado==='correo'" [(ngModel)]="filtroCorreo" placeholder="Buscar por correo">
+    <input *ngIf="criterioSeleccionado==='documento'" [(ngModel)]="filtroDocumento" placeholder="Buscar por documento">
+
+    <div class="botones">
   <button class="filtrar" (click)="aplicarFiltroDesdeForm()"><i class="bi bi-funnel"></i> Filtrar</button>
   <button class="limpiar" (click)="limpiarFiltro()"><i class="bi bi-eraser"></i> Limpiar</button>
   <button class="exportar-pdf" (click)="exportarPDF()"><i class="bi bi-file-earmark-pdf"></i> PDF</button>
   <button class="exportar-excel" (click)="exportarExcel()"><i class="bi bi-file-earmark-excel"></i> Excel</button>
 </div>
-
- 
   </div>
 
-  <!-- Mensajes -->
-  <div *ngIf="cargando" class="mensaje info">Cargando usuarios...</div>
-  <div *ngIf="mensaje" class="mensaje exito">{{ mensaje }}</div>
-  <div *ngIf="error" class="mensaje error">{{ error }}</div>
-
   <!-- Tabla -->
-  <table class="tabla-usuarios" *ngIf="usuarios.length > 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Correo</th>
-        <th>Teléfono</th>
-        <th>Rol</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let usuario of usuarios">
-        <td>{{ usuario.idUsuario }}</td>
-
-        <!-- Nombre -->
-        <td *ngIf="editandoId !== usuario.idUsuario">{{ usuario.nombre }}</td>
-        <td *ngIf="editandoId === usuario.idUsuario">
-          <input [(ngModel)]="usuarioEditado.nombre" />
-        </td>
-
-        <!-- Correo -->
-        <td *ngIf="editandoId !== usuario.idUsuario">{{ usuario.correo }}</td>
-        <td *ngIf="editandoId === usuario.idUsuario">
-          <input [(ngModel)]="usuarioEditado.correo" />
-        </td>
-
-        <!-- Teléfono -->
-        <td *ngIf="editandoId !== usuario.idUsuario">{{ usuario.telefono }}</td>
-        <td *ngIf="editandoId === usuario.idUsuario">
-          <input [(ngModel)]="usuarioEditado.telefono" />
-        </td>
-
-        <!-- Rol -->
-        <td *ngIf="editandoId !== usuario.idUsuario">{{ obtenerNombreRol(usuario.rolId) }}</td>
-        <td *ngIf="editandoId === usuario.idUsuario">
-          <select [(ngModel)]="usuarioEditado.rolId">
-            <option *ngFor="let r of roles" [value]="r.id">{{ r.nombre }}</option>
-          </select>
-        </td>
-
-        <!-- Estado -->
-        <td>
-          <span [class.activo]="usuario.estado" [class.inactivo]="!usuario.estado">
-            {{ usuario.estado ? 'Activo' : 'Inactivo' }}
-          </span>
-        </td>
-
-        <!-- Acciones -->
-        <td class="acciones">
-          <button *ngIf="editandoId !== usuario.idUsuario" class="btn editar" (click)="activarEdicion(usuario)">Editar</button>
-          <button *ngIf="editandoId === usuario.idUsuario" class="btn guardar" (click)="guardarCambios(usuario)">Guardar</button>
-          <button *ngIf="editandoId === usuario.idUsuario" class="btn cancelar" (click)="cancelarEdicion()">Cancelar</button>
-          <button class="btn eliminar" (click)="eliminarUsuario(usuario.idUsuario!)">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
+  <app-tabla
+    [columnas]="columnasUsuarios"
+    [data]="usuarios"
+    [cellTemplates]="cellTemplatesUsuarios"
+    titulo="Usuarios"
+    (editar)="activarEdicion($event)"
+    (eliminar)="eliminarUsuario($event.idUsuario!)">
+  </app-tabla>
   <div *ngIf="usuarios.length === 0 && !cargando" class="mensaje info">
     No hay usuarios registrados.
   </div>
