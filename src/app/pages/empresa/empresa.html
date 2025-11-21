@@ -1,101 +1,14 @@
 <div class="d-flex">
 
   <!-- SIDEBAR LATERAL -->
-  <nav [class.collapsed]="!menuAbierto" class="sidebar border rounded p-3 shadow d-flex flex-column">
+   <app-barra-lateral
+  [menu]="menu"
+  [vistaActual]="vistaActual"
+  [nombreUsuario]="nombreUsuario"
+  (vistaChange)="cambiarVista($event)"
+  (logout)="cerrarSesion()">
+</app-barra-lateral>
 
-    <!-- LOGO -->
-    <div class="sidebar-logo mb-4 text-center">
-      <a routerLink="/" class="d-flex align-items-center justify-content-center gap-2" routerLink="">
-        <i class="bi bi-recycle fs-3"></i>
-        <span *ngIf="menuAbierto" class="ms-2 fw-bold fs-4 verde-principal">EcoSoftware</span>
-      </a>
-    </div>
-
-    <!-- Botón toggle -->
-    <button class="btn btn-outline-success mb-3 w-100" (click)="toggleMenu()">
-      <i class="bi" [ngClass]="menuAbierto ? 'bi-x-lg' : 'bi-list'"></i>
-      <span *ngIf="menuAbierto" class="ms-2">Menú</span>
-    </button>
-
-    <!-- Menú principal -->
-    <ul class="nav flex-column mt-2" id="sidebarMenu">
-      <li class="nav-item mb-2">
-        <a class="nav-link d-flex align-items-center"
-           [ngClass]="{'active-link': vistaActual==='panel'}"
-           (click)="cambiarVista('panel')">
-          <i class="bi bi-speedometer2"></i>
-          <span *ngIf="menuAbierto">Panel de Control</span>
-        </a>
-      </li>
-      
-      <li class="nav-item mb-2">
-        <a class="nav-link d-flex align-items-center"
-           [ngClass]="{'active-link': vistaActual==='solicitudes'}"
-           (click)="cambiarVista('solicitudes')">
-          <i class="bi bi-bar-chart-line"></i>
-          <span *ngIf="menuAbierto">Solicitudes</span>
-
-        </a>
-      </li>
-      <li class="nav-item mb-2">
-        <a class="nav-link d-flex align-items-center"
-           [ngClass]="{'active-link': vistaActual==='recolecciones'}"
-           (click)="cambiarVista('recolecciones')">
-
-          <i class="bi bi-truck"></i>
-          <span *ngIf="menuAbierto">Recolecciones</span>
-        </a>
-      </li>
-      <li class="nav-item mb-2">
-        <a class="nav-link d-flex align-items-center"
-           [ngClass]="{'active-link': vistaActual==='puntos'}"
-           (click)="cambiarVista('puntos')">
-          <i class="bi bi-geo-alt"></i>
-          <span *ngIf="menuAbierto">Puntos de Reciclaje</span>
-        </a>
-      </li>
-      <li class="nav-item mb-2">
-        <a class="nav-link d-flex align-items-center"
-           [ngClass]="{'active-link': vistaActual==='noticias'}"
-           (click)="cambiarVista('noticias')">
-          <i class="bi bi-newspaper"></i>
-          <span *ngIf="menuAbierto">Noticias</span>
-        </a>
-      </li>
-    </ul>
-
-    <!-- PERFIL USUARIO -->
-    <div class="sidebar-perfil mt-auto text-center position-relative">
-      <button class="btn w-100 d-flex align-items-center justify-content-center gap-2"
-              (click)="togglePerfilMenu()">
-        <i class="bi bi-person-circle fs-3"></i>
-        <span *ngIf="menuAbierto">Empresa</span>
-        <i *ngIf="menuAbierto" class="bi ms-auto"
-           [ngClass]="perfilMenuAbierto ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
-      </button>
-
-      <ul *ngIf="perfilMenuAbierto" class="perfil-menu list-unstyled shadow rounded">
-        <li>
-          <a class="dropdown-item d-flex align-items-center justify-content-center" routerLink="/editar-usuario">
-            <i class="bi bi-pencil"></i>
-            <span *ngIf="menuAbierto" class="ms-2">Editar Perfil</span>
-          </a>
-        </li>
-        <li>
-          <a class="dropdown-item d-flex align-items-center justify-content-center" href="#">
-            <i class="bi bi-gear"></i>
-            <span *ngIf="menuAbierto" class="ms-2">Configuración</span>
-          </a>
-        </li>
-        <li>
-          <a class="dropdown-item d-flex align-items-center justify-content-center text-danger" href="#">
-            <i class="bi bi-box-arrow-right"></i>
-            <span *ngIf="menuAbierto" class="ms-2">Cerrar Sesión</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="dashboard administrador flex-fill p-4">

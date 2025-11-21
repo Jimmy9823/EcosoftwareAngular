@@ -3,8 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BarraLateral } from './barra-lateral';
 
 describe('BarraLateral', () => {
-  let component: BarraLateral;
-  let fixture: ComponentFixture<BarraLateral>;
+  let component: BarraLateral<any>;
+let fixture: ComponentFixture<BarraLateral<any>>;
+
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

@@ -7,11 +7,12 @@ import { CardsSolicitud } from '../../Logic/solicitudes-comp/cards-solicitud/car
 import { RouterLink } from '@angular/router';
 import { CardsRecoleccionCiudadano } from '../../Logic/recolecciones-comp/cards-recoleccion-ciudadano/cards-recoleccion-ciudadano';
 import { Mapa } from '../../Logic/puntos-recoleccion/mapa/mapa';
+import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, RouterLink, CardsRecoleccionCiudadano, Mapa],
+  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, CardsRecoleccionCiudadano, Mapa,BarraLateral],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })
@@ -21,11 +22,27 @@ export class Ciudadano {
   perfilMenuAbierto: boolean = false; 
   vistaActual: 'panel' | 'solicitudes' | 'recolecciones' | 'capacitaciones' | 'noticias' = 'panel'; 
   mostrarNuevaSolicitud = false;
+  nombreUsuario: string = localStorage.getItem('nombreUsuario') ?? 'Usuario';
+  nombreRol: string = localStorage.getItem('nombreRol') ?? 'Rol';
 
   constructor(
     private usuarioService: UsuarioService,
     private router: Router
   ) {}
+
+  menu: { 
+  vista: 'panel' | 'solicitudes' | 'recolecciones' | 'capacitaciones' | 'noticias',
+  label: string,
+  icon: string
+}[] = [
+  { vista: 'panel', label: 'Panel de Control', icon: 'bi bi-speedometer2' },
+  { vista: 'solicitudes', label: 'Solicitudes', icon: 'bi bi-bar-chart-line' },
+  { vista: 'recolecciones', label: 'Recolecciones', icon: 'bi bi-truck' },
+  { vista: 'capacitaciones', label: 'Capacitaciones', icon: 'bi bi-mortarboard-fill' },
+  { vista: 'noticias', label: 'Noticias', icon: 'bi bi-newspaper' },
+];
+
+
 
   toggleVista(): void {
     this.mostrarNuevaSolicitud = !this.mostrarNuevaSolicitud;
@@ -38,9 +55,11 @@ export class Ciudadano {
     }
   }
 
-  cambiarVista(vista: 'panel' | 'solicitudes' | 'recolecciones' | 'capacitaciones' | 'noticias'): void {
+  // ========================
+  // CAMBIAR VISTA
+  // ========================
+  cambiarVista(vista: 'panel'|'solicitudes'|'recolecciones'|'capacitaciones'|'noticias') {
     this.vistaActual = vista;
-    this.perfilMenuAbierto = false;
   }
 
   togglePerfilMenu(): void {

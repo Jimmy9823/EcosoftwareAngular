@@ -7,15 +7,17 @@ import { COMPARTIR_IMPORTS } from '../../shared/imports';
 import { Solcitudes } from '../../Logic/solicitudes-comp/listar-filtrar-solicitudes/solcitudes';
 import { Usuario } from "../../Logic/usuarios.comp/listar-filtrar-usuarios/usuario";
 import { RouterLink } from '@angular/router';
-import { PanelDeControl } from '../../core/panel-de-control/panel-de-control';
 import { AuthService } from '../../auth/auth.service';
 import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitaciones/listar-capacitaciones';
 import { CargaMasiva } from '../../Logic/capacitaciones/carga-masiva/carga-masiva';
 import { ListarTabla } from '../../Logic/recolecciones-comp/listar-tabla/listar-tabla';
+import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
+import { Boton } from '../../shared/botones/boton/boton';
+
 
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, Usuario, ListarTabla, Solcitudes, RouterLink, PanelDeControl, CapacitacionesLista, CargaMasiva],
+  imports: [COMPARTIR_IMPORTS, Usuario, ListarTabla, Solcitudes,  CapacitacionesLista, CargaMasiva,BarraLateral],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
@@ -42,6 +44,22 @@ export class Administrador {
     private router: Router,
     private authService : AuthService
   ) {}
+
+  menu: { 
+  vista: 'panel'|'usuarios'|'solicitudes'|'recolecciones'|'puntos'|'capacitaciones'|'noticias',
+  label: string,
+  icon: string
+}[] = [
+  { vista: 'panel', label: 'Panel de Control', icon: 'bi bi-speedometer2' },
+  { vista: 'usuarios', label: 'Usuarios', icon: 'bi bi-people' },
+  { vista: 'solicitudes', label: 'Solicitudes', icon: 'bi bi-bar-chart-line' },
+  { vista: 'recolecciones', label: 'Recolecciones', icon: 'bi bi-truck' },
+  { vista: 'puntos', label: 'Puntos de Reciclaje', icon: 'bi bi-geo-alt' },
+  { vista: 'capacitaciones', label: 'Capacitaciones', icon: 'bi bi-mortarboard-fill' },
+  { vista: 'noticias', label: 'Noticias', icon: 'bi bi-newspaper' },
+];
+
+
 
   ngOnInit(): void {
     this.vistaActual = 'panel';
