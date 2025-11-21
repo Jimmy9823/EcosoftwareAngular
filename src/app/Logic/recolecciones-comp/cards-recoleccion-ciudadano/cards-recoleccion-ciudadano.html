@@ -1,55 +1,150 @@
-<div class="row" *ngIf="recolecciones.length > 0; else sinRecolecciones">
-  <div class="col-md-4 mb-3" *ngFor="let reco of recolecciones">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h6><strong>Estado:</strong> {{ reco.estado }}</h6>
-        <p *ngIf="reco.observaciones"><strong>Observaciones:</strong> {{ reco.observaciones }}</p>
-        <p *ngIf="reco.evidencia"><strong>Evidencia:</strong> {{ reco.evidencia }}</p>
-        <p><strong>Fecha:</strong> {{ reco.fechaCreacionRecoleccion | date:'dd/MM/yyyy HH:mm:ss' }}</p>
-      </div>
+<div class="recolecciones-container">
+  
+  <div class="page-header">
+    <h3>
+      <i class="fas fa-recycle"></i>
+      Mis Recolecciones
+    </h3>
+  </div>
 
-      <div class="card-footer d-flex justify-content-between" *ngIf="mostrarBotones(reco.estado)">
-        <button class="btn btn-warning btn-sm" (click)="abrirModalEdicion(reco)">Editar<i class="fas fa-edit"></i></button>
-        <button class="btn btn-danger btn-sm" (click)="cancelarRecoleccion(reco.idRecoleccion)">Eliminar<i class="fas fa-trash"></i></button>
+  <div class="row" *ngIf="recolecciones.length > 0; else sinRecolecciones">
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-4" *ngFor="let reco of recolecciones">
+      <div class="card card-recoleccion">
+        
+        <div class="card-header-custom">
+          <div class="estado-badge" 
+               [ngClass]="{
+                 'estado-pendiente': reco.estado === 'Pendiente',
+                 'estado-completada': reco.estado === 'Completada',
+                 'estado-cancelada': reco.estado === 'Cancelada'
+               }">
+            <i class="fas" 
+               [ngClass]="{
+                 'fa-clock': reco.estado === 'Pendiente',
+                 'fa-check-circle': reco.estado === 'Completada',
+                 'fa-times-circle': reco.estado === 'Cancelada'
+               }"></i>
+            {{ reco.estado }}
+          </div>
+        </div>
+
+        <div class="card-body-custom">
+          
+          <div class="info-row">
+            <div class="info-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Fecha Creación</div>
+              <div class="info-value">{{ reco.fechaCreacionRecoleccion | date:'dd/MM/yyyy HH:mm' }}</div>
+            </div>
+          </div>
+
+          <div class="info-row" *ngIf="reco.observaciones">
+            <div class="info-icon">
+              <i class="fas fa-comment-alt"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Observaciones</div>
+              <div class="info-value">{{ reco.observaciones }}</div>
+            </div>
+          </div>
+
+          <div class="info-row" *ngIf="reco.evidencia">
+            <div class="info-icon">
+              <i class="fas fa-image"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Evidencia</div>
+              <div class="info-value">{{ reco.evidencia }}</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card-footer-custom" *ngIf="mostrarBotones(reco.estado)">
+          <button class="btn-custom btn-editar" (click)="abrirModalEdicion(reco)">
+            <i class="fas fa-edit"></i>
+            Editar
+          </button>
+          <button class="btn-custom btn-eliminar" (click)="cancelarRecoleccion(reco.idRecoleccion)">
+            <i class="fas fa-trash"></i>
+            Eliminar
+          </button>
+        </div>
+
       </div>
     </div>
   </div>
-</div>
 
-<!-- ✅ Modal Bootstrap -->
-<div class="modal fade" id="modalEdicion" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
+  <!-- Modal Bootstrap -->
+  <div class="modal fade" id="modalEdicion" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
 
-      <div class="modal-header">
-        <h5 class="modal-title">Editar Recolección</h5>
-        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-edit me-2"></i>
+            Editar Recolección
+          </h5>
+          <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body" *ngIf="recoleccionSeleccionada">
+          
+          <div class="mb-3">
+            <label>
+              <i class="fas fa-info-circle me-2"></i>
+              Estado:
+            </label>
+            <select class="form-select" [(ngModel)]="estadoEditable">
+              <option [ngValue]="EstadoRecoleccion.Pendiente">Pendiente</option>
+              <option [ngValue]="EstadoRecoleccion.Cancelada">Cancelada</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label>
+              <i class="fas fa-calendar-check me-2"></i>
+              Fecha Programada:
+            </label>
+            <input type="datetime-local" [(ngModel)]="fechaProgramadaEditable" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label>
+              <i class="fas fa-comment-dots me-2"></i>
+              Observaciones:
+            </label>
+            <textarea [(ngModel)]="recoleccionSeleccionada.observaciones" 
+                      class="form-control" 
+                      rows="4"
+                      placeholder="Escribe tus observaciones aquí..."></textarea>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="cerrarModal()">
+            <i class="fas fa-times me-2"></i>
+            Cancelar
+          </button>
+          <button class="btn btn-success" (click)="guardarEdicion()">
+            <i class="fas fa-save me-2"></i>
+            Guardar
+          </button>
+        </div>
+
       </div>
-
-      <div class="modal-body" *ngIf="recoleccionSeleccionada">
-        <label>Estado:</label>
-        <select class="form-control" [(ngModel)]="estadoEditable">
-          <option [ngValue]="EstadoRecoleccion.Pendiente">Pendiente</option>
-          <option [ngValue]="EstadoRecoleccion.Cancelada">Cancelada</option>
-        </select>
-
-        <label class="mt-2">Fecha Programada:</label>
-        <input type="datetime-local" [(ngModel)]="fechaProgramadaEditable" class="form-control">
-
-        <label class="mt-2">Observaciones:</label>
-        <textarea [(ngModel)]="recoleccionSeleccionada.observaciones" class="form-control"></textarea>
-
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
-        <button class="btn btn-success" (click)="guardarEdicion()">Guardar</button>
-      </div>
-
     </div>
   </div>
-</div>
 
-<ng-template #sinRecolecciones>
-  <p class="text-center mt-3">No tienes recolecciones asignadas.</p>
-</ng-template>
+  <!-- Template sin recolecciones -->
+  <ng-template #sinRecolecciones>
+    <div class="sin-recolecciones">
+      <i class="fas fa-inbox"></i>
+      <p>No tienes recolecciones asignadas.</p>
+    </div>
+  </ng-template>
+
+</div>

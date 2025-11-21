@@ -1,0 +1,47 @@
+/*css para dashboard*/
+.dashboard {
+  height: 100vh;
+  overflow-y: auto;
+}
+/* EVITAR TEXTO CENTRADO EN TODA LA SECCIÓN */
+.container-cards, 
+.cards-grid, 
+.solicitud-card, 
+.card-content, 
+.info-text, 
+.card-header-row {
+    text-align: left !important;
+}
+/* ESTADOS */
+.status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+.status-pendiente {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+
+
+
+.status-aceptada {
+  background: #d1e7dd;
+  color: #0f5132;
+}
+
+.status-rechazada {
+  background: #f8d7da;
+  color: #842029;
+}
+
+.status-cancelada {
+  background: #e2e3e5;
+  color: #41464b;
+}
