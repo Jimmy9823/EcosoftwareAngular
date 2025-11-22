@@ -10,7 +10,7 @@ import { UsuarioModel } from '../Models/usuario'
 export class UsuarioService {
   private apiUrlSpringboot = 'http://localhost:8080/api/personas'
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // ========================
   //  LISTAR TODOS
@@ -74,8 +74,8 @@ export class UsuarioService {
   // CRUD
   // ========================
   guardar(usuario: UsuarioModel): Observable<UsuarioModel> {
-     console.log('📤 Enviando al backend:', usuario)
-  console.log('🔗 URL:', `${this.apiUrlSpringboot}/registro`)
+    console.log('📤 Enviando al backend:', usuario)
+    console.log('🔗 URL:', `${this.apiUrlSpringboot}/registro`)
     return this.http.post<UsuarioModel>(`${this.apiUrlSpringboot}/registro`, usuario)
   }
 
@@ -114,7 +114,7 @@ export class UsuarioService {
     }
     return this.http.get(`${this.apiUrlSpringboot}/export/excel`, { responseType: 'blob', params })
   }
-   obtenerUsuarioActual(): UsuarioModel | null {
+  obtenerUsuarioActual(): UsuarioModel | null {
     const data = localStorage.getItem('usuarioLogueado');
     return data ? JSON.parse(data) : null;
   }
@@ -125,4 +125,13 @@ export class UsuarioService {
   logout(): void {
     localStorage.removeItem('usuarioLogueado');
   }
+
+  obtenerGraficoLocalidadRol(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrlSpringboot}/graficos/usuarios-localidad-rol`);
+  }
+
+  obtenerBarriosPorLocalidades(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrlSpringboot}/estadisticas/barrios-localidades`);
+  }
+
 }

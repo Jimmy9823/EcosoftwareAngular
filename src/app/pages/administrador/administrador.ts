@@ -12,10 +12,12 @@ import { AuthService } from '../../auth/auth.service';
 import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitaciones/listar-capacitaciones';
 import { CargaMasiva } from '../../Logic/capacitaciones/carga-masiva/carga-masiva';
 import { ListarTabla } from '../../Logic/recolecciones-comp/listar-tabla/listar-tabla';
+import { GraficoUsuariosLocalidad } from '../../Logic/usuarios.comp/grafica-usuarios-localidad/grafica-usuarios-localidad';
+import { GraficoUsuariosBarrios } from '../../Logic/usuarios.comp/grafica-usuarios-barrio/grafica-usuarios-barrio';
 
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, Usuario, ListarTabla, Solcitudes, RouterLink, PanelDeControl, CapacitacionesLista, CargaMasiva],
+  imports: [COMPARTIR_IMPORTS, GraficoUsuariosLocalidad, GraficoUsuariosBarrios ,Usuario, ListarTabla, Solcitudes, RouterLink, PanelDeControl, CapacitacionesLista, CargaMasiva],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })

@@ -14,14 +14,16 @@ import { EditarUsuario } from './Logic/usuarios.comp/editar-usuario/editar-usuar
 import { Error } from './core/error/error';
 import { AuthGuard } from './auth/auth.guard';
 import { Mapa } from './Logic/puntos-recoleccion/mapa/mapa';
-
-
+import { GraficoUsuariosLocalidad } from './Logic/usuarios.comp/grafica-usuarios-localidad/grafica-usuarios-localidad';
+import { GraficoUsuariosBarrios } from './Logic/usuarios.comp/grafica-usuarios-barrio/grafica-usuarios-barrio';
 
 export const routes: Routes = [
   { path: '', component: Inicio },
   { path: 'solicitudes', component: Solcitudes },
   { path: 'usuarios', component: Usuario },
   { path: 'registro', component: Registro },
+  { path: 'usuarios', component: Usuario },
+  { path: 'grafica', component: GraficoUsuariosBarrios },
 
   { path: 'login', component: Login},
   {

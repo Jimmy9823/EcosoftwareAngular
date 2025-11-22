@@ -1,0 +1,54 @@
+/* Contenedor general de la gráfica */
+.grafica-container {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 1000px;
+  margin: 40px auto;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Título de la gráfica */
+.grafica-title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+/* Ajuste del canvas */
+.grafica-container canvas {
+  width: 100% !important;
+  height: 450px !important;
+}
+
+/* Sombra al pasar el mouse (elegante y suave) */
+.grafica-container:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Para que combine con tus cards */
+.dashboard-card-style {
+  border-radius: 18px;
+  border: 1px solid #e5e9f2;
+}
+
+/* Botones para cambiar entre gráficas (si luego los agregas) */
+.grafica-btn {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 12px;
+  background-color: #006ad4;
+  color: white;
+  margin: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.grafica-btn:hover {
+  background-color: #0052a8;
+}
