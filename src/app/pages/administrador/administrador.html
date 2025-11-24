@@ -17,35 +17,18 @@
     <ng-container *ngIf="vistaActual === 'panel'">
       <h3 class="fw-bold text-center verde-principal mb-4">Panel de Control</h3>
       <div class="row g-4">
-        <div class="col-md-4">
+        <div class="col-md-10">
           <div class="card text-center shadow-sm">
             <div class="card-body">
-              <i class="bi bi-people fs-1 text-success"></i>
-              <h5 class="mt-2">Usuarios activos</h5>
-              <p class="fs-4 fw-bold">128</p>
-            </div>
-            
-          </div>
-        </div>
-        
-        <div class="col-md-4">
-          <div class="card text-center shadow-sm">
-            <div class="card-body">
-              <i class="bi bi-recycle fs-1 text-success"></i>
-              <h5 class="mt-2">Kg reciclados</h5>
-              <p class="fs-4 fw-bold">1.245</p>
+              <i class="bi bi-people fs-1 text-success">Usuarios</i>
+              <h5 class="mt-2">Usuarios por localidad</h5>
+              <app-grafico-usuarios-localidad></app-grafico-usuarios-localidad>
+              <h5 class="mt-2">Usuarios por barrio</h5>
+              <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="card text-center shadow-sm">
-            <div class="card-body">
-              <i class="bi bi-graph-up-arrow fs-1 text-success"></i>
-              <h5 class="mt-2">Campañas activas</h5>
-              <p class="fs-4 fw-bold">6</p>
-            </div>
-          </div>
-        </div>
+       
       </div>
     </ng-container>
 
