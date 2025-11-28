@@ -11,7 +11,7 @@ import { Capacitacion, EstadoCurso, Modulo, Inscripcion, Progreso, UploadResultD
 })
 export class CapacitacionesService {
 
-  private apiUrl = 'http://localhost:8080/api/capacitaciones';
+  private apiUrl = 'http://localhost:8082/api/capacitaciones';
 
   constructor(private http: HttpClient) {}
 

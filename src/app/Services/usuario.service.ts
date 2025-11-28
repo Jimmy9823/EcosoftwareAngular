@@ -15,11 +15,7 @@ import { ApiService } from './api.service'
 export class UsuarioService {
   private apiUrlSpringboot = 'http://localhost:8082/api/personas';
 
-<<<<<<< HEAD
   constructor(private http: HttpClient, private api: ApiService) {}
-=======
-  constructor(private http: HttpClient) { }
->>>>>>> 979f079224731b1a0d7df4e3b6977e22b67c66cc
 
   // ========================
   //  LISTAR TODOS
@@ -109,15 +105,9 @@ export class UsuarioService {
   // CRUD
   // ========================
   guardar(usuario: UsuarioModel): Observable<UsuarioModel> {
-<<<<<<< HEAD
     return this.http.post<UsuarioModel>(`${this.apiUrlSpringboot}/registro`, usuario).pipe(
       catchError(err => throwError(() => err))
     );
-=======
-    console.log('📤 Enviando al backend:', usuario)
-    console.log('🔗 URL:', `${this.apiUrlSpringboot}/registro`)
-    return this.http.post<UsuarioModel>(`${this.apiUrlSpringboot}/registro`, usuario)
->>>>>>> 979f079224731b1a0d7df4e3b6977e22b67c66cc
   }
 
   actualizar(id: number, usuario: UsuarioModel): Observable<UsuarioModel> {
@@ -167,10 +157,6 @@ export class UsuarioService {
       catchError(err => throwError(() => err))
     );
   }
-<<<<<<< HEAD
-
-=======
->>>>>>> 979f079224731b1a0d7df4e3b6977e22b67c66cc
   obtenerUsuarioActual(): UsuarioModel | null {
     const data = localStorage.getItem('usuarioLogueado');
     return data ? JSON.parse(data) : null;
