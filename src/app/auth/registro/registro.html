@@ -7,8 +7,6 @@
         Conecta, gestiona y transforma tu entorno de manera sostenible
       </p>
       <div class="welcome-message">
-
-
         <ul class="benefits-list">
           <li> Gestiona tus puntos de reciclaje</li>
           <li>Monitorea tu impacto ambiental</li>
@@ -85,6 +83,21 @@
           </div>
         </div>
 
+        <!-- Nuevo campo: Verificar Contraseña -->
+        <div class="form-group">
+          <label>Verificar Contraseña *</label>
+          <input type="password" [(ngModel)]="verificarContrasena" name="verificarContrasena" required 
+            #verificarContrasenaInput="ngModel" class="form-input" placeholder="Repite tu contraseña">
+          
+          <div class="error" *ngIf="verificarContrasenaInput.touched">
+            <span *ngIf="verificarContrasenaInput.errors?.['required']">
+              Verificar contraseña es requerido
+            </span>
+            <span *ngIf="!verificarContrasenaInput.errors?.['required'] && !contrasenasCoinciden()">
+              Las contraseñas no coinciden
+            </span>
+          </div>
+        </div>
 
         <div class="form-row">
           <div class="form-group half">
@@ -155,7 +168,7 @@
           </div>
         </div>
 
-        <button type="submit" [disabled]="!registroForm.valid || enviando" class="submit-btn">
+        <button type="submit" [disabled]="!registroForm.valid || enviando || !contrasenasCoinciden()" class="submit-btn">
           {{ enviando ? 'Creando tu cuenta...' : 'Crear mi cuenta' }}
         </button>
 

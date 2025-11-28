@@ -4,12 +4,12 @@ import { UsuarioModel, Localidad } from '../../Models/usuario';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router'; // ← AGREGAR ESTO
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule], // ← AGREGAR RouterModule
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './registro.html',
   styleUrls: ['./registro.css']
 })
@@ -28,6 +28,7 @@ export class Registro {
     fechaCreacion: new Date().toISOString()
   };
 
+  verificarContrasena: string = '';
   localidades = Object.values(Localidad);
   enviando = false;
 
@@ -37,7 +38,7 @@ export class Registro {
   ) {}
 
   registrar() {
-    if (this.enviando) return;
+    if (this.enviando || !this.contrasenasCoinciden()) return;
     
     this.enviando = true;
     console.log('Datos a enviar:', this.usuario);
@@ -48,7 +49,6 @@ export class Registro {
         this.enviando = false;
         alert('Usuario registrado correctamente');
         
-        // Redirección según el rol
         this.redirigirSegunRol(this.usuario.rolId!);
       },
       error: (error) => {
@@ -81,10 +81,14 @@ export class Registro {
         this.router.navigate(['/login']);
     }
   }
-  validarFuerte(valor: string): boolean {
-  if (!valor) return false;
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[{\]};:<>|./?]).+$/;
-  return regex.test(valor);
-}
 
+  validarFuerte(valor: string): boolean {
+    if (!valor) return false;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[{\]};:<>|./?]).+$/;
+    return regex.test(valor);
+  }
+
+  contrasenasCoinciden(): boolean {
+    return this.usuario.contrasena === this.verificarContrasena;
+  }
 }

@@ -3,12 +3,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { COMPARTIR_IMPORTS } from '../../shared/imports';
 import { FormGeneral } from '../../shared/form/form-general/form-general';
-
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormGeneral],
+  imports: [COMPARTIR_IMPORTS, FormGeneral, RouterModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -41,12 +41,12 @@ export class Login implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  // 🌿 Animación al iniciar el componente
+  //  Animación al iniciar el componente
   ngOnInit(): void {
     setInterval(() => this.rotateResidue(), 3000);
   }
 
-  // 🔄 Cambia ícono y texto de residuos
+  //  Cambia ícono y texto de residuos
   rotateResidue() {
     this.fade = true;
     setTimeout(() => {
@@ -56,13 +56,35 @@ export class Login implements OnInit {
     }, 500);
   }
 
-  // 🧠 Login (igual que el tuyo)
+  // Login modificado con validación de campos
   onLogin(formValue: any): void {
-    console.log('📥 Datos recibidos en Login:', formValue);
+    console.log('Datos recibidos en Login:', formValue);
+
+    // Resetear mensaje de error
+    this.errorMessage = '';
+
+    const correo = formValue.correo?.trim() || '';
+    const contrasena = formValue.contrasena?.trim() || '';
+
+    // Validación de campos vacíos
+    if (!correo && !contrasena) {
+      this.errorMessage = 'Por favor, ingrese su correo y contraseña.';
+      return;
+    }
+
+    if (!correo) {
+      this.errorMessage = 'Por favor, ingrese su correo.';
+      return;
+    }
+
+    if (!contrasena) {
+      this.errorMessage = 'Por favor, ingrese su contraseña.';
+      return;
+    }
 
     const credenciales = {
-      correo: formValue.correo,
-      contrasena: formValue.contrasena
+      correo: correo,
+      contrasena: contrasena
     };
 
     this.authService.login(credenciales).subscribe({
@@ -82,10 +104,11 @@ export class Login implements OnInit {
         }
       },
       error: (err) => {
-        console.error('❌ Error en login:', err);
+        console.error('Error en login:', err);
 
         if (err.status === 401) {
-          this.errorMessage = 'Correo o contraseña incorrectos. Por favor, verifique sus credenciales.';
+          this.errorMessage = 'Correo o contraseña incorrectos. Verifique sus credenciales.';
+      
         } else if (err.status === 500) {
           this.errorMessage = 'Error en el servidor. Intente de nuevo más tarde.';
         } else {
@@ -110,4 +133,3 @@ export class Login implements OnInit {
     });
   }
 }
-

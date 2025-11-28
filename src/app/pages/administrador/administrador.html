@@ -15,21 +15,60 @@
 
     <!-- PANEL DE CONTROL (por defecto activo) -->
     <ng-container *ngIf="vistaActual === 'panel'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Panel de Control</h3>
-      <div class="row g-4">
-        <div class="col-md-10">
-          <div class="card text-center shadow-sm">
-            <div class="card-body">
-              <i class="bi bi-people fs-1 text-success">Usuarios</i>
-              <h5 class="mt-2">Usuarios por localidad</h5>
-              <app-grafico-usuarios-localidad></app-grafico-usuarios-localidad>
-              <h5 class="mt-2">Usuarios por barrio</h5>
-              <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
-            </div>
+     <h3 class="fw-bold text-center verde-principal mb-4">Panel de Control</h3>
+    
+    <div class="row g-4">
+      <!-- Card 1: Usuarios -->
+      <div class="col-md-4">
+        <div class="card card-interactiva shadow-sm">
+          <div class="contenido-por-defecto">
+            <i class="bi bi-people fs-1 text-success"></i>
+            <span class="mt-2">Usuarios</span>
+          </div>
+          
+          <div class="contenido-completo">
+            <p class="mt-2 text-center">Por localidad</p>
+            <app-grafico-usuarios-localidad></app-grafico-usuarios-localidad>
+            <h5 class="mt-2 text-center">Usuarios por barrio</h5>
+            <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
           </div>
         </div>
-       
       </div>
+      
+      <!-- Card 2: Solicitudes -->
+      <div class="col-md-4">
+        <div class="card card-interactiva shadow-sm">
+          <div class="contenido-por-defecto">
+            <i class="bi bi-send fs-1 text-success"></i>
+            <span class="mt-2">Solicitudes</span>
+          </div>
+          
+          <div class="contenido-completo">
+            <p class="mt-2 text-center">Por Localidad</p>
+            <app-solicitudes-localidad-chart></app-solicitudes-localidad-chart>
+            <p class="mt-2 text-center">Rechazadas / Pendientes</p>
+            <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Card 3: Recolección -->
+      <div class="col-md-4">
+        <div class="card card-interactiva shadow-sm">
+          <div class="contenido-por-defecto">
+            <i class="bi bi-backpack2 fs-1 text-success"></i>
+            <span class="mt-2">Recolección</span>
+          </div>
+          
+          <div class="contenido-completo">
+            <p class="mt-2 text-center">Por Localidad</p>
+            <app-solicitudes-localidad-chart></app-solicitudes-localidad-chart>
+            <p class="mt-2 text-center">Rechazadas / Pendientes</p>
+            <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
+          </div>
+        </div>
+      </div>
+    </div>
     </ng-container>
 
     <!-- USUARIOS -->

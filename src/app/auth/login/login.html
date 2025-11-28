@@ -31,10 +31,13 @@
       <h2 class="fw-bold mb-4 text-success">Iniciar Sesión</h2>
       <app-form-general [fields]="campos" (submitForm)="onLogin($event)">
       </app-form-general>
-      <!-- 💬 Mensaje de error -->
+      <!-- Mensaje de error -->
     <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center w-100" style="max-width: 400px;">
       {{ errorMessage }}
     </div>
+    <div class="auth-footer">
+          <p>¿Ya tienes una cuenta? <a routerLink="/registro" class="auth-link">Registrate aquí</a></p>
+        </div>
 
     </div>
 

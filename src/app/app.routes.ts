@@ -16,6 +16,9 @@ import { AuthGuard } from './auth/auth.guard';
 import { Mapa } from './Logic/puntos-recoleccion/mapa/mapa';
 import { GraficoUsuariosLocalidad } from './Logic/usuarios.comp/grafica-usuarios-localidad/grafica-usuarios-localidad';
 import { GraficoUsuariosBarrios } from './Logic/usuarios.comp/grafica-usuarios-barrio/grafica-usuarios-barrio';
+import {PendientesAceptadasChartComponent} from "./Logic/solicitudes-comp/pendientes-aceptadas-chart-component/pendientes-aceptadas-chart-component";
+import {RechazadasMotivoChartComponent} from "./Logic/solicitudes-comp/rechazadas-motivo-chart-component/rechazadas-motivo-chart-component";
+import {SolicitudesLocalidadChartComponent} from "./Logic/solicitudes-comp/solicitudes-localidad-chart-component/solicitudes-localidad-chart-component";
 
 export const routes: Routes = [
   { path: '', component: Inicio },
@@ -24,6 +27,9 @@ export const routes: Routes = [
   { path: 'registro', component: Registro },
   { path: 'usuarios', component: Usuario },
   { path: 'grafica', component: GraficoUsuariosBarrios },
+  { path: 'grafica2', component: PendientesAceptadasChartComponent },
+  { path: 'grafica3', component: RechazadasMotivoChartComponent },
+  { path: 'grafica4', component: SolicitudesLocalidadChartComponent  },
 
   { path: 'login', component: Login},
   {

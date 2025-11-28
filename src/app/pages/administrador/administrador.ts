@@ -14,10 +14,11 @@ import { ListarTabla } from '../../Logic/recolecciones-comp/listar-tabla/listar-
 import { GraficoUsuariosLocalidad } from '../../Logic/usuarios.comp/grafica-usuarios-localidad/grafica-usuarios-localidad';
 import { GraficoUsuariosBarrios } from '../../Logic/usuarios.comp/grafica-usuarios-barrio/grafica-usuarios-barrio';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
+import {SolicitudesLocalidadChartComponent} from "../../Logic/solicitudes-comp/solicitudes-localidad-chart-component/solicitudes-localidad-chart-component";
 
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, GraficoUsuariosLocalidad, GraficoUsuariosBarrios ,Usuario, ListarTabla, Solcitudes, CapacitacionesLista, CargaMasiva,BarraLateral],
+  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent,GraficoUsuariosLocalidad, GraficoUsuariosBarrios ,Usuario, ListarTabla, Solcitudes, CapacitacionesLista, CargaMasiva,BarraLateral],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
@@ -126,7 +127,7 @@ export class Administrador {
   // ========================
    logout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
   toggleMenu() {

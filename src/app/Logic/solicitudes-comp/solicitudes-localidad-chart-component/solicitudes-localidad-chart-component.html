@@ -1,0 +1,17 @@
+<div class="chart-container">
+  <div *ngIf="chartOptions.series" class="chart-wrapper">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [plotOptions]="chartOptions.plotOptions"
+      [dataLabels]="chartOptions.dataLabels"
+      [xaxis]="chartOptions.xaxis"
+      [colors]="chartOptions.colors"
+      [title]="chartOptions.title"
+      [tooltip]="chartOptions.tooltip">
+    </apx-chart>
+  </div>
+  <div *ngIf="!chartOptions.series" class="loading">
+    Cargando gráfico...
+  </div>
+</div>
