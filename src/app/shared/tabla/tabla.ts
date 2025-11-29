@@ -1,5 +1,8 @@
+import { Header } from './../../core/header/header';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { COMPARTIR_IMPORTS } from '../imports';
+import { Boton } from '../botones/boton/boton';
+import { icon } from 'leaflet';
 
 export interface ColumnaTabla {
   campo: string;
@@ -8,7 +11,7 @@ export interface ColumnaTabla {
 
 @Component({
   selector: 'app-tabla',
-  imports: [COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS,Boton],
   templateUrl: './tabla.html',
   styleUrls: ['./tabla.css']
 })
@@ -22,6 +25,8 @@ export class Tabla {
   @Output() ver = new EventEmitter<any>();
   @Output() editar = new EventEmitter<any>();
   @Output() eliminar = new EventEmitter<any>();
+  @Output() descargar = new EventEmitter<void>();
+
 
   pagina: number = 1;
   porPagina: number = 10;
@@ -30,11 +35,42 @@ export class Tabla {
   ascendente: boolean = true;
 
   // ACCIONES DINÁMICAS
-  acciones = [
-    { icon: 'bi-eye', color: 'view', evento: (item: any) => this.ver.emit(item) },
-    { icon: 'bi-pencil', color: 'edit', evento: (item: any) => this.editar.emit(item) },
-    { icon: 'bi-trash', color: 'delete', evento: (item: any) => this.eliminar.emit(item) }
-  ];
+    acciones = [
+  {
+    icon: 'bi-pencil',
+    texto: '',
+    color: 'pastel-success',
+    hover: 'btn-pastel-success',
+    evento: (item: any) => this.editar.emit(item)
+  },
+  {
+    icon: 'bi-trash',
+    texto: '',
+    color: 'pastel-danger',
+    hover: 'btn-pastel-danger',
+    evento: (item: any) => this.eliminar.emit(item)
+  },
+  {
+    icon: 'bi-eye',
+    texto: '',
+    color: 'pastel-info',
+    hover: 'btn-pastel-info',
+    evento: (item: any) => this.ver.emit(item)
+  }
+];
+
+Header = [
+  {
+    icon: 'bi-download',
+    texto: '',
+    color: 'outline-custom-success',
+    hover: 'custom-success-filled',
+    evento: () => this.descargar.emit()  // dispara el Output
+  }
+];
+
+
+
 
   cambiarPagina(p: number) {
     this.pagina = p;

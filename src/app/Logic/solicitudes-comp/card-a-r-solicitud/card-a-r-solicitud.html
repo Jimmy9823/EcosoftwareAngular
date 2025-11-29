@@ -99,15 +99,15 @@
 
           <button class="btn-action btn-edit"
                   *ngIf="s.estadoPeticion === 'Pendiente'"
-                  (click)="editar(s)">
-            <i class="fas fa-edit"></i>
-            Editar
-          </button>
-
-          <button class="btn-action btn-details"
                   (click)="ver(s)">
             <i class="fas fa-eye"></i>
             Ver
+          </button>
+
+          <button class="btn-action btn-details"
+                  (click)="aceptarSolicitud(s)">
+            <i class="fas fa-check"></i>
+            Aceptar
           </button>
 
         </div>

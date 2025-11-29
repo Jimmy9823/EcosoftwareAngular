@@ -1,13 +1,9 @@
 <div class="d-flex">
 
   <!-- SIDEBAR LATERAL -->
-  <app-barra-lateral
-  [menu]="menu"
-  [vistaActual]="vistaActual"
-  [nombreUsuario]="nombreUsuario"
-  (vistaChange)="cambiarVista($event)"
-  (logout)="cerrarSesion()">
-</app-barra-lateral>
+  <app-barra-lateral [menu]="menu" [vistaActual]="vistaActual" [nombreUsuario]="nombreUsuario"
+    (vistaChange)="cambiarVista($event)" (logout)="cerrarSesion()">
+  </app-barra-lateral>
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="dashboard administrador flex-fill p-4">
@@ -56,10 +52,12 @@
           <h3 class="fw-bold verde-principal mb-1">Solicitudes</h3>
           <p class="text-muted mb-0">Consulta tus solicitudes</p>
         </div>
-        <button class="btn btn-success d-flex align-items-center gap-2" (click)="toggleVista()">
-          <i class="bi bi-plus-circle"></i>
-          {{ mostrarNuevaSolicitud ? 'Mostrar solicitudes' : 'Hacer nueva solicitud' }}
-        </button>
+        <app-boton [texto]="mostrarNuevaSolicitud ? 'Mostrar solicitudes' : 'Hacer nueva solicitud'"
+          icono="bi bi-plus-circle" color="outline-custom-success" hoverColor="custom-success-filled"
+          (click)="toggleVista()">
+        </app-boton>
+
+
       </div>
 
       <!-- CONTENIDO PRINCIPAL DE SOLICITUDES -->

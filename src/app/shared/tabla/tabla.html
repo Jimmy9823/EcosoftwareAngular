@@ -2,10 +2,20 @@
 
  <!-- HEADER -->
   <div class="table-header">
+    
     <h2 class="table-title">
       <i class="fas fa-table"></i>
       {{ titulo }}
     </h2>
+ <app-boton
+  *ngFor="let d of Header"
+  [icono]="d.icon"
+  [texto]="d.texto"
+  [color]="d.color"
+  [hoverColor]="d.hover"
+  size="sm"
+  (click)="d.evento()">
+</app-boton>
 
     
     </div>
@@ -31,12 +41,18 @@
 
 
           <td class="table-actions-cell">
-            <button *ngFor="let a of acciones"
-                    class="btn-table-icon btn-{{a.color}}-table"
-                    (click)="a.evento(item)">
-              <i class="bi {{a.icon}}"></i>
-            </button>
-          </td>
+  <app-boton
+  *ngFor="let a of acciones"
+  [icono]="a.icon"
+  [texto]="a.texto"
+  [color]="a.color"
+  [hoverColor]="a.hover"
+  size="sm"
+  (click)="a.evento(item)">
+</app-boton>
+
+</td>
+
         </tr>
 
         <tr *ngIf="data.length === 0">

@@ -5,22 +5,18 @@ import { COMPARTIR_IMPORTS } from '../../imports';
 @Component({
   standalone: true,
   selector: 'app-boton',
-  imports: [NgStyle, COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS],
   templateUrl: './boton.html',
   styleUrl: './boton.css'
 })
 export class Boton {
-  @Input() label: string = '';
-  @Input() tipo: string = ''; 
-  @Input() disabled: boolean = false;
-  @Input() estilo: { [key: string]: string } = {};
+  @Input() texto: string = '';           // Texto del botón
+  @Input() icono: string = '';           // Ej: "bi bi-pencil"
+  @Input() color: string = 'primary';    // primary | success | danger...
+  @Input() size: string = '';            // sm | lg | ''
+  @Input() tipo: string = 'button';      // button | submit
+  @Input() deshabilitado: boolean = false;
 
-  // 👉 Clases de Font Awesome, ejemplo: 'fa-solid fa-right-to-bracket'
-  @Input() icono: string = '';  
-
-  @Output() accion = new EventEmitter<void>();
-
-  ejecutarAccion() {
-    this.accion.emit();
-  }
+  // Color del hover (Bootstrap)
+  @Input() hoverColor: string = '';      // primary | danger | success | warning...
 }

@@ -1,42 +1,105 @@
-button {
+/* Estilo base */
+.custom-btn {
+  transition: all 0.25s ease-in-out;
   border-radius: 8px;
-  padding: 6px 14px;
-  font-weight: 500;
-  font-size: 15px;
-  box-sizing: border-box;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-button:hover{
-  background-color: #16a34a;
-  color: #ffffff;
 }
 
-/* Botón de Login */
-.btn-login {
-    background-color: #6dbf4b;
-  color: #ffffff;
+/* ================================
+   1. Estado normal: outline con #22c55e
+   ================================ */
+.btn-outline-custom-success {
+  color: #22c55e !important;
+  border: 2px solid #22c55e !important;
+  background-color: white !important;
 }
 
-.btn-login:hover {
-   background-color: #3e7d3c;
-}
-
-/* Botón de Registro */
-.btn-registro {
-  background-color: #5c8ead; /* azul agua */
-  color: #ffffff;
-}
-
-.btn-registro:hover {
-  background-color: #4a7a92;
-}
-
-/* Íconos dentro del botón */
-button i {
-  vertical-align: middle;
-  font-size: 1rem;
+/* ================================
+   2. Hover: fondo #16a34a y texto blanco
+   ================================ */
+.hover-custom-success-filled:hover {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  color: white !important;
+  border-color: #16a34a !important;
+  transform: scale(1.03);
 }
 
 
+/* ========================================================
+   1️⃣ VER INFORMACIÓN — AZUL PASTEL
+======================================================== */
+.btn-pastel-info {
+  background-color: #dbeafe !important;   /* azul pastel suave */
+  color: #1d4ed8 !important;              /* azul fuerte */
+  border: 2px solid #bfdbfe !important;   /* borde pastel */
+}
+
+.btn-pastel-info:hover {
+  background-color: #dbeafe !important;   /* azul pastel más intenso */
+  border-color: #2563eb !important;       /* azul fuerte */
+  color: #1d4ed8 !important;
+  transform: scale(1.04);
+}
+
+/* ========================================================
+   2️⃣ EDITAR — VERDE PASTEL
+======================================================== */
+.btn-pastel-success {
+  background-color: #d1fadf !important;   /* verde pastel suave */
+  color: #16a34a !important;
+  border: 2px solid #bbf7d0 !important;
+}
+
+.btn-pastel-success:hover {
+  background-color: #d1fadf !important;
+  border-color: #22c55e !important;
+  color: #16a34a !important;
+  transform: scale(1.04);
+}
+
+/* ========================================================
+   3️⃣ ELIMINAR — ROJO PASTEL
+======================================================== */
+.btn-pastel-danger {
+  background-color: #fee2e2 !important;   /* pastel suave */
+  color: #dc2626 !important;
+  border: 2px solid #fecaca !important;
+}
+
+.btn-pastel-danger:hover {
+  background-color: #fee2e2 !important;
+  border-color: #ef4444 !important;
+  color: #dc2626 !important;
+  transform: scale(1.04);
+}
+
+/* ============================
+   PDF – ROJO ELEGANTE
+============================ */
+.btn-export-pdf {
+  background-color: #ffffff !important;   
+  color: #7f1d1d   !important;               
+  border-color: #ffffff !important;        
+}
+
+.btn-export-pdf:hover {
+  background-color: #7f1d1d !important;    
+  border-color: #7f1d1d !important;        
+  color: #ffffff !important;
+  transform: scale(1.05);
+}
+
+/* ============================
+   EXCEL – VERDE ESMERALDA PASTEL
+============================ */
+.btn-export-excel {
+  background-color: #dcfce7 !important;    
+  color: #15803d !important;               
+  border-color: #bbf7d0 !important;
+}
+
+.btn-export-excel:hover {
+  background-color: #86efac !important;
+  border-color: #22c55e !important;
+  color: #064e3b !important;
+  transform: scale(1.05);
+}

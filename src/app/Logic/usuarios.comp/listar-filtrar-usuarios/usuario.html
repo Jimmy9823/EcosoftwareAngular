@@ -19,21 +19,46 @@
     <div class="botones">
   <button class="filtrar" (click)="aplicarFiltroDesdeForm()"><i class="bi bi-funnel"></i> Filtrar</button>
   <button class="limpiar" (click)="limpiarFiltro()"><i class="bi bi-eraser"></i> Limpiar</button>
-  <button class="exportar-pdf" (click)="exportarPDF()"><i class="bi bi-file-earmark-pdf"></i> PDF</button>
-  <button class="exportar-excel" (click)="exportarExcel()"><i class="bi bi-file-earmark-excel"></i> Excel</button>
+  
+
 </div>
   </div>
 
   <!-- Tabla -->
   <app-tabla
-    [columnas]="columnasUsuarios"
-    [data]="usuarios"
-    [cellTemplates]="cellTemplatesUsuarios"
-    titulo="Usuarios"
-    (editar)="activarEdicion($event)"
-    (eliminar)="eliminarUsuario($event.idUsuario!)">
-  </app-tabla>
+  [columnas]="columnasUsuarios"
+  [data]="usuarios"
+  [cellTemplates]="cellTemplatesUsuarios"
+  titulo="Usuarios"
+  (descargar)="abrirModalReportes()"
+  (editar)="activarEdicion($event)"
+  (eliminar)="eliminarUsuario($event.idUsuario!)">
+</app-tabla>
+
   <div *ngIf="usuarios.length === 0 && !cargando" class="mensaje info">
     No hay usuarios registrados.
   </div>
 </div>
+
+<!--Modal de reportes-->
+<app-modal
+  #modalReportes
+  [title]="'Reportes de usuarios'"
+  [headerColor]="'#4CAF50'"
+  [cancelText]="'Cancelar'"
+
+  [isOpen]="false"
+>
+<div >Seleccione el formato de reporte a descargar:</div>
+  <div class="d-flex gap-2">
+    <app-boton
+      *ngFor="let btn of botonesReporte"
+      [texto]="btn.texto"
+      [icono]="btn.icono"
+      [color]="btn.color"
+      (click)="btn.accion()"
+    >
+    </app-boton>
+  </div>
+</app-modal>
+

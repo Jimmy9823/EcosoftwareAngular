@@ -8,11 +8,12 @@ import { RouterLink } from '@angular/router';
 import { CardsRecoleccionCiudadano } from '../../Logic/recolecciones-comp/cards-recoleccion-ciudadano/cards-recoleccion-ciudadano';
 import { Mapa } from '../../Logic/puntos-recoleccion/mapa/mapa';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
+import { Boton } from '../../shared/botones/boton/boton';
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, CardsRecoleccionCiudadano, Mapa,BarraLateral],
+  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, CardsRecoleccionCiudadano, Mapa,BarraLateral,Boton],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })

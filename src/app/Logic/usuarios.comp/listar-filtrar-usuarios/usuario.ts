@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { UsuarioService } from '../../../Services/usuario.service'
 import { UsuarioModel } from '../../../Models/usuario'
 import { COMPARTIR_IMPORTS } from '../../../shared/imports'
 import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla'
+import { Boton } from '../../../shared/botones/boton/boton'
+import { Modal } from '../../../shared/modal/modal'
+import { FormComp } from "../../../shared/form/form.comp/form.comp";
+import { FormGeneral } from "../../../shared/form/form-general/form-general";
 
 @Component({
   selector: 'app-usuario-tabla',
   templateUrl: './usuario.html',
-  imports: [COMPARTIR_IMPORTS,Tabla],
+  imports: [COMPARTIR_IMPORTS, Tabla, Boton, Modal],
   styleUrls: ['./usuario.css']
 })
 export class Usuario implements OnInit {
@@ -17,6 +21,8 @@ export class Usuario implements OnInit {
   cargando = false
   mensaje = ''
   error = ''
+  // 🔹 REFERENCIA AL MODAL
+  @ViewChild('modalReportes') modalReportes!: Modal;
 
   // 🔸 Filtros
   filtroNombre: string = ''
@@ -55,6 +61,32 @@ cellTemplatesUsuarios = {
   ngOnInit(): void {
     this.cargarUsuarios()
   }
+
+  // Botones del modal (PDF / Excel)
+  botonesReporte = [
+    {
+      texto: 'PDF',
+      icono: 'bi-file-earmark-pdf',
+      color: 'export-pdf',
+      accion: () => this.exportarPDF()
+    },
+    {
+      texto: 'Excel',
+      icono: 'bi-file-earmark-excel',
+      color: 'export-excel',
+      accion: () => this.exportarExcel()
+    }
+  ];
+
+  
+
+  // 🔹 ABRIR MODAL DE REPORTES
+  abrirModalReportes(): void {
+    if (this.modalReportes) {
+      this.modalReportes.isOpen = true;
+    }
+  }
+
 
   // ========================
   // CONSULTAR USUARIOS
