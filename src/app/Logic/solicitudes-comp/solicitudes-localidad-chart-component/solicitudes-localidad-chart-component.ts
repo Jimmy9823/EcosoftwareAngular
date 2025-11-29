@@ -16,10 +16,11 @@ export class SolicitudesLocalidadChartComponent implements OnInit {
   constructor(private service: Service) {}
 
   ngOnInit() {
-    this.service.getSolicitudesPorLocalidad().subscribe((data: SolicitudesPorLocalidad[]) => {
-      this.initChart(data);
-    });
-  }
+  this.service.getSolicitudesPorLocalidadFactory().subscribe((data: SolicitudesPorLocalidad[]) => {
+    this.initChart(data);
+  });
+}
+
 
   private initChart(data: SolicitudesPorLocalidad[]): void {
     const colors = this.generateColors(data.length);
