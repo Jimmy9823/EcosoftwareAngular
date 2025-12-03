@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { CardARSolicitud } from '../../Logic/solicitudes-comp/card-a-r-solicitud/card-a-r-solicitud';
 import { CardsRecoleccion } from '../../Logic/recolecciones-comp/cards-recoleccion/cards-recoleccion';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
+import { Titulo } from '../../shared/titulo/titulo';
+import { Mapa } from "../../Logic/puntos-recoleccion/mapa/mapa";
 
 /**
  * Interfaz para los elementos del menú lateral.
@@ -23,7 +25,7 @@ interface MenuItem {
 @Component({
   selector: 'app-empresa',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, CardARSolicitud, CardsRecoleccion, BarraLateral],
+  imports: [COMPARTIR_IMPORTS, CardARSolicitud, CardsRecoleccion, BarraLateral, Titulo, Mapa],
   templateUrl: './empresa.html',
   styleUrls: ['./empresa.css']
 })
@@ -38,6 +40,9 @@ export class Empresa {
   nombreUsuario: string = localStorage.getItem('nombreUsuario') ?? 'Usuario';
   nombreRol: string = localStorage.getItem('nombreRol') ?? 'Rol';
 
+
+  puntos = false;
+
   menu: MenuItem[] = [
     { vista: 'panel', label: 'Panel de Control', icon: 'bi bi-speedometer2' },
     { vista: 'solicitudes', label: 'Solicitudes', icon: 'bi bi-bar-chart-line' },
@@ -45,6 +50,14 @@ export class Empresa {
     { vista: 'puntos', label: 'Puntos de Reciclaje', icon: 'bi bi-geo-alt' },
     { vista: 'noticias', label: 'Noticias', icon: 'bi bi-newspaper' },
   ];
+
+
+  // ========================
+  // Botones alternar vistas
+  // ========================
+  togglePuntos(): void {
+    this.puntos = !this.puntos;
+  }
 
   /**
    * Dependencias inyectadas por el constructor:

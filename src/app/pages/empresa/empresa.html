@@ -1,21 +1,27 @@
 <div class="d-flex">
 
   <!-- SIDEBAR LATERAL -->
-   <app-barra-lateral
-  [menu]="menu"
-  [vistaActual]="vistaActual"
-  [nombreUsuario]="nombreUsuario"
-  (vistaChange)="cambiarVista($event)"
-  (logout)="cerrarSesion()">
-</app-barra-lateral>
-
+  <app-barra-lateral
+    [menu]="menu"
+    [vistaActual]="vistaActual"
+    [nombreUsuario]="nombreUsuario"
+    (vistaChange)="cambiarVista($event)"
+    (logout)="cerrarSesion()">
+  </app-barra-lateral>
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="dashboard administrador flex-fill p-4">
 
-    <!-- PANEL DE CONTROL (por defecto activo) -->
+    <!-- PANEL DE CONTROL -->
     <ng-container *ngIf="vistaActual === 'panel'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Panel de Control</h3>
+      <app-titulo 
+        titulo="Panel de Control" 
+        subtitulo="Toda la información relevante de un vistazo"
+        iconoBoton="bi bi-bell"
+        colorBoton="outline-custom-success" 
+        hoverColorBoton="custom-success-filled">
+      </app-titulo>
+
       <div class="row g-4">
         <div class="col-md-4">
           <div class="card text-center shadow-sm">
@@ -26,6 +32,7 @@
             </div>
           </div>
         </div>
+
         <div class="col-md-4">
           <div class="card text-center shadow-sm">
             <div class="card-body">
@@ -35,6 +42,7 @@
             </div>
           </div>
         </div>
+
         <div class="col-md-4">
           <div class="card text-center shadow-sm">
             <div class="card-body">
@@ -47,32 +55,57 @@
       </div>
     </ng-container>
 
-    
-
     <!-- SOLICITUDES -->
     <ng-container *ngIf="vistaActual === 'solicitudes'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Solicitudes</h3>
-      <p class="text-center">Solicitudes pendientes.</p>
-      <app-card-a-r-solicitud/>
+      <app-titulo 
+        titulo="Gestión de Solicitudes" 
+        subtitulo="Gestiona las solicitudes pendientes"
+        iconoBoton="bi bi-plus-lg"
+        colorBoton="outline-custom-success" 
+        hoverColorBoton="custom-success-filled">
+      </app-titulo>
+
+      <app-card-a-r-solicitud></app-card-a-r-solicitud>
     </ng-container>
 
     <!-- RECOLECCIONES -->
     <ng-container *ngIf="vistaActual === 'recolecciones'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Campañas y Recolecciones</h3>
-      <p class="text-center">Vista para gestionar campañas y recolecciones.</p>
+      <app-titulo 
+        titulo="Mis Recolecciones" 
+        subtitulo="Gestiona tus recolecciones activas"
+        iconoBoton="bi bi-plus-lg"
+        colorBoton="outline-custom-success" 
+        hoverColorBoton="custom-success-filled">
+      </app-titulo>
+
       <app-cards-recoleccion></app-cards-recoleccion>
     </ng-container>
 
     <!-- PUNTOS DE RECICLAJE -->
     <ng-container *ngIf="vistaActual === 'puntos'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Puntos de Reciclaje</h3>
-      <p class="text-center">Mapa e información de los puntos de reciclaje.</p>
-    </ng-container>
+      <app-titulo 
+        titulo="Puntos de Reciclaje" 
+        subtitulo="Gestiona tus puntos de reciclaje"
+        [textoBoton]="puntos ? 'Gestionar' : 'Mostrar puntos'"
+        iconoBoton="bi bi-plus-lg"
+        colorBoton="outline-custom-success" 
+        hoverColorBoton="custom-success-filled"
+        (clickBoton)="togglePuntos()">
+      </app-titulo>
 
-    <!-- NOTICIAS -->
-    <ng-container *ngIf="vistaActual === 'noticias'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Noticias</h3>
-      <p class="text-center">Últimas noticias y novedades relacionadas con el reciclaje.</p>
+      <div class="contenedor-toggle">
+        <ng-container *ngIf="puntos">
+          <div class="contenido-solicitud">
+            <!-- Registro y lista de puntos -->
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!puntos">
+          <div class="contenido-solicitud">
+            <app-mapa></app-mapa>
+          </div>
+        </ng-container>
+      </div>
     </ng-container>
 
   </main>

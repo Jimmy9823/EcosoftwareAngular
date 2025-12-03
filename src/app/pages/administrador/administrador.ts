@@ -1,3 +1,4 @@
+import { Registro } from './../../auth/registro/registro';
 // src/app/usuario/administrador/administrador.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -15,10 +16,14 @@ import { GraficoUsuariosLocalidad } from '../../Logic/usuarios.comp/grafica-usua
 import { GraficoUsuariosBarrios } from '../../Logic/usuarios.comp/grafica-usuarios-barrio/grafica-usuarios-barrio';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
 import {SolicitudesLocalidadChartComponent} from "../../Logic/solicitudes-comp/solicitudes-localidad-chart-component/solicitudes-localidad-chart-component";
+import { Boton } from '../../shared/botones/boton/boton';
+import { Titulo } from '../../shared/titulo/titulo';
+import { Modal } from '../../shared/modal/modal';
+import { FormComp } from '../../shared/form/form.comp/form.comp';
 
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent,GraficoUsuariosLocalidad, GraficoUsuariosBarrios ,Usuario, ListarTabla, Solcitudes, CapacitacionesLista, CargaMasiva,BarraLateral],
+  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent,GraficoUsuariosLocalidad, GraficoUsuariosBarrios ,Usuario, ListarTabla, Solcitudes, CapacitacionesLista, CargaMasiva,BarraLateral,Boton,Titulo,Modal,FormComp],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
@@ -40,6 +45,11 @@ export class Administrador {
   menuAbierto = true;
   perfilMenuAbierto = false;
 
+  // botones de alternar vistas
+  mostrarNuevoUsuario = false;
+  capacitaciones = false;
+  registro: any;
+
   constructor(
     private usuarioService: UsuarioService,
     private router: Router,
@@ -60,7 +70,36 @@ export class Administrador {
   { vista: 'noticias', label: 'Noticias', icon: 'bi bi-newspaper' },
 ];
 
+registroAdmin = [
+  {
+    icono: 'bi bi-download',
+    texto: '',
+    color: 'outline-custom-success',
+    hoverColor: 'custom-success-filled',
+    onClick: () => this.RegistroAdmin()   // Llama al método correctamente
+  }
+];
 
+
+RegistroAdmin() {
+  this.registro.emit();  // dispara el Output que ya tienes
+}
+
+
+
+// ========================
+// Botones de alternar vistas
+// ========================
+
+// Alternar vista de capacitaciones
+  toggleVista(): void {
+    this.capacitaciones = !this.capacitaciones;
+  }
+
+  // Alternar vista de nuevo usuario
+  toggleNuevoUsuario(): void {
+    this.mostrarNuevoUsuario = !this.mostrarNuevoUsuario;
+  }
 
   ngOnInit(): void {
     this.vistaActual = 'panel';
@@ -90,6 +129,9 @@ export class Administrador {
   consultarUsuarios(): void {
     this.cargando = true;
     this.usuarioService.listar().subscribe({
+
+
+
       next: (lista) => {
         this.usuarios = lista.map(usuario => ({
           ...usuario,

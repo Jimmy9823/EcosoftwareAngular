@@ -1,119 +1,187 @@
-
 <div class="d-flex">
 
-  <app-barra-lateral
-  [menu]="menu"
-  [vistaActual]="vistaActual"
-  [nombreUsuario]="nombreUsuario"
-  (vistaChange)="cambiarVista($event)"
-  (logout)="logout()">
-</app-barra-lateral>
-
+  <!-- BARRA LATERAL -->
+  <app-barra-lateral 
+    [menu]="menu" 
+    [vistaActual]="vistaActual" 
+    [nombreUsuario]="nombreUsuario"
+    (vistaChange)="cambiarVista($event)" 
+    (logout)="logout()">
+  </app-barra-lateral>
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="dashboard administrador flex-fill p-4">
 
-    <!-- PANEL DE CONTROL (por defecto activo) -->
+    <!-- PANEL DE CONTROL -->
     <ng-container *ngIf="vistaActual === 'panel'">
-     <h3 class="fw-bold text-center verde-principal mb-4">Panel de Control</h3>
-    
-    <div class="row g-4">
-      <!-- Card 1: Usuarios -->
-      <div class="col-md-4">
-        <div class="card card-interactiva shadow-sm">
-          <div class="contenido-por-defecto">
-            <i class="bi bi-people fs-1 text-success"></i>
-            <span class="mt-2">Usuarios</span>
-          </div>
-          
-          <div class="contenido-completo">
-            <p class="mt-2 text-center">Por localidad</p>
-            <app-grafico-usuarios-localidad></app-grafico-usuarios-localidad>
-            <h5 class="mt-2 text-center">Usuarios por barrio</h5>
-            <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
-          </div>
-        </div>
-      </div>
       
-      <!-- Card 2: Solicitudes -->
-      <div class="col-md-4">
-        <div class="card card-interactiva shadow-sm">
-          <div class="contenido-por-defecto">
-            <i class="bi bi-send fs-1 text-success"></i>
-            <span class="mt-2">Solicitudes</span>
-          </div>
-          
-          <div class="contenido-completo">
-            <p class="mt-2 text-center">Por Localidad</p>
-            <app-solicitudes-localidad-chart></app-solicitudes-localidad-chart>
-            <p class="mt-2 text-center">Rechazadas / Pendientes</p>
-            <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Card 3: Recolección -->
-      <div class="col-md-4">
-        <div class="card card-interactiva shadow-sm">
-          <div class="contenido-por-defecto">
-            <i class="bi bi-backpack2 fs-1 text-success"></i>
-            <span class="mt-2">Recolección</span>
-          </div>
-          
-          <div class="contenido-completo">
-            <p class="mt-2 text-center">Por Localidad</p>
-            <app-solicitudes-localidad-chart></app-solicitudes-localidad-chart>
-            <p class="mt-2 text-center">Rechazadas / Pendientes</p>
-            <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
+      <app-titulo 
+        titulo="Panel de Control" 
+        subtitulo="Una visión general de la plataforma"
+        iconoBoton="bi bi-bell"
+        colorBoton="outline-custom-success" 
+        hoverColorBoton="custom-success-filled">
+      </app-titulo>
+
+      <div class="row g-4">
+
+        <!-- Card 1: Usuarios -->
+        <div class="col-md-4">
+          <div class="card card-interactiva shadow-sm">
+            <div class="contenido-por-defecto">
+              <i class="bi bi-people fs-1 text-success"></i>
+              <span class="mt-2">Usuarios</span>
+            </div>
+            <div class="contenido-completo">
+              <p class="mt-2 text-center">Por localidad</p>
+              <app-grafico-usuarios-localidad></app-grafico-usuarios-localidad>
+              <h5 class="mt-2 text-center">Usuarios por barrio</h5>
+              <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
+            </div>
           </div>
         </div>
+
+        <!-- Card 2: Solicitudes -->
+        <div class="col-md-4">
+          <div class="card card-interactiva shadow-sm">
+            <div class="contenido-por-defecto">
+              <i class="bi bi-send fs-1 text-success"></i>
+              <span class="mt-2">Solicitudes</span>
+            </div>
+            <div class="contenido-completo">
+              <p class="mt-2 text-center">Por Localidad</p>
+              <app-solicitudes-localidad-chart></app-solicitudes-localidad-chart>
+              <p class="mt-2 text-center">Rechazadas / Pendientes</p>
+              <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Recolección -->
+        <div class="col-md-4">
+          <div class="card card-interactiva shadow-sm">
+            <div class="contenido-por-defecto">
+              <i class="bi bi-backpack2 fs-1 text-success"></i>
+              <span class="mt-2">Recolección</span>
+            </div>
+            <div class="contenido-completo">
+              <p class="mt-2 text-center">Por Localidad</p>
+              <app-solicitudes-localidad-chart></app-solicitudes-localidad-chart>
+              <p class="mt-2 text-center">Rechazadas / Pendientes</p>
+              <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
     </ng-container>
 
     <!-- USUARIOS -->
     <ng-container *ngIf="vistaActual === 'usuarios'">
-    <app-usuario-tabla/>
-      <!-- SIN RESULTADOS -->
-      <div *ngIf="!cargando && usuarios.length === 0"
-           class="alert alert-warning text-center shadow-sm  py-2 mt-3">
-        No se encontraron usuarios registrados.
+
+      <app-titulo 
+        titulo="Usuarios" 
+        subtitulo="Gestión de usuarios registrados"
+        [textoBoton]="mostrarNuevoUsuario ? 'Mostrar usuarios' : 'Agregar nuevo usuario'"
+        iconoBoton="bi bi-plus-circle"
+        colorBoton="outline-custom-success"
+        hoverColorBoton="custom-success-filled"
+        (clickBoton)="toggleNuevoUsuario()">
+      </app-titulo>
+
+      <div class="contenedor-toggle">
+
+        <!-- Agregar usuario -->
+        <ng-container *ngIf="mostrarNuevoUsuario">
+          <div class="contenido-solicitud">
+            
+          </div>
+        </ng-container>
+
+        <!-- Lista de usuarios -->
+        <ng-container *ngIf="!mostrarNuevoUsuario">
+          <div class="contenido-solicitud">
+             <app-usuario-tabla></app-usuario-tabla>
+
+            <div *ngIf="!cargando && usuarios.length === 0"
+              class="alert alert-warning text-center shadow-sm py-2 mt-3">
+              No se encontraron usuarios registrados.
+            </div>
+          </div>
+        </ng-container>
+
       </div>
     </ng-container>
 
     <!-- SOLICITUDES -->
     <ng-container *ngIf="vistaActual === 'solicitudes'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Solicitudes de Recolección</h3>
-      <app-solcitudes/>
-
+      <app-titulo 
+        titulo="Solicitudes de Recolección" 
+        subtitulo="Gestión de solicitudes de recolección">
+      </app-titulo>
+      <app-solcitudes></app-solcitudes>
     </ng-container>
 
     <!-- RECOLECCIONES -->
     <ng-container *ngIf="vistaActual === 'recolecciones'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Recolecciones</h3>
-      <p class="text-center">Vista para gestionar campañas y recolecciones.</p>
+      <app-titulo 
+        titulo="Recolecciones" 
+        subtitulo="Gestión de recolecciones">
+      </app-titulo>
+
       <app-listar-tabla></app-listar-tabla>
     </ng-container>
 
     <!-- PUNTOS DE RECICLAJE -->
     <ng-container *ngIf="vistaActual === 'puntos'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Puntos de Reciclaje</h3>
-      <p class="text-center">Mapa e información de los puntos de reciclaje.</p>
+      <app-titulo 
+        titulo="Puntos de Reciclaje" 
+        subtitulo="Gestión de puntos de reciclaje">
+      </app-titulo>
     </ng-container>
 
-    <!-- PUNTOS DE CAPACITACIONES -->
+    <!-- CAPACITACIONES -->
     <ng-container *ngIf="vistaActual === 'capacitaciones'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Capacitaciones</h3>
-      <app-carga-masiva-capacitacion></app-carga-masiva-capacitacion>
-      
-      <app-listar-capacitaciones> </app-listar-capacitaciones>
+      <app-titulo 
+        titulo="Capacitaciones y Módulos"
+        subtitulo="Gestión de capacitaciones y módulos"
+        [textoBoton]="capacitaciones ? 'Mostrar capacitaciones' : 'Mostrar Módulos'"
+        iconoBoton="bi bi-plus-circle"
+        colorBoton="outline-custom-success"
+        hoverColorBoton="custom-success-filled"
+        (clickBoton)="toggleVista()">
+      </app-titulo>
+
+      <div class="contenedor-toggle">
+
+        <!-- Lista de capacitaciones -->
+        <ng-container *ngIf="capacitaciones">
+          <div class="contenido-solicitud">
+            <h3 class="fw-bold verde-principal mb-1">Capacitaciones</h3>
+            <p class="text-muted mb-0">Consulta tus capacitaciones</p>
+          </div>
+        </ng-container>
+
+        <!-- Módulos -->
+        <ng-container *ngIf="!capacitaciones">
+          <div class="contenido-solicitud">
+            <app-carga-masiva-capacitacion></app-carga-masiva-capacitacion>
+            <app-listar-capacitaciones></app-listar-capacitaciones>
+          </div>
+        </ng-container>
+
+      </div>
     </ng-container>
 
     <!-- NOTICIAS -->
     <ng-container *ngIf="vistaActual === 'noticias'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Noticias</h3>
-      <p class="text-center">Últimas noticias y novedades relacionadas con el reciclaje.</p>
+      <app-titulo 
+        titulo="Noticias" 
+        subtitulo="Gestión de noticias y novedades">
+      </app-titulo>
     </ng-container>
 
   </main>
+
 </div>
+

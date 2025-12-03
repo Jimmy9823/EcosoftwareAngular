@@ -9,11 +9,13 @@ import { CardsRecoleccionCiudadano } from '../../Logic/recolecciones-comp/cards-
 import { Mapa } from '../../Logic/puntos-recoleccion/mapa/mapa';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
 import { Boton } from '../../shared/botones/boton/boton';
+import { Titulo } from '../../shared/titulo/titulo';
+import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitaciones/listar-capacitaciones';
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, CardsRecoleccionCiudadano, Mapa,BarraLateral,Boton],
+  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, CardsRecoleccionCiudadano,BarraLateral,Titulo,CapacitacionesLista],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })

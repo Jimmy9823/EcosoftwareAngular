@@ -1,110 +1,87 @@
-<!-- ===================== REGISTRO ===================== -->
-<form *ngIf="mode === 'registro'" [formGroup]="registroForm" (ngSubmit)="onSubmit()" [ngClass]="selectedRol">
-  <h2>Registro de {{ selectedRol | titlecase }}</h2>
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="auth-form">
 
-  <!-- Rol -->
-  <label for="rol">Selecciona Rol</label>
-  <select id="rol" formControlName="rol" (change)="onRolChange($event)">
-    <option value="ciudadano">Ciudadano</option>
-    <option value="reciclador">Reciclador</option>
-    <option value="empresa">Empresa</option>
-    <option value="admin">Administrador</option>
-  </select>
+  <div class="row g-3">
 
-  <!-- Campos base (todos los roles) -->
-  <input type="text" placeholder="Nombre completo" formControlName="nombre">
-  <div class="error-msg" *ngIf="isInvalid(registroForm,'nombre')">Nombre requerido</div>
+    <ng-container *ngFor="let field of fields">
 
-  <input type="text" placeholder="Cédula" formControlName="cedula">
-  <div class="error-msg" *ngIf="isInvalid(registroForm,'cedula')">Cédula inválida</div>
+      <!-- SEPARADOR -->
+      <div *ngIf="field.type === 'separator'" class="col-12">
+        <div class="form-separator">{{ field.label }}</div>
+      </div>
 
-  <input type="email" placeholder="Correo" formControlName="correo">
-  <div class="error-msg" *ngIf="isInvalid(registroForm,'correo','email')">Correo inválido</div>
+      <!-- CAMPOS -->
+      <div *ngIf="field.type !== 'separator'" [class]="'col-12 col-md-' + (field.cols || 12)">
+        <div class="form-group">
 
-  <input type="text" placeholder="Teléfono" formControlName="telefono">
-  <div class="error-msg" *ngIf="isInvalid(registroForm,'telefono')">Teléfono inválido</div>
+          <label *ngIf="field.label">{{ field.label }}</label>
 
-  <!-- Campos adicionales por rol -->
-  <ng-container *ngIf="selectedRol === 'ciudadano'">
-    <input placeholder="Dirección" formControlName="direccion">
-    <input placeholder="Barrio" formControlName="barrio">
-    <input placeholder="Localidad" formControlName="localidad">
-  </ng-container>
+          <!-- INPUT -->
+          <input *ngIf="['text','email','password','number','date'].includes(field.type)"
+            [type]="field.type"
+            class="form-input"
+            [formControlName]="field.name"
+            [placeholder]="field.placeholder || ''"
+          />
 
-  <ng-container *ngIf="selectedRol === 'reciclador'">
-    <input placeholder="Zona de trabajo" formControlName="zonaTrabajo">
-    <input placeholder="Horario de trabajo" formControlName="horarioTrabajo">
-    <input type="number" placeholder="Cantidad mínima de residuos" formControlName="cantidadMinima">
+          <!-- TEXTAREA -->
+          <textarea *ngIf="field.type === 'textarea'"
+            class="form-input"
+            [rows]="field.rows || 3"
+            [formControlName]="field.name">
+          </textarea>
 
-    <label>Tipo de material:</label>
-    <div class="checkbox-list">
-      <label *ngFor="let tipo of tiposMaterial">
-        <input type="checkbox" [value]="tipo" (change)="onTipoMaterialChange($event)"> {{ tipo }}
-      </label>
-    </div>
+          <!-- SELECT -->
+          <select *ngIf="field.type === 'select'"
+            class="form-input"
+            [formControlName]="field.name">
+            <option value="" disabled selected>
+              {{ field.placeholder || 'Seleccione' }}
+            </option>
+            <option *ngFor="let opt of field.options" [value]="opt.value">
+              {{ opt.text }}
+            </option>
+          </select>
 
-    <input *ngIf="mostrarOtrosMateriales" placeholder="Otros materiales" formControlName="otrosMateriales">
-  </ng-container>
+          <!-- RADIO -->
+          <div *ngIf="field.type === 'radio'">
+            <div class="role-section">
+              <h3>{{ field.label }}</h3>
 
-  <ng-container *ngIf="selectedRol === 'empresa'">
-    <input placeholder="Nombre de la empresa" formControlName="nombre">
-    <input placeholder="NIT" formControlName="nit">
-    <input placeholder="Representante legal" formControlName="representanteLegal">
-    <input placeholder="Dirección" formControlName="direccion">
-    <input placeholder="Barrio" formControlName="barrio">
-    <input placeholder="Localidad" formControlName="localidad">
-    <input placeholder="Horario de operación" formControlName="horario">
-    <input type="number" placeholder="Cantidad mínima de residuos" formControlName="cantidadMinima">
+              <div class="d-flex flex-wrap gap-3">
+                <label *ngFor="let opt of field.options" class="form-check">
+                  <input type="radio"
+                    [value]="opt.value"
+                    [formControlName]="field.name" />
+                  {{ opt.text }}
+                </label>
+              </div>
+            </div>
+          </div>
 
-    <label>Tipo de material:</label>
-    <div class="checkbox-list">
-      <label *ngFor="let tipo of tiposMaterial">
-        <input type="checkbox" [value]="tipo" (change)="onTipoMaterialChange($event)"> {{ tipo }}
-      </label>
-    </div>
+          <!-- ERROR -->
+          <div class="error"
+            *ngIf="formGroup.get(field.name)?.invalid && formGroup.get(field.name)?.touched">
+            {{ field.errorMessage || 'Campo inválido' }}
+          </div>
 
-    <input *ngIf="mostrarOtrosMateriales" placeholder="Otros materiales" formControlName="otrosMateriales">
-  </ng-container>
+        </div>
+      </div>
 
-  <!-- Contraseñas -->
-  <input type="password" placeholder="Contraseña" formControlName="contrasena">
-  <div class="error-msg" *ngIf="isInvalid(registroForm,'contrasena')">Mínimo 6 caracteres</div>
+    </ng-container>
 
-  <input type="password" placeholder="Validar Contraseña" formControlName="validarContrasena">
-  <div class="error-msg" *ngIf="registroForm.hasError('passwordMismatch')">Las contraseñas no coinciden</div>
-
-  <button type="submit">Registrar</button>
-</form>
-
-<!-- ===================== LOGIN ===================== -->
-<form *ngIf="mode === 'login'" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-  <h2>Iniciar Sesión</h2>
-  <input type="email" placeholder="Correo electrónico" formControlName="correo">
-  <div class="error-msg" *ngIf="isInvalid(loginForm,'correo')">Correo requerido</div>
-
-  <input type="password" placeholder="Contraseña" formControlName="contrasena">
-  <div class="error-msg" *ngIf="isInvalid(loginForm,'contrasena')">Contraseña requerida</div>
-
-  <button type="submit">Entrar</button>
-</form>
-
-<!-- ===================== FILTRO ===================== -->
-<form *ngIf="mode === 'filtro'" [formGroup]="filtroForm" (ngSubmit)="onSubmit()" class="card p-3 mb-4 shadow-sm filter-form">
-  <div class="row g-2 align-items-center">
-    <div class="col-md-3">
-      <select class="form-select" formControlName="criterio">
-        <option value="nombre">Nombre</option>
-        <option value="correo">Correo</option>
-        <option value="documento">Documento</option>
-      </select>
-    </div>
-    <div class="col-md-5">
-      <input type="text" class="form-control" placeholder="Valor de búsqueda" formControlName="valor">
-    </div>
-    <div class="col-md-4 d-flex gap-2">
-      <button type="submit" class="btn btn-buscar w-50">Buscar</button>
-<button type="button" class="btn btn-limpiar w-50" (click)="limpiarFiltro()">Limpiar</button>
-
-    </div>
   </div>
+
+  <!-- BOTÓN -->
+  <div class="text-end mt-4" *ngIf="showSubmitButton">
+    <app-boton
+      tipo="submit"
+      [color]="submitButtonColor"
+      [size]="submitButtonSize"
+      [hoverColor]="submitButtonHoverColor"
+      [deshabilitado]="formGroup.invalid"
+      [icono]="'bi bi-check-lg'"
+      [texto]="submitButtonText">
+    </app-boton>
+  </div>
+
 </form>

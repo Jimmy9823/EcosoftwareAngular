@@ -1,169 +1,60 @@
-/* ===================== FORMULARIOS GENERALES ===================== */
-form {
+.form-group {
   display: flex;
   flex-direction: column;
-  max-width: 400px;
-  margin: 1.5rem auto;
-  padding: 1rem;
-  border-radius: 1rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  gap: 0.5rem;
-  background-color: #fff;
 }
 
-form h2 {
-  text-align: center;
-  margin-bottom: 1rem;
+label {
   font-weight: 600;
-}
-
-/* ===================== INPUTS Y SELECTS ===================== */
-input, select, button {
-  padding: 0.5rem;
-  font-size: 1rem;
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  margin: 0.5rem 0;
-}
-
-form label {
-  display: block;
-  margin-top: 10px;
-  font-weight: 600;
-}
-
-/* ===================== CHECKBOX LIST ===================== */
-.checkbox-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
-  justify-items: center;
-}
-
-/* ===================== BOTONES ===================== */
-button {
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
-}
-
-button:hover {
-  background-color: #2563eb;
-}
-
-/* ===================== MENSAJES DE ERROR ===================== */
-.error-msg {
-  color: #d93025;
-  font-size: 0.8rem;
-  margin-top: -4px;
+  color: #4A5568;
   margin-bottom: 6px;
+  font-size: 14px;
 }
 
-/* ===================== ESTILOS POR ROL ===================== */
-.ciudadano { background-color: #ffb64842; }   /* amarillo claro */
-.reciclador, .empresa { background-color: #e5f7e5; } /* verde claro */
-.admin { background-color: #e0edff; }         /* azul claro */
-
-/* ===================== LOGIN ===================== */
-.login-form {
-  max-width: 350px;
-}
-
-/* ===================== FILTRO ===================== */
-.filter-form {
-  background-color: #fff;
-  border-radius: 0.75rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 100%;
-  margin: 1rem auto;
-  padding: 1rem;
-}
-
-.filter-form .form-select,
-.filter-form .form-control {
-  border-radius: 0.5rem;
-  box-shadow: none;
-  font-size: 1rem;
-  height: 2.8rem;
-  border: 1px solid #ccc;
-  transition: border-color 0.2s ease;
-}
-
-.filter-form .form-select:focus,
-.filter-form .form-control:focus {
-  outline: none;
-  border-color: #a7f3d0;
-}
-
-/* Formulario de filtro */
-.filter-form {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-/* Botones verdes suaves */
-.btn-buscar {
-  background-color: #3e7d3c; /* verde suave */
-  color: #ffffff; /* verde oscuro para texto */
-  border: none;
+.form-input {
+  padding: 12px 16px;
+  border: 2px solid #E2E8F0;
   border-radius: 8px;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  background: #F7FAFC;
+  transition: 0.3s ease;
+  font-size: 14px;
 }
 
-.btn-buscar:hover {
-  background-color: #eaf6ea; 
-    color: #3e7d3c;
-
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(6, 95, 70, 0.2);
+.form-input:focus {
+  border-color: #38CA6D;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(56, 202, 109, 0.2);
 }
 
+.form-input.ng-invalid.ng-touched {
+  border-color: #E53E3E;
+}
 
-.btn-limpiar {
-  background-color: #3e7d3c; 
-  color: #ffffff;
-  border: none;
+textarea.form-input {
+  min-height: 100px;
+}
+
+select.form-input {
+  appearance: none;
+  cursor: pointer;
+}
+
+.error {
+  color: #E53E3E;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.form-separator {
+  margin: 20px 0 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4A5568;
+}
+
+.role-section {
+  background: #F7FAFC;
+  padding: 15px;
   border-radius: 8px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.btn-limpiar:hover {
-  background-color: #eaf6ea;
-  color: #3e7d3c;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(6, 95, 70, 0.15);
-}
-
-
-/* Responsive para filtro */
-@media (max-width: 767.98px) {
-  .filter-form .row {
-    flex-direction: column;
-  }
-
-  .filter-form .col-md-3,
-  .filter-form .col-md-5,
-  .filter-form .col-md-4 {
-    width: 100%;
-  }
-
-  .filter-form .d-flex {
-    flex-direction: column;
-  }
-
-  .filter-form button {
-    width: 100%;
-  }
+  border-left: 4px solid #38CA6D;
+  margin-bottom: 10px;
 }

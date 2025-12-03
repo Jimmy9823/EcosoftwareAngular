@@ -1,16 +1,27 @@
 <div class="d-flex">
 
-  <!-- SIDEBAR LATERAL -->
-  <app-barra-lateral [menu]="menu" [vistaActual]="vistaActual" [nombreUsuario]="nombreUsuario"
-    (vistaChange)="cambiarVista($event)" (logout)="cerrarSesion()">
+  <!-- SIDEBAR -->
+  <app-barra-lateral
+    [menu]="menu"
+    [vistaActual]="vistaActual"
+    [nombreUsuario]="nombreUsuario"
+    (vistaChange)="cambiarVista($event)"
+    (logout)="cerrarSesion()">
   </app-barra-lateral>
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="dashboard administrador flex-fill p-4">
 
-    <!-- PANEL DE CONTROL (por defecto activo) -->
+    <!-- PANEL -->
     <ng-container *ngIf="vistaActual === 'panel'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Panel de Control</h3>
+      <app-titulo
+        titulo="Panel de Control"
+        subtitulo="Toda la información relevante de un vistazo"
+        iconoBoton="bi bi-bell"
+        colorBoton="outline-custom-success"
+        hoverColorBoton="custom-success-filled">
+      </app-titulo>
+
       <div class="row g-4">
         <div class="col-md-4">
           <div class="card text-center shadow-sm">
@@ -21,6 +32,7 @@
             </div>
           </div>
         </div>
+
         <div class="col-md-4">
           <div class="card text-center shadow-sm">
             <div class="card-body">
@@ -30,6 +42,7 @@
             </div>
           </div>
         </div>
+
         <div class="col-md-4">
           <div class="card text-center shadow-sm">
             <div class="card-body">
@@ -42,34 +55,25 @@
       </div>
     </ng-container>
 
-
-
     <!-- SOLICITUDES -->
     <ng-container *ngIf="vistaActual === 'solicitudes'">
-      <!-- CABECERA CON TÍTULO Y BOTÓN -->
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-          <h3 class="fw-bold verde-principal mb-1">Solicitudes</h3>
-          <p class="text-muted mb-0">Consulta tus solicitudes</p>
-        </div>
-        <app-boton [texto]="mostrarNuevaSolicitud ? 'Mostrar solicitudes' : 'Hacer nueva solicitud'"
-          icono="bi bi-plus-circle" color="outline-custom-success" hoverColor="custom-success-filled"
-          (click)="toggleVista()">
-        </app-boton>
+      <app-titulo
+        titulo="Solicitudes"
+        subtitulo="Consulta tus solicitudes"
+        [textoBoton]="mostrarNuevaSolicitud ? 'Mostrar solicitudes' : 'Hacer nueva solicitud'"
+        iconoBoton="bi bi-plus-circle"
+        colorBoton="outline-custom-success"
+        hoverColorBoton="custom-success-filled"
+        (clickBoton)="toggleVista()">
+      </app-titulo>
 
-
-      </div>
-
-      <!-- CONTENIDO PRINCIPAL DE SOLICITUDES -->
       <div class="contenedor-toggle">
-        <!-- 🟢 Contenedor para hacer nueva solicitud -->
         <ng-container *ngIf="mostrarNuevaSolicitud">
           <div class="contenido-solicitud">
             <app-form-registro></app-form-registro>
           </div>
         </ng-container>
 
-        <!-- 🟡 Contenedor para mostrar solicitudes pendientes -->
         <ng-container *ngIf="!mostrarNuevaSolicitud">
           <div class="contenido-solicitud">
             <app-cards-solicitud></app-cards-solicitud>
@@ -80,22 +84,22 @@
 
     <!-- RECOLECCIONES -->
     <ng-container *ngIf="vistaActual === 'recolecciones'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Campañas y Recolecciones</h3>
-      <p class="text-center">Vista para gestionar campañas y recolecciones.</p>
+      <app-titulo
+        titulo="Recolecciones"
+        subtitulo="Gestión de tus recolecciones">
+      </app-titulo>
+
       <app-cards-recoleccion-ciudadano></app-cards-recoleccion-ciudadano>
     </ng-container>
 
-    <!-- PUNTOS DE RECICLAJE -->
+    <!-- CAPACITACIONES -->
     <ng-container *ngIf="vistaActual === 'capacitaciones'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Capacitaciones</h3>
-      <p class="text-center">Todos los cursos en los que está inscrito.</p>
-    </ng-container>
+      <app-titulo
+        titulo="Capacitaciones"
+        subtitulo="Consulta tus capacitaciones">
+      </app-titulo>
 
-    <!-- NOTICIAS -->
-    <ng-container *ngIf="vistaActual === 'noticias'">
-      <h3 class="fw-bold text-center verde-principal mb-4">Puntos</h3>
-      <p class="text-center">Conoce puntos de reciclaje en la ciudad.</p>
-      <app-mapa></app-mapa>
+      <app-listar-capacitaciones></app-listar-capacitaciones>
     </ng-container>
 
   </main>

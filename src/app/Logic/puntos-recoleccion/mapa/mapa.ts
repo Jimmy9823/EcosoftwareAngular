@@ -16,7 +16,7 @@ export class Mapa implements OnInit, AfterViewInit {
   constructor(private sanitizer: DomSanitizer) {
     // IMPORTANTE: Sanitizar URL para que Angular deje cargarla
     this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      'http://localhost/Eco_Software-/views/PuntosReciclaje.php'
+      'http://localhost/AQUI%20ES/Eco_Software-/views/PuntosReciclaje.php'
     );
   }
 
