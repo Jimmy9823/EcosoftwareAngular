@@ -130,7 +130,7 @@ export class Service {
  getSolicitudesPorLocalidadFactory(): Observable<SolicitudesPorLocalidad[]> {
   return this.http.get<{ [key: string]: number }>(`${this.api}/graficas/localidades`).pipe(
     map(res => {
-      // res = { "Suba": 2, "Kennedy": 2, ... }
+      // res "respuesta"= { "Suba": 2, "Kennedy": 2, ... } Convertir a array de objetos
       return Object.keys(res).map(localidad => ({
         localidad,
         cantidad: res[localidad]
