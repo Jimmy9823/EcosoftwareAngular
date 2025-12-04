@@ -1,0 +1,174 @@
+.crud-puntos .modal-backdrop{
+  position: fixed;
+  inset: 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,0.4);
+  z-index: 1050;
+}
+.crud-puntos .modal-content{
+  width: 640px;
+  max-width: 96%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.crud-puntos table td, .crud-puntos table th{vertical-align: middle}
+
+.crud-puntos .modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e9ecef;
+}
+.crud-puntos .modal-body{padding: 12px 16px; background: #fff}
+.crud-puntos .modal-footer{padding: 10px 16px; background: #fff; border-top: 1px solid #e9ecef; display:flex; justify-content:flex-end}
+.crud-puntos .modal-title{font-weight:600}
+.crud-puntos .btn-close{border:0; background:transparent}
+.crud-puntos .form-label.small{font-size:0.8rem; color:#495057}
+.crud-puntos .modal-content.shadow-sm{box-shadow: 0 6px 18px rgba(0,0,0,0.08)}
+
+.crud-puntos .list-group-item{border: none; border-bottom: 1px solid #f1f1f1}
+.crud-puntos .list-group-item:last-child{border-bottom: none}
+
+.crud-puntos .suggestions{
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 2000;
+  max-height: 220px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+.crud-puntos .suggestions .list-group-item{cursor:pointer; padding:8px 10px}
+.crud-puntos .suggestions .list-group-item:hover{background:#f8f9fa}
+
+/* Action buttons style to match solicitudes */
+.crud-puntos .action-buttons{display:flex; gap:8px}
+
+/* Icon style buttons (rounded squares) */
+.crud-puntos .btn-action {
+  min-width: 44px;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid rgba(16,24,40,0.04);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all .18s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+  background-clip: padding-box;
+}
+
+/* Icon size and alignment */
+.crud-puntos .btn-action i{ font-size:16px; display:inline-block; }
+
+/* Pastel backgrounds with colored icons like the attachment */
+.crud-puntos .btn-edit {
+  background: #e9f9ef; /* pale green */
+  color: #059669; /* green icon/text */
+  border-color: #c7f0d7;
+}
+.crud-puntos .btn-edit:hover{ background:#dff3e8; transform: translateY(-2px); }
+
+.crud-puntos .btn-delete{
+  background: #fff0f2; /* pale pink */
+  color: #dc2626; /* red icon/text */
+  border-color: #ffd6d9;
+}
+.crud-puntos .btn-delete:hover{ box-shadow:0 8px 20px rgba(220,38,38,0.12); transform: translateY(-2px); }
+
+.crud-puntos .btn-view{
+  background: #eef4ff; /* pale blue */
+  color: #2563eb; /* blue icon/text */
+  border-color: #d7e6ff;
+}
+.crud-puntos .btn-view:hover{ background:#e3ecff; transform: translateY(-2px); }
+
+.crud-puntos .action-buttons .ms-2{margin-left:0.5rem}
+
+/* When the text label is hidden (small screens), buttons look square; when shown, they expand */
+.crud-puntos .btn-action .d-none.d-md-inline{ display: inline-block; }
+.crud-puntos .btn-action span { line-height:1; }
+
+/* View header styles */
+.crud-puntos .view-header{height:86px; display:flex; align-items:flex-end}
+.crud-puntos .view-header-inner{width:100%; display:flex; align-items:center; gap:12px; padding:12px 18px}
+.crud-puntos .view-title{flex:1}
+.crud-puntos .view-title h5{color:#0f172a}
+.crud-puntos .view-header .btn-close{margin-left:auto}
+
+.crud-puntos .material-badge{display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; font-weight:700}
+.crud-puntos .material-badge i{font-size:14px}
+
+/* color variants */
+.crud-puntos .bg-plastico{background: linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%)}
+.crud-puntos .bg-vidrio{background: linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%)}
+.crud-puntos .bg-organico{background: linear-gradient(135deg,#ecfdf5 0%,#bbf7d0 100%)}
+.crud-puntos .bg-papel{background: linear-gradient(135deg,#fff7ed 0%,#ffedd5 100%)}
+.crud-puntos .bg-default{background: linear-gradient(135deg,#eef2ff 0%,#e0e7ff 100%)}
+
+.crud-puntos .bg-metal{background: linear-gradient(135deg,#ff7b77 0%,#ff4136 100%)}
+
+.crud-puntos .view-header .material-badge.bg-white{background: rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.04)}
+
+.crud-puntos .raw-json{background:#0f172a08; border:1px solid rgba(15,23,42,0.04); padding:12px; border-radius:8px; max-height:220px; overflow:auto; font-size:12px}
+
+/* color helper classes provided by user */
+.crud-puntos .papel-color { color: #0074d9; }
+.crud-puntos .metal-color { color: #ff4136; }
+.crud-puntos .plastico-color { color: #ffdc00; }
+.crud-puntos .vidrio-color { color: #0b7417; }
+
+/* Card layout for compact mode */
+.crud-puntos .punto-card{
+  border-radius:16px;
+  overflow:hidden;
+  color: #0f172a;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+  border: 1px solid rgba(15,23,42,0.04);
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+.crud-puntos .punto-card:hover{ transform: translateY(-6px); box-shadow: 0 22px 50px rgba(15,23,42,0.10); }
+.crud-puntos .punto-card .card-body{
+  padding:16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+/* Elegant, softer color treatments for cards */
+.crud-puntos .punto-card.bg-papel{ background: #ffffff; color: #0f172a; border: 2px solid #0074d9; box-shadow: 0 10px 28px rgba(11,83,166,0.06); }
+.crud-puntos .punto-card.bg-plastico{ background: #ffffff; color: #0f172a; border: 2px solid #ffdc00; box-shadow: 0 10px 28px rgba(255,214,102,0.06); }
+.crud-puntos .punto-card.bg-vidrio{ background: #ffffff; color: #0f172a; border: 2px solid #0b7417; box-shadow: 0 10px 28px rgba(7,107,34,0.06); }
+.crud-puntos .punto-card.bg-organico{ background: #ffffff; color: #0f172a; border: 2px solid #0b7417; box-shadow: 0 10px 28px rgba(7,107,34,0.04); }
+.crud-puntos .punto-card.bg-metal{ background: #ffffff; color: #0f172a; border: 2px solid #ff4136; box-shadow: 0 10px 28px rgba(255,65,54,0.06); }
+.crud-puntos .punto-card.bg-default{ background: #ffffff; color: #0f172a; border: 1px solid rgba(15,23,42,0.04); }
+
+/* Buttons inside colored cards: more subtle, rounded, smaller */
+.crud-puntos .punto-card .btn-action{
+  background: rgba(255,255,255,0.9);
+  color: #0f172a;
+  border: 1px solid rgba(15,23,42,0.04);
+  box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.crud-puntos .punto-card .btn-action:hover{ transform: translateY(-2px); box-shadow: 0 10px 22px rgba(15,23,42,0.06); }
+.crud-puntos .punto-card .btn-action i{ color: inherit; }
+
+/* Ensure card text uses the card's color unless overridden */
+.crud-puntos .punto-card .card-body{ color: inherit; font-weight: 600; }
+.crud-puntos .punto-card .card-title{ font-weight: 700; font-size:1.05rem; letter-spacing:0.2px; }
+.crud-puntos .punto-card .btn-action{ height:36px; min-width:36px; border-radius:10px; padding:0 10px; }

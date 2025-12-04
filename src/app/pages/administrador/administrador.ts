@@ -1,6 +1,6 @@
 import { Registro } from './../../auth/registro/registro';
 // src/app/usuario/administrador/administrador.ts
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../Services/usuario.service';
 import { UsuarioModel } from '../../Models/usuario';
@@ -15,6 +15,11 @@ import { ListarTabla } from '../../Logic/recolecciones-comp/listar-tabla/listar-
 import { GraficoUsuariosLocalidad } from '../../Logic/usuarios.comp/grafica-usuarios-localidad/grafica-usuarios-localidad';
 import { GraficoUsuariosBarrios } from '../../Logic/usuarios.comp/grafica-usuarios-barrio/grafica-usuarios-barrio';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
+import { Mapa } from '../../Logic/puntos-recoleccion/mapa/mapa';
+import { PuntosIframe } from '../../shared/puntos-iframe/puntos-iframe';
+import { CrudPuntos } from '../../Logic/puntos-recoleccion/crud-puntos/crud-puntos';
+import { PuntosService } from '../../Services/puntos-reciclaje.service';
+import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
 import {SolicitudesLocalidadChartComponent} from "../../Logic/solicitudes-comp/solicitudes-localidad-chart-component/solicitudes-localidad-chart-component";
 import { Boton } from '../../shared/botones/boton/boton';
 import { Titulo } from '../../shared/titulo/titulo';
@@ -23,7 +28,7 @@ import { FormComp } from '../../shared/form/form.comp/form.comp';
 
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent,GraficoUsuariosLocalidad, GraficoUsuariosBarrios ,Usuario, ListarTabla, Solcitudes, CapacitacionesLista, CargaMasiva,BarraLateral,Boton,Titulo,Modal,FormComp],
+  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent,GraficoUsuariosLocalidad, GraficoUsuariosBarrios ,Usuario, ListarTabla, Solcitudes, CapacitacionesLista, CargaMasiva,BarraLateral,Boton,Titulo,Modal,FormComp, PuntosIframe, CrudPuntos],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
@@ -44,17 +49,37 @@ export class Administrador {
 
   menuAbierto = true;
   perfilMenuAbierto = false;
+  puntos: PuntoReciclaje[] = [];
 
   // botones de alternar vistas
   mostrarNuevoUsuario = false;
   capacitaciones = false;
   registro: any;
 
-  constructor(
+  @ViewChild(CrudPuntos) puntosCrud!: CrudPuntos;
+
+    constructor(
     private usuarioService: UsuarioService,
     private router: Router,
-    private authService : AuthService
+    private authService : AuthService,
+    private puntosService: PuntosService
   ) {}
+
+  cargarPuntos(): void {
+    this.puntosService.obtenerTodos().subscribe({
+      next: (response) => {
+        const data = Array.isArray(response) ? response : response.data;
+        this.puntos = (data || []).map((p: any) => ({
+          ...p,
+          latitud: p.latitud !== null && p.latitud !== undefined ? parseFloat(String(p.latitud)) : null,
+          longitud: p.longitud !== null && p.longitud !== undefined ? parseFloat(String(p.longitud)) : null
+        }));
+      },
+      error: (err) => {
+        console.error('Error al cargar puntos:', err);
+      }
+    });
+  }
 
   menu: { 
   vista: 'panel'|'usuarios'|'solicitudes'|'recolecciones'|'puntos'|'capacitaciones'|'noticias',
@@ -104,6 +129,9 @@ RegistroAdmin() {
   ngOnInit(): void {
     this.vistaActual = 'panel';
     this.consultarUsuarios();
+
+    // Cargar puntos para el mapa cuando el admin abra la sección
+    this.cargarPuntos();
 
     // 🔸 Recuperar usuario logueado
     this.usuarioActual = this.usuarioService.obtenerUsuarioActual();
@@ -179,5 +207,13 @@ RegistroAdmin() {
 
   togglePerfilMenu() {
     this.perfilMenuAbierto = !this.perfilMenuAbierto;
+  }
+
+  openCreateFromTitulo(): void {
+    try {
+      if (this.puntosCrud) this.puntosCrud.openCreate();
+    } catch (e) {
+      console.error('No se pudo abrir modal de crear punto:', e);
+    }
   }
 }

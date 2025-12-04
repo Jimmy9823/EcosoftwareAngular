@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../Services/usuario.service'; // ajusta ruta según tu estructura
 import { COMPARTIR_IMPORTS } from '../../shared/imports';
@@ -7,7 +7,11 @@ import { CardsSolicitud } from '../../Logic/solicitudes-comp/cards-solicitud/car
 import { RouterLink } from '@angular/router';
 import { CardsRecoleccionCiudadano } from '../../Logic/recolecciones-comp/cards-recoleccion-ciudadano/cards-recoleccion-ciudadano';
 import { Mapa } from '../../Logic/puntos-recoleccion/mapa/mapa';
+import { PuntosService } from '../../Services/puntos-reciclaje.service';
+import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
+import { PuntosIframe } from '../../shared/puntos-iframe/puntos-iframe';
+import { CrudPuntos } from '../../Logic/puntos-recoleccion/crud-puntos/crud-puntos';
 import { Boton } from '../../shared/botones/boton/boton';
 import { Titulo } from '../../shared/titulo/titulo';
 import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitaciones/listar-capacitaciones';
@@ -15,7 +19,7 @@ import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitac
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, CardsRecoleccionCiudadano,BarraLateral,Titulo,CapacitacionesLista],
+  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, CardsRecoleccionCiudadano,BarraLateral,Titulo,CapacitacionesLista, PuntosIframe, CrudPuntos],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })
@@ -23,24 +27,50 @@ export class Ciudadano {
 
   menuAbierto: boolean = true;       
   perfilMenuAbierto: boolean = false; 
-  vistaActual: 'panel' | 'solicitudes' | 'recolecciones' | 'capacitaciones' | 'noticias' = 'panel'; 
+  vistaActual: 'panel' | 'solicitudes' | 'recolecciones' | 'capacitaciones' | 'noticias' | 'puntos' = 'panel'; 
   mostrarNuevaSolicitud = false;
   nombreUsuario: string = localStorage.getItem('nombreUsuario') ?? 'Usuario';
   nombreRol: string = localStorage.getItem('nombreRol') ?? 'Rol';
+  puntos: PuntoReciclaje[] = [];
+  mostrarPuntos: boolean = false;
 
   constructor(
     private usuarioService: UsuarioService,
-    private router: Router
+    private router: Router,
+    private puntosService: PuntosService
   ) {}
 
+  @ViewChild(CrudPuntos) puntosCrud!: CrudPuntos;
+
+  ngOnInit(): void {
+    this.cargarPuntos();
+  }
+
+  cargarPuntos(): void {
+    this.puntosService.obtenerTodos().subscribe({
+      next: (response) => {
+        const data = Array.isArray(response) ? response : response.data;
+        this.puntos = (data || []).map((p: any) => ({
+          ...p,
+          latitud: p.latitud !== null && p.latitud !== undefined ? parseFloat(String(p.latitud)) : null,
+          longitud: p.longitud !== null && p.longitud !== undefined ? parseFloat(String(p.longitud)) : null
+        }));
+      },
+      error: (err) => {
+        console.error('Error al cargar puntos:', err);
+      }
+    });
+  }
+
   menu: { 
-  vista: 'panel' | 'solicitudes' | 'recolecciones' | 'capacitaciones' | 'noticias',
+  vista: 'panel' | 'solicitudes' | 'recolecciones' | 'capacitaciones' | 'noticias' | 'puntos',
   label: string,
   icon: string
 }[] = [
   { vista: 'panel', label: 'Panel de Control', icon: 'bi bi-speedometer2' },
   { vista: 'solicitudes', label: 'Solicitudes', icon: 'bi bi-bar-chart-line' },
   { vista: 'recolecciones', label: 'Recolecciones', icon: 'bi bi-truck' },
+  { vista: 'puntos', label: 'Puntos de Reciclaje', icon: 'bi bi-geo-alt' },
   { vista: 'capacitaciones', label: 'Capacitaciones', icon: 'bi bi-mortarboard-fill' },
   { vista: 'noticias', label: 'Noticias', icon: 'bi bi-newspaper' },
 ];
@@ -49,6 +79,18 @@ export class Ciudadano {
 
   toggleVista(): void {
     this.mostrarNuevaSolicitud = !this.mostrarNuevaSolicitud;
+  }
+
+  togglePuntos(): void {
+    this.mostrarPuntos = !this.mostrarPuntos;
+    // if we just opened the registrar panel, request the child to open the create form
+    if (this.mostrarPuntos) {
+      setTimeout(() => { try { this.puntosCrud?.openCreate(); } catch(e) { console.warn('openCreate failed', e); } }, 50);
+    }
+  }
+
+  openMyPointsFromPage(): void {
+    try { this.puntosCrud?.openMyPoints(); } catch (e) { console.warn('puntosCrud not ready', e); }
   }
 
   toggleMenu(): void {
@@ -61,7 +103,7 @@ export class Ciudadano {
   // ========================
   // CAMBIAR VISTA
   // ========================
-  cambiarVista(vista: 'panel'|'solicitudes'|'recolecciones'|'capacitaciones'|'noticias') {
+  cambiarVista(vista: 'panel'|'solicitudes'|'recolecciones'|'capacitaciones'|'noticias'|'puntos') {
     this.vistaActual = vista;
   }
 
