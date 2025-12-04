@@ -224,3 +224,16 @@
     flex-direction: column;
   }
 }
+
+
+
+
+.alertas-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+  width: 300px;
+}
+
+

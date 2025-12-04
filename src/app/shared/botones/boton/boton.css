@@ -13,8 +13,15 @@
   background-color: white !important;
 }
 
+.btn-outline-custom-success:hover {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  color: white !important;
+  border-color: #16a34a !important;
+  transform: scale(1.03);
+}
+
 /* ================================
-   2. Hover: fondo #16a34a y texto blanco
+   2.  fondo #16a34a y texto blanco
    ================================ */
 .hover-custom-success-filled:hover {
   background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
@@ -22,6 +29,26 @@
   border-color: #16a34a !important;
   transform: scale(1.03);
 }
+
+/* ================================
+   1. Estado normal: outline rojo (#dc2626)
+   ================================ */
+.btn-outline-custom-danger {
+  color: #dc2626 !important;              
+  border: 2px solid #dc2626 !important;    
+  background-color: white !important;      
+  transition: all 0.25s ease-in-out;
+}
+
+
+.btn-outline-custom-danger:hover {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: white !important;                
+  border-color: #b91c1c !important;       
+  transform: scale(1.03);  
+                  
+}
+
 
 
 /* ========================================================
@@ -102,4 +129,22 @@
   border-color: #22c55e !important;
   color: #064e3b !important;
   transform: scale(1.05);
+}
+
+/* ============================
+   CANCELAR – GRIS PASTEL
+============================ */
+.btn-cancelar {
+  background-color: #f3f4f6 !important;   
+  color: #4b5563 !important;              
+  border: 2px solid #e5e7eb !important;   
+  transition: all 0.2s ease-in-out;
+  border-radius: 8px;
+}
+
+.btn-cancelar:hover {
+  background-color: #e5e7eb !important;   
+  border-color: #9ca3af !important;       
+  color: #374151 !important;              
+  transform: scale(1.04);                 
 }

@@ -37,17 +37,12 @@
       <div class="modal-body">
         <ng-content></ng-content>
       </div>
+      
 
-      <!-- FOOTER -->
-<div class="modal-footer" *ngIf="cancelText || confirmText">
-  <button class="btn btn-secondary" (click)="close()">
-    {{ cancelText }}
-  </button>
-
-  <button class="btn btn-primary" [disabled]="disableConfirm" (click)="confirm()">
-    {{ confirmText }}
-  </button>
-</div>
+       <!-- FOOTER LIBRE -->
+      <div class="modal-footer">
+        <ng-content select="[modal-footer]"></ng-content>
+      </div>
 
 
     </div>

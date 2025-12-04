@@ -116,17 +116,25 @@ export class UsuarioService {
     );
   }
 
-  eliminarFisico(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrlSpringboot}/${id}`).pipe(
-      catchError(err => throwError(() => err))
-    );
-  }
+ eliminarFisico(id: number): Observable<string> {
+  return this.http.delete<string>(`${this.apiUrlSpringboot}/${id}`, {
+    responseType: 'text' as 'json'
+  }).pipe(
+    catchError(err => throwError(() => err))
+  );
+}
 
-  eliminarLogico(id: number): Observable<string> {
-    return this.http.patch<string>(`${this.apiUrlSpringboot}/eliminar/${id}`, null).pipe(
-      catchError(err => throwError(() => err))
-    );
-  }
+
+
+ 
+eliminarLogico(id: number): Observable<string> {
+  return this.http.patch<string>(`${this.apiUrlSpringboot}/eliminar/${id}`, null, {
+    responseType: 'text' as 'json'
+  }).pipe(
+    catchError(err => throwError(() => err))
+  );
+}
+
 
   generarReporte(): Observable<UsuarioModel[]> {
     return this.http.get<UsuarioModel[]>(`${this.apiUrlSpringboot}/export/excel`).pipe(

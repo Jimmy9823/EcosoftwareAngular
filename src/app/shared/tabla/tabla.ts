@@ -36,6 +36,7 @@ export class Tabla {
 
   // ACCIONES DINÁMICAS
     acciones = [
+      
   {
     icon: 'bi-pencil',
     texto: '',

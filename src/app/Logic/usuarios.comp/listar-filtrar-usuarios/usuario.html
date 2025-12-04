@@ -1,4 +1,15 @@
+<!-- ALERTAS BOOSTRAP FIJAS ARRIBA A LA DERECHA -->
+<div class="alertas-container">
+  <div *ngIf="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ mensaje }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
 
+  <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+</div>
 
 
 <div class="tabla-container">
@@ -12,53 +23,107 @@
       <option value="documento">Documento</option>
     </select>
 
-    <input *ngIf="criterioSeleccionado==='nombre'" [(ngModel)]="filtroNombre" placeholder="Buscar por nombre">
-    <input *ngIf="criterioSeleccionado==='correo'" [(ngModel)]="filtroCorreo" placeholder="Buscar por correo">
-    <input *ngIf="criterioSeleccionado==='documento'" [(ngModel)]="filtroDocumento" placeholder="Buscar por documento">
+    <input
+      *ngIf="criterioSeleccionado === 'nombre'"
+      [(ngModel)]="filtroNombre"
+      placeholder="Buscar por nombre"
+    />
+
+    <input
+      *ngIf="criterioSeleccionado === 'correo'"
+      [(ngModel)]="filtroCorreo"
+      placeholder="Buscar por correo"
+    />
+
+    <input
+      *ngIf="criterioSeleccionado === 'documento'"
+      [(ngModel)]="filtroDocumento"
+      placeholder="Buscar por documento"
+    />
 
     <div class="botones">
-  <button class="filtrar" (click)="aplicarFiltroDesdeForm()"><i class="bi bi-funnel"></i> Filtrar</button>
-  <button class="limpiar" (click)="limpiarFiltro()"><i class="bi bi-eraser"></i> Limpiar</button>
-  
+      <button class="filtrar" (click)="aplicarFiltroDesdeForm()">
+        <i class="bi bi-funnel"></i> Filtrar
+      </button>
 
-</div>
+      <button class="limpiar" (click)="limpiarFiltro()">
+        <i class="bi bi-eraser"></i> Limpiar
+      </button>
+    </div>
   </div>
 
   <!-- Tabla -->
   <app-tabla
-  [columnas]="columnasUsuarios"
-  [data]="usuarios"
-  [cellTemplates]="cellTemplatesUsuarios"
-  titulo="Usuarios"
-  (descargar)="abrirModalReportes()"
-  (editar)="activarEdicion($event)"
-  (eliminar)="eliminarUsuario($event.idUsuario!)">
-</app-tabla>
+    [columnas]="columnasUsuarios"
+    [data]="usuarios"
+    [cellTemplates]="cellTemplatesUsuarios"
+    titulo="Usuarios"
+    (descargar)="abrirModalReportes()"
+    (eliminar)="abrirModalEliminar($event)"
+
+  >
+  </app-tabla>
+
+  
 
   <div *ngIf="usuarios.length === 0 && !cargando" class="mensaje info">
     No hay usuarios registrados.
   </div>
 </div>
 
-<!--Modal de reportes-->
+<!-- Modal de reportes -->
 <app-modal
   #modalReportes
   [title]="'Reportes de usuarios'"
-  [headerColor]="'#4CAF50'"
-  [cancelText]="'Cancelar'"
-
+  [headerColor]="'#6c757d'"
   [isOpen]="false"
 >
-<div >Seleccione el formato de reporte a descargar:</div>
-  <div class="d-flex gap-2">
+  <div class="mb-3">
+    Seleccione el formato de reporte a descargar:
+  </div>
+
+  <div class="d-flex gap-2 justify-content-center flex-wrap">
     <app-boton
       *ngFor="let btn of botonesReporte"
       [texto]="btn.texto"
       [icono]="btn.icono"
       [color]="btn.color"
       (click)="btn.accion()"
-    >
-    </app-boton>
+    ></app-boton>
   </div>
 </app-modal>
+
+<!-- ============================== -->
+<!-- MODAL ELIMINAR USUARIO -->
+<!-- ============================== -->
+<app-modal
+  #modalEliminar
+  [title]="'Eliminar usuario'"
+  [headerColor]="'#d9534f'"
+  [isOpen]="false"
+>
+  <div class="p-2">
+    <p>
+      ¿Estás seguro que deseas eliminar al usuario 
+      <strong>{{ usuarioSeleccionado?.nombre }}</strong>?
+    </p>
+  </div>
+
+  <!-- FOOTER LIBRE CON BOTONES DINÁMICOS -->
+  <ng-container footer>
+    <div class="d-flex justify-content-end gap-2">
+      <app-boton
+        *ngFor="let btn of accionesEliminarFisico"
+        [texto]="btn.texto"
+        [icono]="btn.icono"
+        [color]="btn.color"
+        size="sm"
+        (click)="btn.accion()"
+      >
+      </app-boton>
+    </div>
+  </ng-container>
+
+</app-modal>
+
 

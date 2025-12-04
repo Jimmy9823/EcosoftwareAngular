@@ -1,248 +1,300 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { UsuarioService } from '../../../Services/usuario.service'
-import { UsuarioModel } from '../../../Models/usuario'
-import { COMPARTIR_IMPORTS } from '../../../shared/imports'
-import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla'
-import { Boton } from '../../../shared/botones/boton/boton'
-import { Modal } from '../../../shared/modal/modal'
-import { FormComp } from "../../../shared/form/form.comp/form.comp";
-import { FormGeneral } from "../../../shared/form/form-general/form-general";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { UsuarioService } from '../../../Services/usuario.service';
+import { UsuarioModel } from '../../../Models/usuario';
+import { COMPARTIR_IMPORTS } from '../../../shared/imports';
+import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla';
+import { Boton } from '../../../shared/botones/boton/boton';
+import { Modal } from '../../../shared/modal/modal';
 
 @Component({
   selector: 'app-usuario-tabla',
   templateUrl: './usuario.html',
+  styleUrls: ['./usuario.css'],
   imports: [COMPARTIR_IMPORTS, Tabla, Boton, Modal],
-  styleUrls: ['./usuario.css']
 })
 export class Usuario implements OnInit {
-  usuarios: UsuarioModel[] = []
-  editandoId: number | null = null
-  usuarioEditado: Partial<UsuarioModel> = {}
-  cargando = false
-  mensaje = ''
-  error = ''
-  // 🔹 REFERENCIA AL MODAL
+
+  usuarios: UsuarioModel[] = [];
+  cargando = false;
+
+  editandoId: number | null = null;
+  usuarioEditado: Partial<UsuarioModel> = {};
+
+  mensaje = '';
+  error = '';
+
   @ViewChild('modalReportes') modalReportes!: Modal;
+  @ViewChild('modalEliminar') modalEliminar!: Modal;
+  @ViewChild('modalEliminarFisico') modalEliminarFisico!: Modal;
 
-  // 🔸 Filtros
-  filtroNombre: string = ''
-  filtroCorreo: string = ''
-  filtroDocumento: string = ''
-  criterioSeleccionado: string = 'nombre' // valor inicial por defecto
 
+  usuarioSeleccionado: UsuarioModel | null = null;
+
+  // Filtros
+  criterioSeleccionado = 'nombre';
+  filtroNombre = '';
+  filtroCorreo = '';
+  filtroDocumento = '';
+
+  // Roles
   roles = [
     { id: 1, nombre: 'Administrador' },
     { id: 2, nombre: 'Ciudadano' },
     { id: 3, nombre: 'Empresa' },
     { id: 4, nombre: 'Reciclador' }
-  ]
+  ];
 
   columnasUsuarios: ColumnaTabla[] = [
-  { campo: 'idUsuario', titulo: 'ID' },
-  { campo: 'nombre', titulo: 'Nombre' },
-  { campo: 'correo', titulo: 'Correo' },
-  { campo: 'telefono', titulo: 'Teléfono' },
-  { campo: 'rolId', titulo: 'Rol' },
-  { campo: 'estado', titulo: 'Estado' }
-];
+    { campo: 'idUsuario', titulo: 'ID' },
+    { campo: 'nombre', titulo: 'Nombre' },
+    { campo: 'correo', titulo: 'Correo' },
+    { campo: 'telefono', titulo: 'Teléfono' },
+    { campo: 'rolId', titulo: 'Rol' },
+    { campo: 'estado', titulo: 'Estado' }
+  ];
 
-cellTemplatesUsuarios = {
-  rolId: (item: UsuarioModel) => this.obtenerNombreRol(item.rolId),
-  estado: (item: UsuarioModel) => {
-    const clase = item.estado ? 'activo' : 'inactivo';
-    const texto = item.estado ? 'Activo' : 'Inactivo';
-    return `<span class="${clase}">${texto}</span>`;
-  }
-};
+  cellTemplatesUsuarios = {
+    rolId: (u: UsuarioModel) => this.obtenerNombreRol(u.rolId),
+    estado: (u: UsuarioModel) => {
+      const clase = u.estado ? 'activo' : 'inactivo';
+      const texto = u.estado ? 'Activo' : 'Inactivo';
+      return `<span class="${clase}">${texto}</span>`;
+    }
+  };
 
-
-  constructor(private usuarioService: UsuarioService) {}
-
-  ngOnInit(): void {
-    this.cargarUsuarios()
-  }
-
-  // Botones del modal (PDF / Excel)
+  // ===============================
+  // BOTONES DEL MODAL DE REPORTES
+  // ===============================
   botonesReporte = [
     {
       texto: 'PDF',
       icono: 'bi-file-earmark-pdf',
-      color: 'export-pdf',
+      color: 'outline-custom-danger',
       accion: () => this.exportarPDF()
     },
     {
       texto: 'Excel',
       icono: 'bi-file-earmark-excel',
-      color: 'export-excel',
+      color: 'outline-custom-success',
       accion: () => this.exportarExcel()
     }
   ];
 
+  // ===============================
+  // BOTONES DEL MODAL DE ACTIVAR
+  // ===============================
+  accionesEliminar = [
+    {
+      texto: 'Cancelar',
+      icono: 'bi-x-circle',
+      color: 'btn-cancelar',
+      accion: () => this.cerrarModalEliminar()
+    },
+    {
+      texto: 'Confirmar',
+      icono: 'bi-check-circle',
+      color: 'btn-confirmar',
+      accion: () => this.confirmarEliminacion()
+    }
+  ];
+
+  // ===============================
+  // BOTONES DEL MODAL DE ELIMINAR
+  // ===============================
+accionesEliminarFisico = [
+  {
+    texto: 'Cancelar',
+    icono: 'bi-x-circle',
+    color: 'cancelar',
+    hover: 'btn-cancelar',
+    accion: () => this.cerrarModalEliminar()
+  },
+  {
+    texto: 'Eliminar',
+    icono: 'bi-trash',
+    color: 'pastel-danger',
+    hover: 'btn-pastel-danger',
+
+    accion: () => this.confirmarEliminacionFisica()
+  }
+];
+
+
+
+  constructor(private usuarioService: UsuarioService) {}
+
+  ngOnInit(): void {
+    this.cargarUsuarios();
+  }
+
+  // ===============================
+  // MODAL ELIMINAR
+  // ===============================
+
+  abrirModalReportes(): void {
+  this.modalReportes.isOpen = true;
+}
+
+  abrirModalEliminar(usuario: UsuarioModel): void {
+    this.usuarioSeleccionado = usuario;
+    this.modalEliminar.isOpen = true;
+  }
+
   
 
-  // 🔹 ABRIR MODAL DE REPORTES
-  abrirModalReportes(): void {
-    if (this.modalReportes) {
-      this.modalReportes.isOpen = true;
-    }
+  confirmarEliminacion(): void {
+    if (!this.usuarioSeleccionado?.idUsuario) return;
+
+    this.eliminarUsuario(this.usuarioSeleccionado.idUsuario);
+    this.cerrarModalEliminar();
   }
+abrirModalEliminarFisico(usuario: UsuarioModel): void {
+  this.usuarioSeleccionado = usuario;
+  this.modalEliminarFisico.isOpen = true;
+}
+
+cerrarModalEliminar(): void {
+  this.modalEliminar.close();
+}
 
 
-  // ========================
-  // CONSULTAR USUARIOS
-  // ========================
+confirmarEliminacionFisica(): void {
+  if (!this.usuarioSeleccionado?.idUsuario) return;
+
+  this.usuarioService.eliminarFisico(this.usuarioSeleccionado.idUsuario).subscribe({
+    next: () => {
+      this.mensaje =  'Usuario eliminado permanentemente';
+      this.cargarUsuarios();
+      this.cerrarModalEliminar();
+
+      setTimeout(() => (this.mensaje = ''), 2500);
+    },
+    error: () => {
+      this.error = 'Error al eliminar el usuario';
+      setTimeout(() => (this.error = ''), 2500);
+    }
+  });
+}
+
+  
+
+  
+
+  // ===============================
+  // CARGAR USUARIOS
+  // ===============================
   cargarUsuarios(): void {
-    this.cargando = true
+    this.cargando = true;
+
     this.usuarioService.listar().subscribe({
       next: (data) => {
-        this.usuarios = data
-        this.cargando = false
+        this.usuarios = data;
+        this.cargando = false;
       },
-      error: (err) => {
-        console.error('Error al cargar usuarios:', err)
-        this.error = 'Error al cargar usuarios'
-        this.cargando = false
-        setTimeout(() => this.error = '', 2500);
+      error: () => {
+        this.error = 'Error al cargar usuarios';
+        this.cargando = false;
+        setTimeout(() => (this.error = ''), 2500);
       }
-    })
+    });
   }
 
-  // ========================
-  // APLICAR FILTRO
-  // ========================
+  // ===============================
+  // FILTROS
+  // ===============================
   aplicarFiltroDesdeForm(): void {
-    const criterio = this.criterioSeleccionado
-    let valor = ''
-    if (criterio === 'nombre') valor = this.filtroNombre
-    else if (criterio === 'correo') valor = this.filtroCorreo
-    else if (criterio === 'documento') valor = this.filtroDocumento
+    const valor = {
+      nombre: this.filtroNombre,
+      correo: this.filtroCorreo,
+      documento: this.filtroDocumento
+    }[this.criterioSeleccionado];
 
-    if (!valor || !valor.trim()) {
-      this.cargarUsuarios()
-      return
+    if (!valor?.trim()) {
+      this.cargarUsuarios();
+      return;
     }
 
-    this.cargando = true
-    this.usuarioService.filtrar(criterio, valor).subscribe({
+    this.cargando = true;
+
+    this.usuarioService.filtrar(this.criterioSeleccionado, valor).subscribe({
       next: (usuariosFiltrados) => {
-        this.usuarios = usuariosFiltrados
-        this.mensaje = `${usuariosFiltrados.length} usuario(s) encontrado(s)`
-        this.error = ''
-        this.cargando = false
-        setTimeout(() => (this.mensaje = ''), 2500)
+        this.usuarios = usuariosFiltrados;
+        this.mensaje = `${usuariosFiltrados.length} usuario(s) encontrado(s)`;
+        this.cargando = false;
+        setTimeout(() => (this.mensaje = ''), 2500);
       },
-      error: (err) => {
-        console.error('Error al filtrar usuarios:', err)
-        this.error = 'Error al filtrar usuarios'
-        this.mensaje = ''
-        this.cargando = false
-        setTimeout(() => {
-          this.mensaje = ''
-          this.error = ''
-        }, 2500)
+      error: () => {
+        this.error = 'Error al filtrar usuarios';
+        this.cargando = false;
+        setTimeout(() => (this.error = ''), 2500);
       }
-    })
+    });
   }
 
-  // ========================
-  // LIMPIAR FILTRO
-  // ========================
   limpiarFiltro(): void {
-    this.filtroNombre = ''
-    this.filtroCorreo = ''
-    this.filtroDocumento = ''
-    this.cargarUsuarios()
+    this.filtroNombre = '';
+    this.filtroCorreo = '';
+    this.filtroDocumento = '';
+    this.cargarUsuarios();
   }
 
-  // ========================
-  // EXPORTAR PDF
-  // ========================
+   // ===============================
+  // EXPORTAR REPORTES
+  // ===============================
   exportarPDF(): void {
     const filtros = {
       nombre: this.filtroNombre || undefined,
       correo: this.filtroCorreo || undefined,
       documento: this.filtroDocumento || undefined
-    }
+    };
 
     this.usuarioService.descargarPDF(filtros).subscribe((data: Blob) => {
-      const blob = new Blob([data], { type: 'application/pdf' })
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = 'usuarioReporte.pdf'
-      link.click()
-    })
+      const url = URL.createObjectURL(new Blob([data], { type: 'application/pdf' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'usuarioReporte.pdf';
+      link.click();
+    });
   }
 
-  // ========================
-  // EXPORTAR EXCEL
-  // ========================
   exportarExcel(): void {
     const filtros = {
       nombre: this.filtroNombre || undefined,
       correo: this.filtroCorreo || undefined,
       documento: this.filtroDocumento || undefined
-    }
+    };
 
     this.usuarioService.descargarExcel(filtros).subscribe((data: Blob) => {
-      const blob = new Blob([data], { type: 'application/vnd.ms-excel' })
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = 'usuarioReporte.xlsx'
-      link.click()
-    })
+      const url = URL.createObjectURL(new Blob([data], { type: 'application/vnd.ms-excel' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'usuarioReporte.xlsx';
+      link.click();
+    });
   }
 
-  // ========================
-  // EDICIÓN / ELIMINACIÓN (ya existente)
-  // ========================
-  activarEdicion(usuario: UsuarioModel): void {
-    this.editandoId = usuario.idUsuario!
-    this.usuarioEditado = { ...usuario }
-  }
-
-  cancelarEdicion(): void {
-    this.editandoId = null
-    this.usuarioEditado = {}
-  }
-
-  guardarCambios(usuario: UsuarioModel): void {
-    if (!this.editandoId) return
-
-    this.usuarioService.actualizar(this.editandoId, this.usuarioEditado as UsuarioModel).subscribe({
-      next: () => {
-        this.mensaje = 'Usuario actualizado correctamente'
-        this.cancelarEdicion()
-        this.cargarUsuarios()
-        setTimeout(() => this.mensaje = '', 2500);
-      },
-      error: (err) => {
-        console.error('Error al actualizar:', err)
-        this.error = 'No se pudo actualizar el usuario'
-      }
-    })
-  }
-
+  // ===============================
+  // EDICIÓN Y ELIMINACIÓN
+  // ===============================
   eliminarUsuario(id: number): void {
-    if (confirm('¿Está seguro de que desea eliminar este usuario?')) {
-      this.usuarioService.eliminarLogico(id).subscribe({
-        next: () => {
-          this.mensaje = 'Usuario eliminado correctamente'
-          this.cargarUsuarios()
-          setTimeout(() => this.mensaje = '', 2500);
-        },
-        error: (err) => {
-          console.error('Error al eliminar:', err)
-          this.error = 'No se pudo eliminar el usuario'
-          setTimeout(() => this.error = '', 2500);
-        }
-      })
-    }
+    this.usuarioService.eliminarLogico(id).subscribe({
+      next: () => {
+        this.mensaje = 'Usuario eliminado correctamente';
+        this.cargarUsuarios();
+        setTimeout(() => (this.mensaje = ''), 2500);
+      },
+      error: () => {
+        this.error = 'No se pudo eliminar el usuario';
+        setTimeout(() => (this.error = ''), 2500);
+      }
+    });
   }
 
-  obtenerNombreRol(rolId: number | undefined): string {
-    const rol = this.roles.find(r => r.id === rolId)
-    return rol ? rol.nombre : 'Desconocido'
+
+
+
+
+  obtenerNombreRol(rolId?: number): string {
+    return this.roles.find(r => r.id === rolId)?.nombre ?? 'Desconocido';
   }
 }
