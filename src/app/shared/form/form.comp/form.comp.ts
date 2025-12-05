@@ -12,23 +12,33 @@ import { Boton } from '../../botones/boton/boton';
 })
 export class FormComp {
 
-  @Input() formGroup!: FormGroup;
   @Input() fields: any[] = [];
+  @Input() disableSubmit: boolean = false;
+  
+  @Input() formGroup!: FormGroup; // ✅ Recibe el FormGroup desde el padre
 
-  @Input() showSubmitButton: boolean = true;
-  @Input() submitButtonText: string = 'Guardar';
-  @Input() submitButtonColor: string = 'verde';
-  @Input() submitButtonSize: string = 'md';
-  @Input() submitButtonIcon: string | undefined;
-  @Input() submitButtonHoverColor: string = 'verde-claro';
+  @Output() submitForm = new EventEmitter<any>();
+  @Output() valueChanges = new EventEmitter<any>();
 
-  @Output() formSubmit = new EventEmitter<any>();
+  // Nuevos inputs para configurar el botón
+  @Input() showSubmitButton: boolean = true; // Mostrar/ocultar botón
+  @Input() submitButtonText: string = 'Enviar'; // Texto del botón
+  @Input() submitButtonIcon: string = 'fa fa-paper-plane'; // Icono del botón
+
+  ngOnInit() {
+    if (!this.formGroup) {
+      console.error('❌ ERROR: Debes pasar un FormGroup desde el componente padre');
+    } else {
+      this.formGroup.valueChanges.subscribe(value => {
+        this.valueChanges.emit(value);
+      });
+    }
+  }
 
   onSubmit() {
-    if (this.formGroup.valid) {
-      this.formSubmit.emit(this.formGroup.value);
-    } else {
-      this.formGroup.markAllAsTouched();
+    if (this.disableSubmit) return;
+    if (this.formGroup && this.formGroup.valid) {
+      this.submitForm.emit(this.formGroup.value);
     }
   }
 }

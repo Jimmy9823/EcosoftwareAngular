@@ -1,87 +1,94 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="auth-form">
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
 
   <div class="row g-3">
 
+    <!-- Recorremos todos los fields -->
     <ng-container *ngFor="let field of fields">
 
       <!-- SEPARADOR -->
-      <div *ngIf="field.type === 'separator'" class="col-12">
-        <div class="form-separator">{{ field.label }}</div>
-      </div>
+      <ng-container *ngIf="field.type === 'separator'">
+        <div class="col-12">
+          <div class="form-separator">
+            {{ field.label }}
+          </div>
+        </div>
+      </ng-container>
 
-      <!-- CAMPOS -->
-      <div *ngIf="field.type !== 'separator'" [class]="'col-12 col-md-' + (field.cols || 12)">
-        <div class="form-group">
+      <!-- CAMPOS NORMALES -->
+      <ng-container *ngIf="field.type !== 'separator'">
+        <div [class]="'col-12 col-md-' + (field.cols || 12)">
 
-          <label *ngIf="field.label">{{ field.label }}</label>
+          <label class="form-label fw-semibold">{{ field.label }}</label>
 
-          <!-- INPUT -->
-          <input *ngIf="['text','email','password','number','date'].includes(field.type)"
-            [type]="field.type"
-            class="form-input"
-            [formControlName]="field.name"
-            [placeholder]="field.placeholder || ''"
-          />
-
-          <!-- TEXTAREA -->
-          <textarea *ngIf="field.type === 'textarea'"
-            class="form-input"
-            [rows]="field.rows || 3"
-            [formControlName]="field.name">
-          </textarea>
+          <!-- TEXT / EMAIL / PASSWORD -->
+          <ng-container *ngIf="field.type === 'text' || field.type === 'email' || field.type === 'password'">
+            <input 
+              [type]="field.type"
+              [formControlName]="field.name"
+              class="form-control"
+              [attr.placeholder]="field.placeholder ?? ''"
+            />
+          </ng-container>
 
           <!-- SELECT -->
-          <select *ngIf="field.type === 'select'"
-            class="form-input"
-            [formControlName]="field.name">
-            <option value="" disabled selected>
-              {{ field.placeholder || 'Seleccione' }}
-            </option>
-            <option *ngFor="let opt of field.options" [value]="opt.value">
-              {{ opt.text }}
-            </option>
-          </select>
+          <ng-container *ngIf="field.type === 'select'">
+            <select [formControlName]="field.name" class="form-select">
+              <option value="" disabled selected>Seleccione una opción</option>
+              <option 
+                *ngFor="let option of field.options"
+                [value]="option.value"
+              >
+                {{ option.text }}
+              </option>
+            </select>
+          </ng-container>
+
+          <!-- DATE -->
+          <ng-container *ngIf="field.type === 'date'">
+            <input 
+              type="date"
+              [formControlName]="field.name"
+              class="form-control"
+            />
+          </ng-container>
 
           <!-- RADIO -->
-          <div *ngIf="field.type === 'radio'">
-            <div class="role-section">
-              <h3>{{ field.label }}</h3>
-
-              <div class="d-flex flex-wrap gap-3">
-                <label *ngFor="let opt of field.options" class="form-check">
-                  <input type="radio"
-                    [value]="opt.value"
-                    [formControlName]="field.name" />
-                  {{ opt.text }}
+          <ng-container *ngIf="field.type === 'radio'">
+            <div class="d-flex flex-wrap gap-3">
+              <div *ngFor="let option of field.options" class="form-check">
+                <input 
+                  class="form-check-input"
+                  type="radio"
+                  [formControlName]="field.name"
+                  [value]="option.value"
+                  [id]="field.name + '_' + option.value"
+                />
+                <label 
+                  class="form-check-label"
+                  [for]="field.name + '_' + option.value"
+                >
+                  {{ option.text }}
                 </label>
               </div>
             </div>
-          </div>
+          </ng-container>
 
-          <!-- ERROR -->
-          <div class="error"
-            *ngIf="formGroup.get(field.name)?.invalid && formGroup.get(field.name)?.touched">
-            {{ field.errorMessage || 'Campo inválido' }}
-          </div>
+          <!-- TEXTAREA -->
+          <ng-container *ngIf="field.type === 'textarea'">
+            <textarea 
+              [formControlName]="field.name"
+              rows="3"
+              class="form-control"
+            ></textarea>
+          </ng-container>
 
         </div>
-      </div>
+      </ng-container>
 
     </ng-container>
 
   </div>
 
-  <!-- BOTÓN -->
-  <div class="text-end mt-4" *ngIf="showSubmitButton">
-    <app-boton
-      tipo="submit"
-      [color]="submitButtonColor"
-      [size]="submitButtonSize"
-      [hoverColor]="submitButtonHoverColor"
-      [deshabilitado]="formGroup.invalid"
-      [icono]="'bi bi-check-lg'"
-      [texto]="submitButtonText">
-    </app-boton>
-  </div>
+
 
 </form>
