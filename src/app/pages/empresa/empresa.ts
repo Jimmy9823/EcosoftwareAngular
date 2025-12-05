@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { UsuarioService } from '../../Services/usuario.service';
 import { UsuarioModel } from '../../Models/usuario';
 import { COMPARTIR_IMPORTS } from '../../shared/imports';
@@ -8,6 +8,10 @@ import { CardsRecoleccion } from '../../Logic/recolecciones-comp/cards-recolecci
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
 import { Titulo } from '../../shared/titulo/titulo';
 import { Mapa } from "../../Logic/puntos-recoleccion/mapa/mapa";
+import { PuntosIframe } from '../../shared/puntos-iframe/puntos-iframe';
+import { CrudPuntos } from '../../Logic/puntos-recoleccion/crud-puntos/crud-puntos';
+import { PuntosService } from '../../Services/puntos-reciclaje.service';
+import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
 
 /**
  * Interfaz para los elementos del menú lateral.
@@ -25,7 +29,7 @@ interface MenuItem {
 @Component({
   selector: 'app-empresa',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, CardARSolicitud, CardsRecoleccion, BarraLateral, Titulo, Mapa],
+  imports: [COMPARTIR_IMPORTS, CardARSolicitud, CardsRecoleccion, BarraLateral, Titulo, PuntosIframe, CrudPuntos],
   templateUrl: './empresa.html',
   styleUrls: ['./empresa.css']
 })
@@ -41,7 +45,10 @@ export class Empresa {
   nombreRol: string = localStorage.getItem('nombreRol') ?? 'Rol';
 
 
-  puntos = false;
+  mostrarPuntos = false;
+  puntosList: PuntoReciclaje[] = [];
+
+  @ViewChild(CrudPuntos) puntosCrud!: CrudPuntos;
 
   menu: MenuItem[] = [
     { vista: 'panel', label: 'Panel de Control', icon: 'bi bi-speedometer2' },
@@ -56,7 +63,14 @@ export class Empresa {
   // Botones alternar vistas
   // ========================
   togglePuntos(): void {
-    this.puntos = !this.puntos;
+    this.mostrarPuntos = !this.mostrarPuntos;
+    if (this.mostrarPuntos) {
+      setTimeout(() => { try { this.puntosCrud?.openCreate(); } catch(e) { console.warn('openCreate failed', e); } }, 50);
+    }
+  }
+
+  openMyPointsFromPage(): void {
+    try { this.puntosCrud?.openMyPoints(); } catch (e) { console.warn('puntosCrud not ready', e); }
   }
 
   /**
@@ -67,8 +81,29 @@ export class Empresa {
 
   constructor(
     public usuarioService: UsuarioService,
-    public router: Router
+    public router: Router,
+    private puntosService: PuntosService
   ) {}
+
+  ngOnInit(): void {
+    this.cargarPuntos();
+  }
+
+  cargarPuntos(): void {
+    this.puntosService.obtenerTodos().subscribe({
+      next: (response) => {
+        const data = Array.isArray(response) ? response : response.data;
+        this.puntosList = (data || []).map((p: any) => ({
+          ...p,
+          latitud: p.latitud !== null && p.latitud !== undefined ? parseFloat(String(p.latitud)) : null,
+          longitud: p.longitud !== null && p.longitud !== undefined ? parseFloat(String(p.longitud)) : null
+        }));
+      },
+      error: (err) => {
+        console.error('Error al cargar puntos:', err);
+      }
+    });
+  }
 
   // ========================
   // MÉTODOS DEL SIDEBAR

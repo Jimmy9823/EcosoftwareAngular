@@ -5,8 +5,8 @@ export interface PuntoReciclaje {
   horario: string;
   tipo_residuo: string;
   descripcion: string;    // mapeado desde "otro"
-  latitud: number;
-  longitud: number;
+  latitud: number | null;
+  longitud: number | null;
   imagen: string | null;
   usuario_id: number;
 }

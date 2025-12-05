@@ -6,7 +6,8 @@ import { PuntoReciclaje } from '../Models/puntos-reciclaje.model';
 @Injectable({ providedIn: 'root' })
 export class PuntosService {
 
-  private url = 'http://localhost/Eco_Software-/api/puntos.php';
+ 
+  private url = 'http://localhost/puntos/Eco_Software-/api/puntos.php';
 
   constructor(private http: HttpClient) {}
 
@@ -18,11 +19,11 @@ export class PuntosService {
     return this.http.get(`${this.url}?id=${id}`);
   }
 
-  crear(punto: PuntoReciclaje): Observable<any> {
+  crear(punto: Partial<PuntoReciclaje>): Observable<any> {
     return this.http.post(this.url, punto);
   }
 
-  actualizar(id: number, punto: PuntoReciclaje): Observable<any> {
+  actualizar(id: number, punto: Partial<PuntoReciclaje>): Observable<any> {
     return this.http.put(`${this.url}?id=${id}`, punto);
   }
 

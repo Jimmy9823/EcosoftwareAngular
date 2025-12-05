@@ -136,8 +136,16 @@
     <ng-container *ngIf="vistaActual === 'puntos'">
       <app-titulo 
         titulo="Puntos de Reciclaje" 
-        subtitulo="Gestión de puntos de reciclaje">
+        subtitulo="Listado y gestión de puntos" 
+        iconoBoton="bi bi-plus-circle"
+        colorBoton="outline-custom-success"
+        hoverColorBoton="custom-success-filled"
+        (clickBoton)="openCreateFromTitulo()">
       </app-titulo>
+
+      <div class="mt-3">
+        <app-crud-puntos></app-crud-puntos>
+      </div>
     </ng-container>
 
     <!-- CAPACITACIONES -->

@@ -102,5 +102,39 @@
       <app-listar-capacitaciones></app-listar-capacitaciones>
     </ng-container>
 
+    <!-- PUNTOS DE RECICLAJE -->
+    <ng-container *ngIf="vistaActual === 'puntos'">
+      <div class="contenido-solicitud">
+        <app-titulo
+          titulo="Mis puntos"
+          subtitulo=""
+          [textoBoton]="mostrarPuntos ? 'Gestionar' : 'Registrar puntos'"
+          iconoBoton="bi bi-plus-lg"
+          colorBoton="outline-custom-success"
+          hoverColorBoton="custom-success-filled"
+          (clickBoton)="togglePuntos()">
+        </app-titulo>
+
+        <div class="contenedor-toggle mt-2">
+          <ng-container *ngIf="mostrarPuntos">
+            <div class="contenido-solicitud">
+              <!-- Mostrar inline form y tarjetas al registrar puntos -->
+              <app-crud-puntos [compact]="true"></app-crud-puntos>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!mostrarPuntos">
+            <div class="contenido-solicitud">
+              <app-puntos-iframe></app-puntos-iframe>
+
+              <div class="d-flex justify-content-end align-items-center mt-3">
+              </div>
+              <!-- Cards removed here: only the PHP iframe is displayed in the map area -->
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+
   </main>
 </div>

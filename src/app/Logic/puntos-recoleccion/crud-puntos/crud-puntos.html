@@ -1,0 +1,295 @@
+<div class="crud-puntos">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="m-0">Puntos</h5>
+    <div>
+      <ng-container *ngIf="compact">
+        <button class="btn btn-success btn-sm" (click)="openCreate()"><i class="bi bi-plus-lg"></i> Registrar punto</button>
+      </ng-container>
+      <ng-container *ngIf="!compact">
+        <button *ngIf="currentUserId" class="btn btn-success btn-sm" (click)="openCreate()"><i class="bi bi-plus-lg"></i> Añadir punto</button>
+        <button class="btn btn-secondary btn-sm ms-2" (click)="load()"><i class="bi bi-arrow-clockwise"></i> Refrescar</button>
+      </ng-container>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center">Cargando...</div>
+  <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+  
+  <!-- Compact mode: show cards -->
+  <div *ngIf="compact && !loading">
+    <!-- ADMIN: Show all puntos in one section with full edit/delete -->
+    <ng-container *ngIf="isAdmin()">
+      <div class="row g-3">
+        <ng-container *ngIf="puntos.length">
+          <div class="col-12 col-md-6 col-lg-4" *ngFor="let p of puntos">
+            <div class="punto-card card h-100" [ngClass]="bgClassFor(p.tipo_residuo)">
+              <div class="card-body d-flex flex-column">
+                <div class="d-flex align-items-start justify-content-between mb-2">
+                  <div>
+                    <h6 class="card-title mb-1">{{p.nombre}}</h6>
+                    <div class="small text-muted">{{p.direccion}}</div>
+                  </div>
+                  <div class="ms-2 text-end">
+                    <div class="small"><span [ngClass]="tipoClassFor(p.tipo_residuo)">{{ p.tipo_residuo || '-' }}</span></div>
+                  </div>
+                </div>
+
+                <div class="mt-auto d-flex justify-content-between align-items-center">
+                  <div class="d-flex gap-2">
+                    <button class="btn-action btn-edit" (click)="openEdit(p)"><i class="fas fa-pen"></i><span class="d-none d-md-inline">Editar</span></button>
+                    <button class="btn-action btn-view" (click)="view(p)"><i class="fas fa-eye"></i><span class="d-none d-md-inline">Ver</span></button>
+                  </div>
+                  <div class="text-end small text-muted">{{ p.horario || '' }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div *ngIf="!puntos.length" class="col-12 alert alert-info">No hay puntos aún.</div>
+      </div>
+    </ng-container>
+
+    <!-- NON-ADMIN: Show two sections (own + all) -->
+    <ng-container *ngIf="!isAdmin()">
+      <!-- MIS PUNTOS (editable) -->
+      <div class="mb-4">
+        <h6 class="mb-3 text-primary">Mis puntos</h6>
+        <div class="row g-3">
+          <ng-container *ngIf="misPuntos.length">
+            <div class="col-12 col-md-6 col-lg-4" *ngFor="let p of misPuntos">
+              <div class="punto-card card h-100" [ngClass]="bgClassFor(p.tipo_residuo)">
+                <div class="card-body d-flex flex-column">
+                  <div class="d-flex align-items-start justify-content-between mb-2">
+                    <div>
+                      <h6 class="card-title mb-1">{{p.nombre}}</h6>
+                      <div class="small text-muted">{{p.direccion}}</div>
+                    </div>
+                    <div class="ms-2 text-end">
+                      <div class="small"><span [ngClass]="tipoClassFor(p.tipo_residuo)">{{ p.tipo_residuo || '-' }}</span></div>
+                    </div>
+                  </div>
+
+                  <div class="mt-auto d-flex justify-content-between align-items-center">
+                    <div class="d-flex gap-2">
+                      <button class="btn-action btn-edit" (click)="openEdit(p)"><i class="fas fa-pen"></i><span class="d-none d-md-inline">Editar</span></button>
+                      <button class="btn-action btn-view" (click)="view(p)"><i class="fas fa-eye"></i><span class="d-none d-md-inline">Ver</span></button>
+                    </div>
+                    <div class="text-end small text-muted">{{ p.horario || '' }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <div *ngIf="!misPuntos.length" class="col-12 alert alert-info">No tienes puntos aún.</div>
+        </div>
+      </div>
+
+      <!-- TODOS LOS PUNTOS (read-only) -->
+      <div *ngIf="todosPuntos.length" class="mb-4">
+        <h6 class="mb-3 text-muted">Todos los puntos</h6>
+        <div class="row g-3">
+          <div class="col-12 col-md-6 col-lg-4" *ngFor="let p of todosPuntos">
+            <div class="punto-card card h-100" [ngClass]="bgClassFor(p.tipo_residuo)">
+              <div class="card-body d-flex flex-column">
+                <div class="d-flex align-items-start justify-content-between mb-2">
+                  <div>
+                    <h6 class="card-title mb-1">{{p.nombre}}</h6>
+                    <div class="small text-muted">{{p.direccion}}</div>
+                  </div>
+                  <div class="ms-2 text-end">
+                    <div class="small"><span [ngClass]="tipoClassFor(p.tipo_residuo)">{{ p.tipo_residuo || '-' }}</span></div>
+                  </div>
+                </div>
+
+                <div class="mt-auto d-flex justify-content-between align-items-center">
+                  <div class="d-flex gap-2">
+                    <button class="btn-action btn-view" (click)="view(p)"><i class="fas fa-eye"></i><span class="d-none d-md-inline">Ver</span></button>
+                  </div>
+                  <div class="text-end small text-muted">{{ p.horario || '' }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <table class="table table-sm table-hover" *ngIf="!compact && !loading && puntos.length">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Dirección</th>
+        <th>Horario</th>
+        <th>Residuos</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of puntos">
+        <td>{{p.nombre}}</td>
+        <td>{{p.direccion}}</td>
+        <td>{{p.horario}}</td>
+        <td>
+          <span [ngClass]="tipoClassFor(p.tipo_residuo)">{{p.tipo_residuo || '-'}}</span>
+        </td>
+        <td style="width:140px">
+          <div class="action-buttons d-flex align-items-center">
+            <button *ngIf="isAdmin() || p.usuario_id === currentUserId" class="btn-action btn-edit" (click)="openEdit(p)" title="Editar">
+              <i class="fas fa-pen"></i>
+              <span class="d-none d-md-inline">Editar</span>
+            </button>
+
+            <button *ngIf="isAdmin()" class="btn-action btn-delete ms-2" (click)="remove(p)" title="Eliminar">
+              <i class="fas fa-trash"></i>
+              <span class="d-none d-md-inline">Eliminar</span>
+            </button>
+
+            <button class="btn-action btn-view ms-2" (click)="view(p)" title="Ver">
+              <i class="fas fa-eye"></i>
+              <span class="d-none d-md-inline">Ver</span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!compact && !loading && puntos.length === 0" class="alert alert-info">No hay puntos aún.</div>
+
+  <!-- Modal simple -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow-sm">
+        <div class="modal-header align-items-center">
+          <div>
+            <h5 class="modal-title mb-0">{{ isEditing ? 'Editar punto' : 'Registrar punto' }}</h5>
+            <small class="text-muted">Completa los datos y pulsa Guardar</small>
+          </div>
+          <button type="button" class="btn-close" aria-label="Cerrar" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form class="row gx-2 gy-2">
+            <div class="col-12">
+              <label class="form-label small">Nombre</label>
+              <input class="form-control form-control-sm" placeholder="Ej: Punto Central" [(ngModel)]="form.nombre" name="nombre" />
+            </div>
+
+            <div class="col-12 position-relative">
+              <label class="form-label small">Dirección</label>
+              <input class="form-control form-control-sm" placeholder="Buscar dirección o escribir manualmente" [(ngModel)]="form.direccion" name="direccion" (input)="searchAddress($any($event.target).value)" autocomplete="off" />
+              <ul *ngIf="geocodeResults.length" class="list-group suggestions">
+                <li class="list-group-item" *ngFor="let g of geocodeResults" (click)="selectAddress(g)">
+                  <div class="small">{{ formatAddress(g.display_name) }}</div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small">Horario</label>
+              <input class="form-control form-control-sm" placeholder="08:00 - 18:00" [(ngModel)]="form.horario" name="horario" />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small">Tipo de residuo</label>
+              <input class="form-control form-control-sm" placeholder="Plástico, Vidrio..." [(ngModel)]="form.tipo_residuo" name="tipo_residuo" />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small">Descripción</label>
+              <textarea class="form-control form-control-sm" rows="2" placeholder="Información adicional" [(ngModel)]="form.descripcion" name="descripcion"></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small">Latitud</label>
+              <input class="form-control form-control-sm" type="number" step="any" placeholder="Latitud" [(ngModel)]="form.latitud" name="latitud" readonly />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small">Longitud</label>
+              <input class="form-control form-control-sm" type="number" step="any" placeholder="Longitud" [(ngModel)]="form.longitud" name="longitud" readonly />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary btn-sm" (click)="closeModal()">Cancelar</button>
+          <button class="btn btn-success btn-sm" (click)="save()" [disabled]="!isFormValid()"><i class="bi bi-check2-circle me-1"></i> Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: ver punto (solo lectura) -->
+  <div class="modal-backdrop" *ngIf="showViewModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow-sm">
+
+        <!-- Colored header reflecting tipo_residuo -->
+        <div class="view-header" [ngClass]="viewHeaderClass">
+          <div class="view-header-inner">
+            <div class="material-badge bg-white small">
+              <i class="fas fa-box"></i>
+              <span [ngClass]="viewTipoClass">{{ viewModel?.tipo_residuo }}</span>
+            </div>
+            <div class="view-title">
+              <h5 class="mb-0">{{ viewModel?.nombre }}</h5>
+              <small class="text-muted">Detalle del punto</small>
+            </div>
+            <button type="button" class="btn-close" aria-label="Cerrar" (click)="closeViewModal()"></button>
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <div class="row gx-2 gy-2">
+            <div class="col-12"><strong>Nombre</strong><div>{{viewModel?.nombre}}</div></div>
+            <div class="col-12"><strong>Dirección</strong><div class="text-muted small">{{viewModel?.direccion}}</div></div>
+            <div class="col-md-6"><strong>Latitud</strong><div>{{viewModel?.latitud}}</div></div>
+            <div class="col-md-6"><strong>Longitud</strong><div>{{viewModel?.longitud}}</div></div>
+            <div class="col-12"><strong>Horario</strong><div>{{viewModel?.horario}}</div></div>
+            <div class="col-12"><strong>Tipo residuo</strong><div>{{viewModel?.tipo_residuo}}</div></div>
+            <div class="col-12"><strong>Descripción</strong><div>{{viewModel?.descripcion}}</div></div>
+            <div class="col-12" *ngIf="viewModel?.usuario"><strong>Usuario</strong><div>{{viewModel?.usuario}}</div></div>
+            <div class="col-12" *ngIf="viewModel?.imagen"><strong>Imagen</strong>
+              <div class="mt-2"><img [src]="viewModel.imagen" alt="imagen" style="max-width:100%; border-radius:6px; border:1px solid #eee" /></div>
+            </div>
+            
+            <!-- Show normalized JSON matching PuntoReciclaje -->
+            <div class="col-12 mt-3">
+              <button class="btn btn-sm btn-outline-primary" (click)="showJson = !showJson">{{ showJson ? 'Ocultar JSON' : 'Ver JSON' }}</button>
+              <pre *ngIf="showJson" class="raw-json mt-2">{{ viewItemNormalized | json }}</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" (click)="closeViewModal()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: lista de mis puntos (modo compacto) -->
+  <div class="modal-backdrop" *ngIf="showListModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-3">
+        <h5>Mis puntos</h5>
+        <div *ngIf="filteredPuntos.length === 0" class="alert alert-info">No tienes puntos registrados.</div>
+        <ul class="list-group" *ngIf="filteredPuntos.length">
+          <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let p of filteredPuntos">
+            <div>
+              <strong>{{p.nombre}}</strong>
+              <div class="text-muted small">{{p.direccion}}</div>
+              <div class="small mt-1"><span [ngClass]="tipoClassFor(p.tipo_residuo)">{{ p.tipo_residuo || '-' }}</span></div>
+            </div>
+            <div>
+              <button class="btn btn-sm btn-primary me-1" (click)="openEdit(p); closeListModal()">Editar</button>
+            </div>
+          </li>
+        </ul>
+        <div class="d-flex justify-content-end mt-3">
+          <button class="btn btn-secondary" (click)="closeListModal()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

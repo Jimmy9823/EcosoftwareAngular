@@ -83,26 +83,32 @@
 
     <!-- PUNTOS DE RECICLAJE -->
     <ng-container *ngIf="vistaActual === 'puntos'">
-      <app-titulo 
-        titulo="Puntos de Reciclaje" 
-        subtitulo="Gestiona tus puntos de reciclaje"
-        [textoBoton]="puntos ? 'Gestionar' : 'Mostrar puntos'"
+      <!-- keep only the action button (no visible title) -->
+      <app-titulo
+        titulo="Mis puntos"
+        subtitulo=""
+        [textoBoton]="mostrarPuntos ? 'Gestionar' : 'Registrar puntos'"
         iconoBoton="bi bi-plus-lg"
-        colorBoton="outline-custom-success" 
+        colorBoton="outline-custom-success"
         hoverColorBoton="custom-success-filled"
         (clickBoton)="togglePuntos()">
       </app-titulo>
 
       <div class="contenedor-toggle">
-        <ng-container *ngIf="puntos">
+        <ng-container *ngIf="mostrarPuntos">
           <div class="contenido-solicitud">
-            <!-- Registro y lista de puntos -->
+            <!-- Mostrar inline form y tarjetas al registrar puntos -->
+            <app-crud-puntos [compact]="true"></app-crud-puntos>
           </div>
         </ng-container>
 
-        <ng-container *ngIf="!puntos">
+        <ng-container *ngIf="!mostrarPuntos">
           <div class="contenido-solicitud">
-            <app-mapa></app-mapa>
+            <app-puntos-iframe></app-puntos-iframe>
+
+            <div class="d-flex justify-content-end align-items-center mt-3">
+            </div>
+            <!-- Cards removed here: only the PHP iframe is displayed in the map area -->
           </div>
         </ng-container>
       </div>
