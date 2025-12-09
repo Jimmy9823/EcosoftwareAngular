@@ -6,7 +6,8 @@
     [vistaActual]="vistaActual" 
     [nombreUsuario]="nombreUsuario"
     (vistaChange)="cambiarVista($event)" 
-    (logout)="logout()">
+    (logout)="logout()"
+    (edit)="editarPerfil()">
   </app-barra-lateral>
 
   <!-- CONTENIDO PRINCIPAL -->
@@ -75,8 +76,20 @@
 
       </div>
     </ng-container>
-
+<ng-container *ngIf="vistaActual === 'editar-perfil'">
+      <app-titulo
+        titulo="Editar Perfil"
+        subtitulo="Actualiza tu información personal"
+        iconoBoton="bi bi-eye"
+        colorBoton="outline-custom-success"
+        
+        >
+        
+      </app-titulo>
+      <app-editar-usuario></app-editar-usuario>
+</ng-container>
     <!-- USUARIOS -->
+
     <ng-container *ngIf="vistaActual === 'usuarios'">
 
       <app-titulo 

@@ -1,19 +1,31 @@
 <form [formGroup]="form" (ngSubmit)="onFormSubmit()" class="form-general">
   <div *ngFor="let field of fields" class="form-group">
-    <label>{{ field.label }}</label>
+    <!-- 📌 Campo PASSWORD con botón para mostrar/ocultar -->
+<div *ngIf="field.type === 'password'" class="input-group">
+  
+  <input
+    [type]="passwordVisible ? 'text' : 'password'"
+    [formControlName]="field.name"
+    [placeholder]="field.placeholder"
+    class="form-control"
+    (change)="onFieldChange.emit({ name: field.name, value: form.get(field.name)?.value })"
+  />
 
-    <!-- Campo de texto -->
-    <input *ngIf="field.type === 'text' || field.type === 'email' || field.type === 'password'|| field.type === 'number'" [attr.type]="field.type"
-      [formControlName]="field.name" [placeholder]="field.placeholder" class="form-control"
-      (change)="onFieldChange.emit({ name: field.name, value: form.get(field.name)?.value })" />
+  <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
+    <i class="bi" [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'"></i>
+  </button>
+</div>
 
-    <select *ngIf="field.type === 'select'" [formControlName]="field.name" class="form-control"
-      (change)="onFieldChange.emit({ name: field.name, value: form.get(field.name)?.value })">
-      <option value="">Seleccione una opción</option>
-      <option *ngFor="let opt of field.options" [value]="opt.value">
-        {{ opt.label }}
-      </option>
-    </select>
+<!-- 📌 Campo TEXT, EMAIL, NUMBER normales -->
+<input
+  *ngIf="field.type !== 'password' && (field.type === 'text' || field.type === 'email' || field.type === 'number')"
+  [attr.type]="field.type"
+  [formControlName]="field.name"
+  [placeholder]="field.placeholder"
+  class="form-control"
+  (change)="onFieldChange.emit({ name: field.name, value: form.get(field.name)?.value })"
+/>
+
 
     <!-- Validaciones -->
     <small *ngIf="form.get(field.name)?.hasError('required') && form.get(field.name)?.touched">

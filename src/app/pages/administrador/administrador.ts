@@ -24,12 +24,13 @@ import {SolicitudesLocalidadChartComponent} from "../../Logic/solicitudes-comp/s
 import { Boton } from '../../shared/botones/boton/boton';
 import { Titulo } from '../../shared/titulo/titulo';
 import { Modal } from '../../shared/modal/modal';
-
+import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { FormComp } from '../../shared/form/form.comp/form.comp';
 @Component({
   selector: 'app-administrador',
   imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent,GraficoUsuariosLocalidad, 
-    GraficoUsuariosBarrios ,RegistroAdmin, Usuario, ListarTabla, Solcitudes, CapacitacionesLista, CargaMasiva,BarraLateral,Boton,Titulo,Modal,FormComp, PuntosIframe, CrudPuntos],
+    GraficoUsuariosBarrios ,RegistroAdmin, Usuario, ListarTabla, Solcitudes, 
+    EditarUsuario, CapacitacionesLista, CargaMasiva,BarraLateral,Boton,Titulo,Modal,FormComp, PuntosIframe, CrudPuntos],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
@@ -46,7 +47,7 @@ export class Administrador {
   error: string = '';
   mensaje: string = '';
 
-  vistaActual:'panel'| 'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'capacitaciones'|'noticias' = 'panel';
+  vistaActual:'panel'|'editar-perfil'|'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'capacitaciones'|'noticias' = 'panel';
 
   menuAbierto = true;
   perfilMenuAbierto = false;
@@ -148,7 +149,7 @@ RegistroAdmin() {
   // ========================
   // CAMBIAR VISTA
   // ========================
-  cambiarVista(vista: 'panel'|'usuarios'|'solicitudes'|'recolecciones'|'puntos'|'capacitaciones'|'noticias') {
+  cambiarVista(vista: 'panel'|'editar-perfil'|'usuarios'|'solicitudes'|'recolecciones'|'puntos'|'capacitaciones'|'noticias') {
     this.vistaActual = vista;
   }
 
@@ -217,4 +218,8 @@ RegistroAdmin() {
       console.error('No se pudo abrir modal de crear punto:', e);
     }
   }
+
+  editarPerfil(): void {
+    this.vistaActual = 'editar-perfil';
+}
 }

@@ -12,12 +12,12 @@ import { PuntosIframe } from '../../shared/puntos-iframe/puntos-iframe';
 import { CrudPuntos } from '../../Logic/puntos-recoleccion/crud-puntos/crud-puntos';
 import { PuntosService } from '../../Services/puntos-reciclaje.service';
 import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
-
+import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
 /**
  * Interfaz para los elementos del menú lateral.
  */
 interface MenuItem {
-  vista: 'panel' | 'solicitudes' | 'recolecciones' | 'puntos' | 'noticias';
+  vista: 'panel' | 'solicitudes' | 'recolecciones' | 'puntos' | 'noticias'|'editar-perfil';
   label: string;
   icon: string;
 }
@@ -29,7 +29,8 @@ interface MenuItem {
 @Component({
   selector: 'app-empresa',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, CardARSolicitud, CardsRecoleccion, BarraLateral, Titulo, PuntosIframe, CrudPuntos],
+  imports: [COMPARTIR_IMPORTS, CardARSolicitud, CardsRecoleccion,
+    EditarUsuario, BarraLateral, Titulo, PuntosIframe, CrudPuntos],
   templateUrl: './empresa.html',
   styleUrls: ['./empresa.css']
 })
@@ -145,4 +146,8 @@ export class Empresa {
     // Opcional: mensaje de confirmación
     alert('Sesión cerrada correctamente');
   }
+
+  editarPerfil(): void {
+    this.vistaActual = 'editar-perfil';
+}
 }

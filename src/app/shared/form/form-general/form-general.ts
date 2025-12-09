@@ -30,7 +30,7 @@ export class FormGeneral {
   @Output() submitForm = new EventEmitter<any>(); // <-- nombre cambiado
   @Output() onFieldChange = new EventEmitter<{ name: string; value: any }>();
   form!: FormGroup;
-
+  passwordVisible = false;
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -62,4 +62,7 @@ export class FormGeneral {
       this.form.markAllAsTouched();
     }
   }
+  togglePassword() {
+  this.passwordVisible = !this.passwordVisible;
+}
 }
