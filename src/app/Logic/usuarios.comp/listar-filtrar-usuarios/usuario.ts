@@ -28,7 +28,7 @@ export class Usuario implements OnInit {
   @ViewChild('modalEliminarFisico') modalEliminarFisico!: Modal;
 
 
-  usuarioSeleccionado: UsuarioModel | null = null;
+  usuarioSeleccionado?: UsuarioModel | null = null;
 
   // Filtros
   criterioSeleccionado = 'nombre';
@@ -83,20 +83,20 @@ export class Usuario implements OnInit {
   // ===============================
   // BOTONES DEL MODAL DE ACTIVAR
   // ===============================
-  accionesEliminar = [
-    {
-      texto: 'Cancelar',
-      icono: 'bi-x-circle',
-      color: 'btn-cancelar',
-      accion: () => this.cerrarModalEliminar()
-    },
-    {
-      texto: 'Confirmar',
-      icono: 'bi-check-circle',
-      color: 'btn-confirmar',
-      accion: () => this.confirmarEliminacion()
-    }
-  ];
+ accionesEliminar = [
+  {
+    texto: 'Inactivar',
+    icono: 'bi-pause-circle', // Icono para inactivar
+    color: 'warning',
+    accion: () => this.inactivarUsuario()
+  },
+  {
+    texto: 'Eliminar',
+    icono: 'bi-trash',
+    color: 'danger',
+    accion: () => this.confirmarEliminacionFisica()
+  }
+];
 
   // ===============================
   // BOTONES DEL MODAL DE ELIMINAR
@@ -155,8 +155,8 @@ abrirModalEliminarFisico(usuario: UsuarioModel): void {
 
 cerrarModalEliminar(): void {
   this.modalEliminar.close();
+  this.usuarioSeleccionado = null;
 }
-
 
 confirmarEliminacionFisica(): void {
   if (!this.usuarioSeleccionado?.idUsuario) return;
@@ -176,8 +176,26 @@ confirmarEliminacionFisica(): void {
   });
 }
 
-  
 
+
+
+  
+inactivarUsuario(): void {
+  if (!this.usuarioSeleccionado?.idUsuario) return;
+
+  this.usuarioService.eliminarLogico(this.usuarioSeleccionado.idUsuario).subscribe({
+    next: () => {
+      this.mensaje = 'Usuario inactivado correctamente';
+      this.cargarUsuarios();
+      this.cerrarModalEliminar();
+      setTimeout(() => (this.mensaje = ''), 2500);
+    },
+    error: () => {
+      this.error = 'Error al inactivar el usuario';
+      setTimeout(() => (this.error = ''), 2500);
+    }
+  });
+}
   
 
   // ===============================
@@ -290,7 +308,19 @@ confirmarEliminacionFisica(): void {
     });
   }
 
-
+  eliminarUsuarioFisico(id: number): void {
+    this.usuarioService.eliminarLogico(id).subscribe({
+      next: () => {
+        this.mensaje = 'Usuario inactivado correctamente';
+        this.cargarUsuarios();
+        setTimeout(() => (this.mensaje = ''), 2500);
+      },
+      error: () => {
+        this.error = 'No se pudo eliminar el usuario';
+        setTimeout(() => (this.error = ''), 2500);
+      }
+    });
+  }
 
 
 

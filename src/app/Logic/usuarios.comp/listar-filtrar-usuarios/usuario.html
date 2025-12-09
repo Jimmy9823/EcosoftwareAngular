@@ -96,6 +96,9 @@
 <!-- ============================== -->
 <!-- MODAL ELIMINAR USUARIO -->
 <!-- ============================== -->
+<!-- ============================== -->
+<!-- MODAL ELIMINAR USUARIO -->
+<!-- ============================== -->
 <app-modal
   #modalEliminar
   [title]="'Eliminar usuario'"
@@ -104,16 +107,40 @@
 >
   <div class="p-2">
     <p>
-      ¿Estás seguro que deseas eliminar al usuario 
+      ¿Estás seguro que deseas realizar una de estas acciones para el usuario 
       <strong>{{ usuarioSeleccionado?.nombre }}</strong>?
     </p>
+    
+    <!-- Información adicional del usuario -->
+    <div class="user-info mt-3 p-2 bg-light rounded">
+      <div><strong>Correo:</strong> {{ usuarioSeleccionado?.correo }}</div>
+      <div><strong>Teléfono:</strong> {{ usuarioSeleccionado?.telefono }}</div>
+      <div><strong>Rol:</strong> {{ usuarioSeleccionado && usuarioSeleccionado.rolId ? obtenerNombreRol(usuarioSeleccionado.rolId) : 'No especificado' }}</div>
+      <div><strong>Estado:</strong> 
+        <span [class]="usuarioSeleccionado?.estado ? 'text-success' : 'text-danger'">
+          {{ usuarioSeleccionado?.estado ? 'Activo' : 'Inactivo' }}
+        </span>
+      </div>
+    </div>
+    
+    <!-- Explicación de las opciones -->
+    <div class="mt-3">
+      <div class="alert alert-warning">
+        <i class="bi bi-info-circle"></i>
+        <strong>Inactivar:</strong> Cambia el estado del usuario a "Inactivo". Podrá ser reactivado posteriormente.
+      </div>
+      <div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle"></i>
+        <strong>Eliminar:</strong> Elimina permanentemente el usuario del sistema. Esta acción no se puede deshacer.
+      </div>
+    </div>
   </div>
 
-  <!-- FOOTER LIBRE CON BOTONES DINÁMICOS -->
+  <!-- FOOTER CON BOTONES DINÁMICOS -->
   <ng-container footer>
     <div class="d-flex justify-content-end gap-2">
       <app-boton
-        *ngFor="let btn of accionesEliminarFisico"
+        *ngFor="let btn of accionesEliminar"
         [texto]="btn.texto"
         [icono]="btn.icono"
         [color]="btn.color"
@@ -123,7 +150,6 @@
       </app-boton>
     </div>
   </ng-container>
-
 </app-modal>
 
 
