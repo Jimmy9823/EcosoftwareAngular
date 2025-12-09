@@ -26,6 +26,10 @@ export class RecoleccionService {
   listarMisRecolecciones(): Observable<ModeloRecoleccion[]> {
     return this.http.get<ModeloRecoleccion[]>(`${this.URL}/mis-recolecciones`);
   }
+  // ✅ LISTAR RECOLECCIONES DEL RECOLECTOR ACTUAL
+  listarTodasMisRecolecciones(id:number): Observable<ModeloRecoleccion[]> {
+    return this.http.get<ModeloRecoleccion[]>(`${this.URL}/recolector/${id}`);
+  }
 
   // ✅ LISTAR RECOLECCIONES POR RUTA
   listarPorRuta(idRuta: number): Observable<ModeloRecoleccion[]> {

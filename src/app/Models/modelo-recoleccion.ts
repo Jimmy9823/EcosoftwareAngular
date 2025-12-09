@@ -1,7 +1,7 @@
 export interface ModeloRecoleccion {
   idRecoleccion: number;
   solicitudId: number;
-  recolectorId: number;
+  recolectorId?: number;
   rutaId?: number | null;   // puede venir null desde el backend
 
   estado: EstadoRecoleccion;

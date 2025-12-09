@@ -24,6 +24,7 @@ import { GraficoUsuariosBarrios } from './Logic/usuarios.comp/grafica-usuarios-b
 import {PendientesAceptadasChartComponent} from "./Logic/solicitudes-comp/pendientes-aceptadas-chart-component/pendientes-aceptadas-chart-component";
 import {RechazadasMotivoChartComponent} from "./Logic/solicitudes-comp/rechazadas-motivo-chart-component/rechazadas-motivo-chart-component";
 import {SolicitudesLocalidadChartComponent} from "./Logic/solicitudes-comp/solicitudes-localidad-chart-component/solicitudes-localidad-chart-component";
+import {ListarPorRecolector} from "./Logic/recolecciones-comp/listar-por-recolector/listar-por-recolector";
 
 export const routes: Routes = [
   { path: '', component: Inicio },
@@ -35,6 +36,8 @@ export const routes: Routes = [
   { path: 'grafica2', component: PendientesAceptadasChartComponent },
   { path: 'grafica3', component: RechazadasMotivoChartComponent },
   { path: 'grafica4', component: SolicitudesLocalidadChartComponent  },
+  { path: 'listar-por-recolector', component: ListarPorRecolector  },
+
 
   { path: 'login', component: Login},
   {
