@@ -59,6 +59,7 @@ export class Login implements OnInit {
   // Login modificado con validación de campos
   onLogin(formValue: any): void {
     console.log('Datos recibidos en Login:', formValue);
+    console.log('Correo:', formValue.correo);
 
     // Resetear mensaje de error
     this.errorMessage = '';

@@ -14,12 +14,15 @@ import { PuntosIframe } from '../../shared/puntos-iframe/puntos-iframe';
 import { CrudPuntos } from '../../Logic/puntos-recoleccion/crud-puntos/crud-puntos';
 import { Boton } from '../../shared/botones/boton/boton';
 import { Titulo } from '../../shared/titulo/titulo';
+import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitaciones/listar-capacitaciones';
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormRegistro, CardsSolicitud, CardsRecoleccionCiudadano,BarraLateral,Titulo,CapacitacionesLista, PuntosIframe, CrudPuntos],
+  imports: [COMPARTIR_IMPORTS, FormRegistro, 
+    EditarUsuario, 
+    CardsSolicitud, CardsRecoleccionCiudadano,BarraLateral,Titulo,CapacitacionesLista, PuntosIframe, CrudPuntos],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })
@@ -27,7 +30,8 @@ export class Ciudadano {
 
   menuAbierto: boolean = true;       
   perfilMenuAbierto: boolean = false; 
-  vistaActual: 'panel' | 'solicitudes' | 'recolecciones' | 'capacitaciones' | 'noticias' | 'puntos' = 'panel'; 
+  vistaActual: 'panel' | 'solicitudes' | 'recolecciones' | 'capacitaciones' | 
+  'noticias' | 'editar-perfil'| 'puntos' = 'panel'; 
   mostrarNuevaSolicitud = false;
   nombreUsuario: string = localStorage.getItem('nombreUsuario') ?? 'Usuario';
   nombreRol: string = localStorage.getItem('nombreRol') ?? 'Rol';
@@ -103,7 +107,7 @@ export class Ciudadano {
   // ========================
   // CAMBIAR VISTA
   // ========================
-  cambiarVista(vista: 'panel'|'solicitudes'|'recolecciones'|'capacitaciones'|'noticias'|'puntos') {
+  cambiarVista(vista: 'panel'|'solicitudes'|'recolecciones'|'capacitaciones'|'noticias'|'puntos'| 'editar-perfil'): void {
     this.vistaActual = vista;
   }
 
@@ -111,8 +115,12 @@ export class Ciudadano {
     this.perfilMenuAbierto = !this.perfilMenuAbierto;
   }
 
+editarPerfil(): void {
+    this.vistaActual = 'editar-perfil';
+}
+
   // ========================
-  // 🚪 CERRAR SESIÓN
+  //  CERRAR SESIÓN
   // ========================
   cerrarSesion(): void {
     this.usuarioService.logout(); // limpia el localStorage

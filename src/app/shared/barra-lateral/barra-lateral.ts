@@ -20,6 +20,7 @@ export class BarraLateral<V = string> {
 
   @Output() vistaChange = new EventEmitter<V>();
   @Output() logout = new EventEmitter<void>();
+  @Output() edit = new EventEmitter<void>();
 
   menuAbierto = true;
   perfilMenuAbierto = false;

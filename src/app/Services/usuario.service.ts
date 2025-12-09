@@ -29,36 +29,51 @@ export class UsuarioService {
   // ========================
   //  LOGIN
   // ========================
-  login(correo: string, contrasena: string): Observable<UsuarioModel | null> {
-    return this.listar().pipe(
-      map(usuarios => {
-        const encontrado = usuarios.find(
-          u => u.correo === correo && u.contrasena === contrasena
-        );
-        return encontrado || null;
-      }),
-      catchError(err => {
-        console.error(' Error en login', err);
-        return throwError(() => err);
-      })
-    );
-  }
+  // En UsuarioService
+login(correo: string, contrasena: string): Observable<UsuarioModel | null> {
+  return this.listar().pipe(
+    map(usuarios => {
+      const encontrado = usuarios.find(
+        u => u.correo === correo && u.contrasena === contrasena
+      );
+      
+      // GUARDAR EN LOCALSTORAGE SI SE ENCUENTRA
+      if (encontrado) {
+        localStorage.setItem('usuarioLogueado', JSON.stringify(encontrado));
+      }
+      
+      return encontrado || null;
+    }),
+    catchError(err => {
+      console.error('Error en login', err);
+      return throwError(() => err);
+    })
+  );
+}
 
   /**
    * Login contra API (Auth).
    */
   loginApi(credentials: { usuario: string; password: string }): Observable<AuthResponse> {
-    return this.api.post<AuthResponse>('/api/auth/login', credentials).pipe(
-      catchError(err => {
-        // Devuelve un objeto compatible con AuthResponse
-        return of({
-          token: '',
-          expiresIn: 0,
-          usuario: { id: 0, nombre: '', rol: '' }
-        });
-      })
-    );
-  }
+  return this.api.post<AuthResponse>('/api/auth/login', credentials).pipe(
+    map(response => {
+      // Si el backend devuelve el usuario completo en la respuesta
+      if (response.usuario) {
+        // Aquí asumo que response.usuario tiene la estructura de UsuarioModel
+        localStorage.setItem('usuarioLogueado', JSON.stringify(response.usuario));
+      }
+      return response;
+    }),
+    catchError(err => {
+      console.error('Error en login API', err);
+      return of({
+        token: '',
+        expiresIn: 0,
+        usuario: { id: 0, nombre: '', rol: '' }
+      });
+    })
+  );
+}
 
   // ========================
   //  OBTENER POR ID
@@ -201,5 +216,13 @@ eliminarLogico(id: number): Observable<string> {
   obtenerBarriosPorLocalidades(): Observable<any> {
     return this.http.get<any>(`${this.apiUrlSpringboot}/estadisticas/barrios-localidades`);
   }
+
+  limpiarContrasenaParaEdicion(usuario: UsuarioModel): UsuarioModel {
+  // Crear una copia del usuario sin la contraseña (o con cadena vacía)
+  const usuarioEdit = { ...usuario };
+  // Establecer contraseña vacía para el formulario
+  usuarioEdit.contrasena = '';
+  return usuarioEdit;
+}
 
 }

@@ -17,7 +17,7 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
       tap((response: any) => {
         if (response?.token) {
-          // Guardar token y datos del usuario
+          
           localStorage.setItem(this.TOKEN_KEY, response.token);
           localStorage.setItem(this.USER_KEY, JSON.stringify(response));
         }
@@ -40,6 +40,11 @@ export class AuthService {
   getUser(): any {
     const data = localStorage.getItem(this.USER_KEY);
     return data ? JSON.parse(data) : null;
+  }
+
+  getUserId(): number | null {
+    const user = this.getUser();
+    return user ? user.idUsuario : null;
   }
 
   /** 🧠 Saber si hay sesión activa */

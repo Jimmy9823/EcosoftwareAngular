@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsuarioService } from '../../../Services/usuario.service';
 import { UsuarioModel } from '../../../Models/usuario';
 import { Router } from '@angular/router';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-editar-usuario',
   templateUrl: './editar-usuario.html',
-  imports:[COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS],
   styleUrls: ['./editar-usuario.css']
 })
 export class EditarUsuario implements OnInit {
@@ -19,14 +20,19 @@ export class EditarUsuario implements OnInit {
   mostrarFormulario = false;
 
   usuario: UsuarioModel | null = null;
+  usuarioOriginal: UsuarioModel | null = null; // Guardar datos originales
 
-  private usuarioId = 3; // ID fijo para prueba
-  private rolUsuario: number = 2; // ⚠️ Cambiar dinámicamente si se implementa login
+  private usuarioId?: number;
+  private rolUsuario?: number | null;
+  
+  // Control para mostrar/ocultar contraseña
+  mostrarContrasena = false;
 
   constructor(
     private fb: FormBuilder,
     private usuarioService: UsuarioService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.usuarioForm = this.fb.group({});
   }
@@ -36,16 +42,30 @@ export class EditarUsuario implements OnInit {
   }
 
   cargarUsuario(): void {
-    this.usuarioService.obtenerPorId(this.usuarioId).subscribe({
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      this.error = 'No se pudo obtener el ID del usuario';
+      return;
+    }
+    
+    this.usuarioService.obtenerPorId(userId).subscribe({
       next: (usuario: UsuarioModel) => {
-        this.usuario = usuario;
-        this.rolUsuario = usuario.rolId || 2; // valor por defecto ciudadano
+        // Guardar usuario original (con hash)
+        this.usuarioOriginal = { ...usuario };
+        
+        // Crear copia para edición con contraseña vacía
+        this.usuario = {
+          ...usuario,
+          contrasena: '' // Contraseña vacía para el formulario
+        };
+        
+        this.usuarioId = usuario.idUsuario;
+        this.rolUsuario = usuario.rolId || 2;
       },
       error: (err) => this.error = 'Error al cargar el usuario: ' + (err.message || err)
     });
   }
 
-  // Campos según rol
   getCamposSegunRol(): string[] {
     switch(this.rolUsuario) {
       case 1: // Administrador
@@ -63,26 +83,59 @@ export class EditarUsuario implements OnInit {
 
   mostrarForm(): void {
     if (!this.usuario) return;
+    
     const campos = this.getCamposSegunRol();
     const formGroup: any = {};
+    
     campos.forEach(campo => {
-      formGroup[campo] = [this.usuario![campo as keyof UsuarioModel] || ''];
+      // Para contraseña, usar validadores especiales
+      if (campo === 'contrasena') {
+        formGroup[campo] = [
+          '', // Valor vacío inicial
+          [Validators.minLength(6)] // Validación mínima
+        ];
+      } else {
+        formGroup[campo] = [this.usuario![campo as keyof UsuarioModel] || ''];
+      }
     });
+    
     this.usuarioForm = this.fb.group(formGroup);
     this.mostrarFormulario = true;
   }
 
-  actualizarUsuario(): void {
-    if (!this.usuario) return;
-    const usuarioActualizar: UsuarioModel = {
-      ...this.usuario,
-      ...this.usuarioForm.getRawValue()
-    };
+  toggleMostrarContrasena(): void {
+    this.mostrarContrasena = !this.mostrarContrasena;
+  }
 
-    this.usuarioService.actualizar(this.usuarioId, usuarioActualizar).subscribe({
+  actualizarUsuario(): void {
+    if (!this.usuario || !this.usuarioOriginal) return;
+    
+    // Obtener valores del formulario
+    const formValues = this.usuarioForm.getRawValue();
+    
+    // Preparar objeto para actualizar
+    const usuarioActualizar: UsuarioModel = {
+      ...this.usuarioOriginal, // Usar datos originales como base
+      ...formValues
+    };
+    
+    // Si la contraseña está vacía, no actualizarla
+    if (!formValues.contrasena || formValues.contrasena.trim() === '') {
+      // Excluir la propiedad contrasena para no enviarla vacía
+      const { contrasena, ...usuarioSinContrasena } = usuarioActualizar;
+      Object.assign(usuarioActualizar, usuarioSinContrasena);
+    }
+    
+    this.usuarioService.actualizar(this.usuarioId!, usuarioActualizar).subscribe({
       next: () => {
         this.mensaje = 'Usuario actualizado correctamente ✅';
         this.error = '';
+        
+        // Recargar usuario actualizado
+        setTimeout(() => {
+          this.cargarUsuario();
+          this.mostrarFormulario = false;
+        }, 1500);
       },
       error: (err) => {
         this.mensaje = '';
@@ -91,25 +144,29 @@ export class EditarUsuario implements OnInit {
     });
   }
 
-  darseDeBaja(): void {
-  const confirmado = confirm(
-    '¿Está seguro de darse de baja de la aplicación?\nSe eliminará su cuenta y no podrá volver a ingresar.'
-  );
-
-  if (confirmado) {
-    this.usuarioService.eliminarLogico(this.usuarioId).subscribe({
-      next: (res) => {
-        // ✅ Independientemente de la respuesta, redirige
-        alert('Cuenta desactivada correctamente. Serás redirigido.');
-        this.router.navigate(['/main']); // ⚡ cambiar '/main' por tu ruta real
-      },
-      error: (err) => {
-        // En caso de que Angular lo interprete como error, igual hacemos la navegación
-        console.warn('Error interpretado, pero la cuenta podría estar desactivada:', err);
-        alert('Cuenta desactivada correctamente. Serás redirigido.');
-        this.router.navigate(['/main']); 
-      }
-    });
+  // Método para cancelar edición
+  cancelarEdicion(): void {
+    this.mostrarFormulario = false;
+    this.usuarioForm.reset();
   }
-}
+
+  darseDeBaja(): void {
+    const confirmado = confirm(
+      '¿Está seguro de darse de baja de la aplicación?\nSe eliminará su cuenta y no podrá volver a ingresar.'
+    );
+
+    if (confirmado) {
+      this.usuarioService.eliminarLogico(this.usuarioId!).subscribe({
+        next: (res) => {
+          alert('Cuenta desactivada correctamente. Serás redirigido.');
+          this.router.navigate(['/main']);
+        },
+        error: (err) => {
+          console.warn('Error interpretado, pero la cuenta podría estar desactivada:', err);
+          alert('Cuenta desactivada correctamente. Serás redirigido.');
+          this.router.navigate(['/']);
+        }
+      });
+    }
+  }
 }

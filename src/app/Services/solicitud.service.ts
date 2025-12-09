@@ -24,6 +24,9 @@ export interface SolicitudesPorLocalidad {
   providedIn: 'root'
 })
 export class Service {
+  obtenerIdUsuarioActual(): number {
+    throw new Error('Method not implemented.');
+  }
 
   private api = 'http://localhost:8082/api/solicitudes';
   solicitud: ServiceModel[] = [];
@@ -50,6 +53,12 @@ export class Service {
     return this.http.put<ServiceModel>(`${this.api}/${id}`, solicitud);
   }
 
+  listarPorUsuario(id: number): Observable<ServiceModel[]> {
+    return this.http.get<ServiceModel[]>(`${this.api}/usuario/${id}`);
+  }
+
+
+
   // ================================
   // FILTROS Y ESTADOS
   // ================================
@@ -57,6 +66,7 @@ export class Service {
   listarPorEstado(estado: string): Observable<ServiceModel[]> {
     return this.http.get<ServiceModel[]>(`${this.api}/estado/${estado}`);
   }
+
 
   // ================================
   // ACCIONES: ACEPTAR / RECHAZAR
