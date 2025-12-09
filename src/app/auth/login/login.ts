@@ -89,7 +89,7 @@ export class Login implements OnInit {
 
     this.authService.login(credenciales).subscribe({
       next: (response) => {
-        console.log('✅ Login exitoso');
+        console.log('Login exitoso');
         localStorage.setItem('token', response.token);
         localStorage.setItem('rol', response.rol);
 

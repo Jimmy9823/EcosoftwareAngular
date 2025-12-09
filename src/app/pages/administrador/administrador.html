@@ -81,7 +81,7 @@
 
       <app-titulo 
         titulo="Usuarios" 
-        subtitulo="Gestión de usuarios registrados"
+        subtitulo="Gestión de usuarios del sistema"
         [textoBoton]="mostrarNuevoUsuario ? 'Mostrar usuarios' : 'Agregar nuevo usuario'"
         iconoBoton="bi bi-plus-circle"
         colorBoton="outline-custom-success"
@@ -94,7 +94,9 @@
         <!-- Agregar usuario -->
         <ng-container *ngIf="mostrarNuevoUsuario">
           <div class="contenido-solicitud">
-            
+            <!-- En cualquier template -->
+          <!-- En el dashboard de administrador -->
+<app-registro-admin></app-registro-admin>
           </div>
         </ng-container>
 

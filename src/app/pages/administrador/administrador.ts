@@ -1,4 +1,4 @@
-import { Registro } from './../../auth/registro/registro';
+import { RegistroAdmin } from './../../auth/registro-admin/registro-admin';
 // src/app/usuario/administrador/administrador.ts
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -24,11 +24,12 @@ import {SolicitudesLocalidadChartComponent} from "../../Logic/solicitudes-comp/s
 import { Boton } from '../../shared/botones/boton/boton';
 import { Titulo } from '../../shared/titulo/titulo';
 import { Modal } from '../../shared/modal/modal';
-import { FormComp } from '../../shared/form/form.comp/form.comp';
 
+import { FormComp } from '../../shared/form/form.comp/form.comp';
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent,GraficoUsuariosLocalidad, GraficoUsuariosBarrios ,Usuario, ListarTabla, Solcitudes, CapacitacionesLista, CargaMasiva,BarraLateral,Boton,Titulo,Modal,FormComp, PuntosIframe, CrudPuntos],
+  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent,GraficoUsuariosLocalidad, 
+    GraficoUsuariosBarrios ,RegistroAdmin, Usuario, ListarTabla, Solcitudes, CapacitacionesLista, CargaMasiva,BarraLateral,Boton,Titulo,Modal,FormComp, PuntosIframe, CrudPuntos],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })

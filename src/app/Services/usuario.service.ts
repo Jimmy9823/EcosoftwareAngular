@@ -38,7 +38,7 @@ export class UsuarioService {
         return encontrado || null;
       }),
       catchError(err => {
-        console.error('❌ Error en login', err);
+        console.error(' Error en login', err);
         return throwError(() => err);
       })
     );

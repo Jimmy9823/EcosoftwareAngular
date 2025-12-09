@@ -1,12 +1,17 @@
 import { Routes } from '@angular/router';
+// Pagina de inicio/Registro/login
 import { Inicio } from './pages/inicio/inicio';
-import { Solcitudes } from './Logic/solicitudes-comp/listar-filtrar-solicitudes/solcitudes';
-import { Usuario } from './Logic/usuarios.comp/listar-filtrar-usuarios/usuario';
 import { Login } from './auth/login/login';
 import { Registro } from './auth/registro/registro';
+// Paginas de usuarios
 import { Administrador } from './pages/administrador/administrador';
 import { Ciudadano } from './pages/ciudadano/ciudadano';
 import { Empresa } from './pages/empresa/empresa';
+
+// Paginas de modulos
+import { Usuario } from './Logic/usuarios.comp/listar-filtrar-usuarios/usuario';
+import { Solcitudes } from './Logic/solicitudes-comp/listar-filtrar-solicitudes/solcitudes';
+
 import { CardsSolicitud } from './Logic/solicitudes-comp/cards-solicitud/cards-solicitud';
 import { CardARSolicitud } from './Logic/solicitudes-comp/card-a-r-solicitud/card-a-r-solicitud';
 import { FormRegistro } from './Logic/solicitudes-comp/vista-solicitudes/form-registro/form-registro';
@@ -41,8 +46,8 @@ export const routes: Routes = [
     canActivate: [AuthGuard],  data: { rol: 'Ciudadano' }
   },
   {
-    path: 'empresa', component: Empresa,
-    canActivate: [AuthGuard],  data: { rol: 'Empresa' }
+    path:'empresa', component: Empresa,
+    canActivate: [AuthGuard], data: { roles: ['Empresa', 'Reciclador'] }
   },
   { path: 'editar-usuario', component: EditarUsuario },
   { path: 'card-solicitud', component: CardsSolicitud },
