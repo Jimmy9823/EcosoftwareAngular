@@ -1,4 +1,6 @@
-<!-- ALERTAS BOOSTRAP FIJAS ARRIBA A LA DERECHA -->
+<!-- =============================== -->
+<!-- ALERTAS FIJAS ARRIBA A LA DERECHA -->
+<!-- =============================== -->
 <div class="alertas-container">
   <div *ngIf="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
     {{ mensaje }}
@@ -11,73 +13,66 @@
   </div>
 </div>
 
-
+<!-- =============================== -->
+<!-- CONTENEDOR PRINCIPAL DE TABLA Y FILTROS -->
+<!-- =============================== -->
 <div class="tabla-container">
- 
 
-  <!-- Filtros -->
-  <div class="filtros">
-    <select [(ngModel)]="criterioSeleccionado">
-      <option value="nombre">Nombre</option>
-      <option value="correo">Correo</option>
-      <option value="documento">Documento</option>
-    </select>
-
-    <input
-      *ngIf="criterioSeleccionado === 'nombre'"
-      [(ngModel)]="filtroNombre"
-      placeholder="Buscar por nombre"
-    />
-
-    <input
-      *ngIf="criterioSeleccionado === 'correo'"
-      [(ngModel)]="filtroCorreo"
-      placeholder="Buscar por correo"
-    />
-
-    <input
-      *ngIf="criterioSeleccionado === 'documento'"
-      [(ngModel)]="filtroDocumento"
-      placeholder="Buscar por documento"
-    />
-
-    <div class="botones">
-      <button class="filtrar" (click)="aplicarFiltroDesdeForm()">
-        <i class="bi bi-funnel"></i> Filtrar
-      </button>
-
-      <button class="limpiar" (click)="limpiarFiltro()">
-        <i class="bi bi-eraser"></i> Limpiar
-      </button>
-    </div>
+  <!-- =============================== -->
+<!-- FILTROS CON FormComp Y BOTÓN LIMPIAR -->
+<!-- =============================== -->
+<div class=" filtros-container ">
+  <!-- FormComp ocupa la mayor parte -->
+  <div class="form-wrapper">
+    <app-form-comp
+  [formGroup]="formFiltros"
+  [fields]="fieldsFiltros"
+  [submitButtonIcon]="'bi bi-funnel'"
+  [submitButtonColor]="'custom-success-filled'"  
+  (submitForm)="aplicarFiltroDesdeForm()">
+</app-form-comp>
   </div>
 
-  <!-- Tabla -->
+  <!-- Botón Limpiar -->
+  <div class="limpiar-wrapper">
+    <app-boton
+      icono="bi bi-brush"
+      color="custom-gray-filled"
+      (click)="limpiarFiltro()">
+    </app-boton>
+  </div>
+</div>
+
+
+
+  <!-- =============================== -->
+  <!-- TABLA DE USUARIOS -->
+  <!-- =============================== -->
   <app-tabla
     [columnas]="columnasUsuarios"
     [data]="usuarios"
     [cellTemplates]="cellTemplatesUsuarios"
     titulo="Usuarios"
     (descargar)="abrirModalReportes()"
-    (eliminar)="abrirModalEliminar($event)"
-
-  >
+    (eliminar)="abrirModalEliminar($event)">
   </app-tabla>
 
-  
-
+  <!-- MENSAJE CUANDO NO HAY USUARIOS -->
   <div *ngIf="usuarios.length === 0 && !cargando" class="mensaje info">
     No hay usuarios registrados.
   </div>
+
 </div>
 
-<!-- Modal de reportes -->
+<!-- =============================== -->
+<!-- MODAL DE REPORTES -->
+<!-- =============================== -->
 <app-modal
   #modalReportes
   [title]="'Reportes de usuarios'"
   [headerColor]="'#6c757d'"
-  [isOpen]="false"
->
+  [isOpen]="false">
+  
   <div class="mb-3">
     Seleccione el formato de reporte a descargar:
   </div>
@@ -88,23 +83,21 @@
       [texto]="btn.texto"
       [icono]="btn.icono"
       [color]="btn.color"
-      (click)="btn.accion()"
-    ></app-boton>
+      (click)="btn.accion()">
+    </app-boton>
   </div>
+
 </app-modal>
 
-<!-- ============================== -->
+<!-- =============================== -->
 <!-- MODAL ELIMINAR USUARIO -->
-<!-- ============================== -->
-<!-- ============================== -->
-<!-- MODAL ELIMINAR USUARIO -->
-<!-- ============================== -->
+<!-- =============================== -->
 <app-modal
   #modalEliminar
   [title]="'Eliminar usuario'"
   [headerColor]="'#d9534f'"
-  [isOpen]="false"
->
+  [isOpen]="false">
+
   <div class="p-2">
     <p>
       ¿Estás seguro que deseas realizar una de estas acciones para el usuario 
@@ -115,8 +108,12 @@
     <div class="user-info mt-3 p-2 bg-light rounded">
       <div><strong>Correo:</strong> {{ usuarioSeleccionado?.correo }}</div>
       <div><strong>Teléfono:</strong> {{ usuarioSeleccionado?.telefono }}</div>
-      <div><strong>Rol:</strong> {{ usuarioSeleccionado && usuarioSeleccionado.rolId ? obtenerNombreRol(usuarioSeleccionado.rolId) : 'No especificado' }}</div>
-      <div><strong>Estado:</strong> 
+      <div>
+        <strong>Rol:</strong> 
+        {{ usuarioSeleccionado && usuarioSeleccionado.rolId ? obtenerNombreRol(usuarioSeleccionado.rolId) : 'No especificado' }}
+      </div>
+      <div>
+        <strong>Estado:</strong> 
         <span [class]="usuarioSeleccionado?.estado ? 'text-success' : 'text-danger'">
           {{ usuarioSeleccionado?.estado ? 'Activo' : 'Inactivo' }}
         </span>
@@ -145,11 +142,9 @@
         [icono]="btn.icono"
         [color]="btn.color"
         size="sm"
-        (click)="btn.accion()"
-      >
+        (click)="btn.accion()">
       </app-boton>
     </div>
   </ng-container>
+
 </app-modal>
-
-

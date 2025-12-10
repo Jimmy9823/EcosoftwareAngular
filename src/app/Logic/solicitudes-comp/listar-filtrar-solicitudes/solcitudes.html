@@ -32,10 +32,6 @@
       <button class="btn btn-secondary" (click)="limpiarFiltros()">Limpiar</button>
     </div>
 
-    <div class="d-flex gap-2 ms-auto">
-      <button class="btn btn-outline-success" (click)="exportarExcel()">Exportar Excel</button>
-      <button class="btn btn-outline-danger" (click)="exportarPDF()">Exportar PDF</button>
-    </div>
   </div>
 
   <!-- TABLA REUTILIZABLE -->
@@ -44,6 +40,7 @@
   [data]="solicitudes"
   [cellTemplates]="cellTemplates"
   titulo="Solicitudes"
+  (descargar)="abrirModalReportes()"
   (ver)="selectedSolicitud = $event"
   (editar)="abrirModalEdicion($event)"
   (eliminar)="abrirModalRechazo($event)">
@@ -103,3 +100,27 @@
   </div>
 
 </div>
+<!-- =============================== -->
+<!-- MODAL DE REPORTES -->
+<!-- =============================== -->
+<app-modal
+  #modalReportes
+  [title]="'Reportes de usuarios'"
+  [headerColor]="'#6c757d'"
+  [isOpen]="false">
+  
+  <div class="mb-3">
+    Seleccione el formato de reporte a descargar:
+  </div>
+
+  <div class="d-flex gap-2 justify-content-center flex-wrap">
+    <app-boton
+      *ngFor="let btn of botonesReporte"
+      [texto]="btn.texto"
+      [icono]="btn.icono"
+      [color]="btn.color"
+      (click)="btn.accion()">
+    </app-boton>
+  </div>
+
+</app-modal>

@@ -1,94 +1,80 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="auth-form">
 
-  <div class="row g-3">
-
-    <!-- Recorremos todos los fields -->
-    <ng-container *ngFor="let field of fields">
+  <ng-container *ngFor="let field of fields" >
+    <ng-container *ngIf="shouldShow(field)">
 
       <!-- SEPARADOR -->
-      <ng-container *ngIf="field.type === 'separator'">
-        <div class="col-12">
-          <div class="form-separator">
-            {{ field.label }}
+      <div *ngIf="field.type === 'separator'" class="form-separator">
+        {{ field.label }}
+      </div>
+
+      <!-- CAMPOS -->
+      <div *ngIf="field.type !== 'separator'" 
+           class="form-group"
+           [ngClass]="{
+             'full': !field.cols || field.cols === 12,
+             'half': field.cols === 6,
+             'third': field.cols === 4
+           }">
+
+        <label>{{ field.label }}</label>
+
+        <input *ngIf="field.type === 'text' || field.type === 'email' || field.type === 'password'"
+               [type]="field.type"
+               class="form-input"
+               [formControlName]="field.name!"
+               [placeholder]="field.placeholder || ''" />
+
+        <select *ngIf="field.type === 'select'" 
+                class="form-input"
+                [formControlName]="field.name!">
+          <option value="" disabled selected>Seleccione una opción</option>
+          <option *ngFor="let opt of field.options!" [value]="opt.value!">
+            {{ opt.text }}
+          </option>
+        </select>
+
+        <textarea *ngIf="field.type === 'textarea'"
+                  class="form-input"
+                  rows="3"
+                  [formControlName]="field.name!"></textarea>
+
+        <input *ngIf="field.type === 'date'"
+               type="date"
+               class="form-input"
+               [formControlName]="field.name!" />
+
+        <div *ngIf="field.type === 'radio'" class="form-radio-group">
+          <div *ngFor="let opt of field.options!" class="radio-option">
+            <input type="radio" 
+                   [value]="opt.value!" 
+                   [id]="field.name! + opt.value!" 
+                   [formControlName]="field.name!" />
+            <label [for]="field.name! + opt.value!">{{ opt.text }}</label>
           </div>
         </div>
-      </ng-container>
 
-      <!-- CAMPOS NORMALES -->
-      <ng-container *ngIf="field.type !== 'separator'">
-        <div [class]="'col-12 col-md-' + (field.cols || 12)">
-
-          <label class="form-label fw-semibold">{{ field.label }}</label>
-
-          <!-- TEXT / EMAIL / PASSWORD -->
-          <ng-container *ngIf="field.type === 'text' || field.type === 'email' || field.type === 'password'">
-            <input 
-              [type]="field.type"
-              [formControlName]="field.name"
-              class="form-control"
-              [attr.placeholder]="field.placeholder ?? ''"
-            />
-          </ng-container>
-
-          <!-- SELECT -->
-          <ng-container *ngIf="field.type === 'select'">
-            <select [formControlName]="field.name" class="form-select">
-              <option value="" disabled selected>Seleccione una opción</option>
-              <option 
-                *ngFor="let option of field.options"
-                [value]="option.value"
-              >
-                {{ option.text }}
-              </option>
-            </select>
-          </ng-container>
-
-          <!-- DATE -->
-          <ng-container *ngIf="field.type === 'date'">
-            <input 
-              type="date"
-              [formControlName]="field.name"
-              class="form-control"
-            />
-          </ng-container>
-
-          <!-- RADIO -->
-          <ng-container *ngIf="field.type === 'radio'">
-            <div class="d-flex flex-wrap gap-3">
-              <div *ngFor="let option of field.options" class="form-check">
-                <input 
-                  class="form-check-input"
-                  type="radio"
-                  [formControlName]="field.name"
-                  [value]="option.value"
-                  [id]="field.name + '_' + option.value"
-                />
-                <label 
-                  class="form-check-label"
-                  [for]="field.name + '_' + option.value"
-                >
-                  {{ option.text }}
-                </label>
-              </div>
-            </div>
-          </ng-container>
-
-          <!-- TEXTAREA -->
-          <ng-container *ngIf="field.type === 'textarea'">
-            <textarea 
-              [formControlName]="field.name"
-              rows="3"
-              class="form-control"
-            ></textarea>
-          </ng-container>
-
+        <div class="error" *ngIf="formGroup.get(field.name!)?.invalid && formGroup.get(field.name!)?.touched">
+          Campo inválido
         </div>
-      </ng-container>
+
+      </div>
 
     </ng-container>
+  </ng-container>
 
+  <div class="form-button" *ngIf="showSubmitButton">
+    <app-boton
+      [texto]="submitButtonText"
+      [icono]="submitButtonIcon"
+          [color]="submitButtonColor"   
+
+      size="md"
+      tipo="submit"
+      [deshabilitado]="formGroup.invalid || disableSubmit">
+    </app-boton>
   </div>
 
-
+  <ng-content select="[form-footer]"></ng-content>
 
 </form>

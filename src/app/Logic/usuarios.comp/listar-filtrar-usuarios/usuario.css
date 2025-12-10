@@ -1,239 +1,44 @@
-/* 🌿 Estilo general */
-.tabla-container {
-  background-color: #f1faee;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  margin-top: 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.tabla-container h2 {
-  color: #2b6b2f;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-/* 🧭 Contenedor de filtros */
-.filtros {
+.filtros-container {
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  flex-wrap: wrap;
+  align-items: center;       /* centra verticalmente los elementos */
+  gap: 10px;                 /* espacio entre inputs y botones */
+  padding: 15px 20px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   margin-bottom: 1.5rem;
-  background-color: #e6f4ea;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* 📐 Línea superior: select (1/3) + input (2/3) */
-.filtros .linea-filtros {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 0.5rem;
+/* FormComp ocupa todo el espacio restante */
+.form-wrapper {
+  flex: 1 1 auto;
+  min-width: 250px;
 }
 
-.filtros select,
-.filtros input {
-  padding: 0.5rem 0.8rem;
-  border: 1px solid #b8d8ba;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  background-color: white;
-  color: #2b6b2f;
+/* Botones de acción */
+.botones-wrapper {
+  display: flex;
+  gap: 10px;
+  flex: 0 0 auto;       /* no se estira */
 }
 
-.filtros select:focus,
-.filtros input:focus {
-  outline: none;
-  border-color: #4caf50;
-  box-shadow: 0 0 4px #a5d6a7;
-}
-
-/* 🟩 Línea inferior: 4 botones horizontales (1/4 cada uno) */
-.filtros .botones {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
-}
-
-.filtros .botones button {
+/* Ajusta altura de los botones para que coincida con los inputs */
+.botones-wrapper app-boton {
+  height: 40 !important;         /* altura aproximada de los inputs */
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  padding: 0.45rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
 }
 
-.filtros .filtrar {
-  background-color: #4caf50;
-  color: white;
-}
-
-.filtros .limpiar {
-  background-color: #9e9e9e;
-  color: white;
-}
-
-.filtros .exportar-pdf {
-  background-color: #e53935;
-  color: white;
-}
-
-.filtros .exportar-excel {
-  background-color: #2e7d32;
-  color: white;
-}
-
-.filtros .botones button:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-}
-
-/* 📄 Mensajes */
-.mensaje {
-  margin-bottom: 1rem;
-  text-align: center;
-  padding: 0.5rem;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-.mensaje.info {
-  background-color: #e6f4ea;
-  color: #2b6b2f;
-}
-
-.mensaje.exito {
-  background-color: #a5d6a7;
-  color: #1b5e20;
-}
-
-.mensaje.error {
-  background-color: #ffcdd2;
-  color: #b71c1c;
-}
-
-/* 📝 Tabla */
-.tabla-usuarios {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0.5rem;
-}
-
-.tabla-usuarios thead {
-  background-color: #2e7d32;
-  color: white;
-}
-
-/* ❌ Evitar transparencia en hover de cabecera */
-.tabla-usuarios thead tr:hover {
-  background-color: #2e7d32 !important;
-}
-
-.tabla-usuarios th,
-.tabla-usuarios td {
-  padding: 0.6rem;
-  text-align: left;
-  font-size: 0.9rem;
-  border-bottom: 1px solid #d7e9db;
-}
-
-.tabla-usuarios tbody tr:hover {
-  background-color: #f0f9f2;
-}
-
-.tabla-usuarios input,
-.tabla-usuarios select {
-  width: 100%;
-  padding: 0.3rem;
-  font-size: 0.85rem;
-  border: 1px solid #b8d8ba;
-  border-radius: 6px;
-}
-
-/* 🟩 Estados */
-.activo {
-  color: #2e7d32;
-  font-weight: 600;
-}
-
-.inactivo {
-  color: #b71c1c;
-  font-weight: 600;
-}
-
-/* 🧭 Acciones */
-.acciones {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.acciones .btn {
-  flex: 1;
-  padding: 0.3rem 0.5rem;
-  font-size: 0.8rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.acciones .editar {
-  background-color: #4caf50;
-  color: white;
-}
-
-.acciones .guardar {
-  background-color: #2e7d32;
-  color: white;
-}
-
-.acciones .cancelar {
-  background-color: #9e9e9e;
-  color: white;
-}
-
-.acciones .eliminar {
-  background-color: #e53935;
-  color: white;
-}
-
-.acciones .btn:hover {
-  filter: brightness(1.1);
-}
-
-/* 📱 Responsive */
+/* Responsive */
 @media (max-width: 768px) {
-  .filtros .linea-filtros {
-    grid-template-columns: 1fr;
-  }
-
-  .filtros .botones {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .acciones {
+  .filtros-container {
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .botones-wrapper {
+    justify-content: center;
   }
 }
-
-
-
-
-.alertas-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 2000;
-  width: 300px;
-}
-
-

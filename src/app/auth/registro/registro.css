@@ -1,240 +1,508 @@
-.auth-container {
-  min-height: 100vh;
-  display: flex;
+/* 🌿 Variables de Color - Tema Ecológico */
+:root {
+  --eco-primary: #10b981;
+  --eco-primary-dark: #059669;
+  --eco-primary-light: #6ee7b7;
+  --eco-secondary: #3b82f6;
+  --eco-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --eco-gradient-light: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  --eco-text: #1f2937;
+  --eco-text-light: #6b7280;
+  --eco-bg: #f9fafb;
+  --eco-white: #ffffff;
+  --eco-error: #ef4444;
+  --eco-shadow: 0 10px 40px rgba(16, 185, 129, 0.1);
+  --eco-shadow-hover: 0 20px 60px rgba(16, 185, 129, 0.15);
 }
 
-/* Sección Izquierda: Mensaje de Bienvenida */
+/* 🎨 Reset y Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--eco-bg);
+  color: var(--eco-text);
+  line-height: 1.6;
+}
+
+/* 📦 Container Principal */
+.auth-container {
+  display: grid;
+  grid-template-columns: 45% 55%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .auth-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 🌟 Sección de Bienvenida */
 .welcome-section {
-  flex: 1;
-  background: linear-gradient(135deg, #8efcb6 0%, #38ca6d 100%);
+  background: var(--eco-gradient);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  color: white;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-section::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  top: -200px;
+  left: -200px;
+  animation: float 20s infinite ease-in-out;
+}
+
+.welcome-section::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  bottom: -150px;
+  right: -150px;
+  animation: float 15s infinite ease-in-out reverse;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-30px) rotate(5deg);
+  }
 }
 
 .welcome-content {
+  position: relative;
+  z-index: 1;
+  color: var(--eco-white);
   max-width: 500px;
-  text-align: center;
 }
 
 .welcome-content h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 3.5rem;
+  font-weight: 800;
   margin-bottom: 1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  line-height: 1.2;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .welcome-subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 3rem;
-  opacity: 0.9;
-  line-height: 1.6;
-}
-
-.welcome-message h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-}
-
-.welcome-message p {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  line-height: 1.6;
-  opacity: 0.9;
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.95;
+  font-weight: 300;
 }
 
 .benefits-list {
-  text-align: left;
   list-style: none;
-  padding: 0;
+  margin-top: 2rem;
 }
 
 .benefits-list li {
-  padding: 0.5rem 0;
-  font-size: 1rem;
-  position: relative;
-  padding-left: 1.5rem;
+  padding: 1rem 0;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  animation: slideIn 0.6s forwards;
 }
+
+.benefits-list li:nth-child(1) { animation-delay: 0.2s; }
+.benefits-list li:nth-child(2) { animation-delay: 0.4s; }
+.benefits-list li:nth-child(3) { animation-delay: 0.6s; }
+.benefits-list li:nth-child(4) { animation-delay: 0.8s; }
 
 .benefits-list li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: #48bb78;
+  content: '✓';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  margin-right: 1rem;
   font-weight: bold;
+  backdrop-filter: blur(10px);
 }
 
-/* Sección Derecha: Formulario */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .welcome-section {
+    padding: 2rem;
+    min-height: 40vh;
+  }
+  
+  .welcome-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .welcome-subtitle {
+    font-size: 1rem;
+  }
+  
+  .benefits-list li {
+    font-size: 1rem;
+  }
+}
+
+/* 📝 Sección del Formulario */
 .form-section {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  background: #f7fafc;
+  padding: 3rem;
+  overflow-y: auto;
+  background: var(--eco-bg);
 }
 
 .auth-card {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 450px;
+  max-width: 600px;
+  background: var(--eco-white);
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: var(--eco-shadow);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .auth-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 2.5rem;
 }
 
 .auth-header h2 {
-  color: #2d3748;
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 8px;
+  color: var(--eco-text);
+  margin-bottom: 0.5rem;
+  background: var(--eco-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .form-subtitle {
-  color: #718096;
-  font-size: 14px;
+  color: var(--eco-text-light);
+  font-size: 0.95rem;
 }
 
+/* 🎯 Formulario */
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.5rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
 }
 
-.form-row {
-  display: flex;
-  gap: 15px;
-}
-
-.half {
-  flex: 1;
-}
-
-label {
+.form-group label {
   font-weight: 600;
-  color: #4a5568;
-  margin-bottom: 6px;
-  font-size: 14px;
+  color: var(--eco-text);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .form-input {
-  padding: 12px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 0.875rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
   transition: all 0.3s ease;
-  background: #f7fafc;
+  background: var(--eco-white);
+  color: var(--eco-text);
+  font-family: inherit;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #38ca6d;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+  border-color: var(--eco-primary);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+  transform: translateY(-1px);
 }
 
-.form-input.ng-invalid.ng-touched {
-  border-color: #fc8181;
+.form-input::placeholder {
+  color: #9ca3af;
 }
 
-.error {
-  color: #e53e3e;
-  font-size: 12px;
-  margin-top: 4px;
-  font-weight: 500;
+/* Diseño en dos columnas */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
+.form-group.half {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 🎭 Sección de Rol */
 .role-section {
-  background: #f7fafc;
-  padding: 20px;
-  border-radius: 8px;
-  border-left: 4px solid #4af087;
+  background: var(--eco-gradient-light);
+  padding: 1.5rem;
+  border-radius: 16px;
+  margin-top: 0.5rem;
+  border: 2px solid var(--eco-primary-light);
 }
 
 .role-section h3 {
-  color: #2d3748;
-  font-size: 16px;
-  margin-bottom: 15px;
-  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--eco-primary-dark);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
+.role-section h3::before {
+  content: '🏢';
+  font-size: 1.3rem;
+}
+
+.role-section .form-group {
+  margin-bottom: 1rem;
+}
+
+.role-section .form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* ⚠️ Mensajes de Error */
+.error {
+  color: var(--eco-error);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+  animation: shake 0.4s ease-in-out;
+}
+
+.error::before {
+  content: '⚠';
+  font-size: 0.9rem;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.form-input:invalid:not(:placeholder-shown) {
+  border-color: var(--eco-error);
+}
+
+/* 🚀 Botón de Envío */
 .submit-btn {
-  background: #38ca6d;
-  color: white;
+  background: var(--eco-gradient);
+  color: var(--eco-white);
   border: none;
-  padding: 14px 20px;
-  border-radius: 8px;
-  font-size: 16px;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 10px;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.submit-btn:hover:not(:disabled)::before {
+  width: 300px;
+  height: 300px;
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: #70ffa5;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+  transform: translateY(-2px);
+  box-shadow: var(--eco-shadow-hover);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .submit-btn:disabled {
-  background: #35443a;
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
 }
 
+/* 🔗 Footer del Formulario */
 .auth-footer {
   text-align: center;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #e2e8f0;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
 }
 
 .auth-footer p {
-  color: #718096;
-  font-size: 14px;
+  color: var(--eco-text-light);
+  font-size: 0.95rem;
 }
 
 .auth-link {
-  color: #38ca6d;
+  color: var(--eco-primary);
   text-decoration: none;
   font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 .auth-link:hover {
+  color: var(--eco-primary-dark);
   text-decoration: underline;
 }
 
-/* Responsive */
+/* 📱 Responsive para móviles */
 @media (max-width: 768px) {
-  .auth-container {
-    flex-direction: column;
+  .form-section {
+    padding: 2rem 1.5rem;
+  }
+  
+  .auth-card {
+    padding: 2rem 1.5rem;
+    border-radius: 20px;
+  }
+  
+  .auth-header h2 {
+    font-size: 1.75rem;
   }
   
   .welcome-section {
-    padding: 30px 20px;
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 1.5rem;
   }
   
-  .form-section {
-    padding: 30px 20px;
+  .form-input {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
   }
   
-  .form-row {
-    flex-direction: column;
-    gap: 0;
+  .submit-btn {
+    padding: 0.875rem 1.5rem;
   }
+}
+
+/* ✨ Animaciones de carga */
+.submit-btn:disabled::after {
+  content: '';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* 🎨 Select personalizado */
+.form-input[type="text"],
+.form-input[type="email"],
+.form-input[type="password"],
+select.form-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+select.form-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2310b981' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 3rem;
+  cursor: pointer;
+}
+
+/* 💚 Scroll personalizado */
+.form-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.form-section::-webkit-scrollbar-track {
+  background: var(--eco-bg);
+}
+
+.form-section::-webkit-scrollbar-thumb {
+  background: var(--eco-primary-light);
+  border-radius: 4px;
+}
+
+.form-section::-webkit-scrollbar-thumb:hover {
+  background: var(--eco-primary);
 }

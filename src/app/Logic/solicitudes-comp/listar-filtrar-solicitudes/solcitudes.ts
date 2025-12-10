@@ -1,14 +1,16 @@
 // solicitudes.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Service } from '../../../Services/solicitud.service';
 import { ServiceModel } from '../../../Models/solicitudes.model';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla';
+import { Modal } from "../../../shared/modal/modal";
+import { Boton } from "../../../shared/botones/boton/boton";
 
 @Component({
   selector: 'app-solcitudes',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS,Tabla],
+  imports: [COMPARTIR_IMPORTS, Tabla, Modal, Boton],
   templateUrl: './solcitudes.html',
   styleUrls: ['./solcitudes.css']
 })
@@ -18,6 +20,8 @@ export class Solcitudes implements OnInit {
   selectedSolicitud: ServiceModel | null = null;
   motivoRechazo: string = '';
   mostrarModalRechazo = false;
+    @ViewChild('modalReportes') modalReportes!: Modal;
+
 
   // filtros
   estadoFilter: string = '';
@@ -94,6 +98,14 @@ cellTemplates = {
     });
   }
 
+  // ===============================
+  // MODALES
+  // ===============================
+  abrirModalReportes(): void {
+    this.modalReportes.isOpen = true;
+  }
+
+
   abrirModalRechazo(solicitud: ServiceModel): void {
     this.selectedSolicitud = solicitud;
     this.motivoRechazo = '';
@@ -118,6 +130,24 @@ cellTemplates = {
     this.motivoRechazo = '';
     this.mostrarModalRechazo = false;
   }
+
+  // ===============================
+  // BOTONES MODALES
+  // ===============================
+  botonesReporte = [
+    {
+      texto: 'PDF',
+      icono: 'bi-file-earmark-pdf',
+      color: 'outline-custom-danger',
+      accion: () => this.exportarPDF()
+    },
+    {
+      texto: 'Excel',
+      icono: 'bi-file-earmark-excel',
+      color: 'outline-custom-success',
+      accion: () => this.exportarExcel()
+    }
+  ];
 
   // ========================
   // FILTROS

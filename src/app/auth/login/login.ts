@@ -1,30 +1,29 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { COMPARTIR_IMPORTS } from '../../shared/imports';
-import { FormGeneral } from '../../shared/form/form-general/form-general';
 import { RouterModule } from '@angular/router';
+import { FormComp, FieldConfig } from '../../shared/form/form.comp/form.comp';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormGeneral, RouterModule],
+  imports: [COMPARTIR_IMPORTS, RouterModule, FormComp],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrls: ['./login.css']
 })
-export class Login implements OnInit {
+export class Login implements OnInit, OnDestroy {
 
-  correo = '';
-  contrasena = '';
+  formGroup!: FormGroup;
+
   errorMessage = '';
 
-  // Campos del formulario (siguen igual)
-  campos = [
+  campos: FieldConfig[] = [
     { name: 'correo', label: 'Correo', type: 'email', placeholder: 'Ingrese su correo' },
     { name: 'contrasena', label: 'Contraseña', type: 'password', placeholder: 'Ingrese su contraseña' }
   ];
 
-  // 🌱 Propiedades para la animación ecológica
   fade = false;
   residues = [
     { icon: '🗑️', name: 'Residuos Ordinarios', color: '#6b7280' },
@@ -38,16 +37,31 @@ export class Login implements OnInit {
   ];
   currentIndex = 0;
   currentResidue = this.residues[0];
+  private residueInterval: any;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {}
 
-  //  Animación al iniciar el componente
   ngOnInit(): void {
-    setInterval(() => this.rotateResidue(), 3000);
+    // Crear formulario con validación
+    this.formGroup = this.fb.group({
+      correo: ['', [Validators.required, Validators.email]],
+      contrasena: ['', Validators.required]
+    });
+
+    // Animación de residuos
+    this.residueInterval = setInterval(() => this.rotateResidue(), 3000);
   }
 
-  //  Cambia ícono y texto de residuos
-  rotateResidue() {
+  ngOnDestroy(): void {
+    // Limpiar intervalo
+    clearInterval(this.residueInterval);
+  }
+
+  rotateResidue(): void {
     this.fade = true;
     setTimeout(() => {
       this.currentIndex = (this.currentIndex + 1) % this.residues.length;
@@ -56,37 +70,28 @@ export class Login implements OnInit {
     }, 500);
   }
 
-  // Login modificado con validación de campos
   onLogin(formValue: any): void {
     console.log('Datos recibidos en Login:', formValue);
-    console.log('Correo:', formValue.correo);
 
-    // Resetear mensaje de error
     this.errorMessage = '';
 
     const correo = formValue.correo?.trim() || '';
     const contrasena = formValue.contrasena?.trim() || '';
 
-    // Validación de campos vacíos
     if (!correo && !contrasena) {
       this.errorMessage = 'Por favor, ingrese su correo y contraseña.';
       return;
     }
-
     if (!correo) {
       this.errorMessage = 'Por favor, ingrese su correo.';
       return;
     }
-
     if (!contrasena) {
       this.errorMessage = 'Por favor, ingrese su contraseña.';
       return;
     }
 
-    const credenciales = {
-      correo: correo,
-      contrasena: contrasena
-    };
+    const credenciales = { correo, contrasena };
 
     this.authService.login(credenciales).subscribe({
       next: (response) => {
@@ -98,30 +103,24 @@ export class Login implements OnInit {
           case 'Administrador': this.router.navigate(['/administrador']); break;
           case 'Ciudadano': this.router.navigate(['/ciudadano']); break;
           case 'Empresa': this.router.navigate(['/empresa']); break;
-          case 'Reciclador': this.router.navigate(['/empresa']); break;
-          default:
-            console.warn('Rol no reconocido, redirigiendo al login');
-            this.router.navigate(['/login']);
+          case 'Reciclador': this.router.navigate(['/reciclador']); break;
+          default: this.router.navigate(['/login']);
         }
       },
       error: (err) => {
-        console.error('Error en login:', err);
-
         if (err.status === 401) {
-          this.errorMessage = 'Correo o contraseña incorrectos. Verifique sus credenciales.';
-      
+          this.errorMessage = 'Correo o contraseña incorrectos.';
         } else if (err.status === 500) {
-          this.errorMessage = 'Error en el servidor. Intente de nuevo más tarde.';
+          this.errorMessage = 'Error en el servidor. Intente de nuevo.';
         } else {
-          this.errorMessage = 'Ha ocurrido un error inesperado. Intente nuevamente.';
+          this.errorMessage = 'Ha ocurrido un error inesperado.';
         }
-      },
+      }
     });
   }
 
-  // 🍃 Efecto visual de movimiento de hojas con el mouse
   @HostListener('document:mousemove', ['$event'])
-  onMouseMove(e: MouseEvent) {
+  onMouseMove(e: MouseEvent): void {
     const leaves = document.querySelectorAll('.floating-leaves');
     const mouseX = e.clientX / window.innerWidth;
     const mouseY = e.clientY / window.innerHeight;

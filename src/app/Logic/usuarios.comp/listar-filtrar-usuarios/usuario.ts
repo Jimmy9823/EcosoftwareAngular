@@ -1,16 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
 import { UsuarioService } from '../../../Services/usuario.service';
 import { UsuarioModel } from '../../../Models/usuario';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla';
 import { Boton } from '../../../shared/botones/boton/boton';
 import { Modal } from '../../../shared/modal/modal';
+import { FieldConfig, FormComp } from '../../../shared/form/form.comp/form.comp';
 
 @Component({
   selector: 'app-usuario-tabla',
   templateUrl: './usuario.html',
   styleUrls: ['./usuario.css'],
-  imports: [COMPARTIR_IMPORTS, Tabla, Boton, Modal],
+  imports: [COMPARTIR_IMPORTS, Tabla, Boton, Modal,FormComp],
 })
 export class Usuario implements OnInit {
 
@@ -27,16 +29,31 @@ export class Usuario implements OnInit {
   @ViewChild('modalEliminar') modalEliminar!: Modal;
   @ViewChild('modalEliminarFisico') modalEliminarFisico!: Modal;
 
-
   usuarioSeleccionado?: UsuarioModel | null = null;
 
-  // Filtros
-  criterioSeleccionado = 'nombre';
-  filtroNombre = '';
-  filtroCorreo = '';
-  filtroDocumento = '';
+  // ===============================
+  // Filtros con FormComp
+  // ===============================
+  formFiltros: FormGroup = new FormGroup({});
 
+  fieldsFiltros: FieldConfig[] = [
+  { type: 'select', name: 'criterio', label: 'Criterio', cols: 4, options: [
+      { value: 'nombre', text: 'Nombre' },
+      { value: 'correo', text: 'Correo' },
+      { value: 'documento', text: 'Documento' }
+  ] },
+  { type: 'text', name: 'nombre', label: 'Buscar por nombre', placeholder: 'Ingrese nombre', cols: 4,
+    showIf: () => this.formFiltros.get('criterio')?.value === 'nombre' },
+  { type: 'text', name: 'correo', label: 'Buscar por correo', placeholder: 'Ingrese correo', cols: 4,
+    showIf: () => this.formFiltros.get('criterio')?.value === 'correo' },
+  { type: 'text', name: 'documento', label: 'Buscar por documento', placeholder: 'Ingrese documento', cols: 4,
+    showIf: () => this.formFiltros.get('criterio')?.value === 'documento' }
+];
+
+
+  // ===============================
   // Roles
+  // ===============================
   roles = [
     { id: 1, nombre: 'Administrador' },
     { id: 2, nombre: 'Ciudadano' },
@@ -44,6 +61,9 @@ export class Usuario implements OnInit {
     { id: 4, nombre: 'Reciclador' }
   ];
 
+  // ===============================
+  // Tabla
+  // ===============================
   columnasUsuarios: ColumnaTabla[] = [
     { campo: 'idUsuario', titulo: 'ID' },
     { campo: 'nombre', titulo: 'Nombre' },
@@ -63,7 +83,7 @@ export class Usuario implements OnInit {
   };
 
   // ===============================
-  // BOTONES DEL MODAL DE REPORTES
+  // BOTONES MODALES
   // ===============================
   botonesReporte = [
     {
@@ -80,130 +100,118 @@ export class Usuario implements OnInit {
     }
   ];
 
-  // ===============================
-  // BOTONES DEL MODAL DE ACTIVAR
-  // ===============================
- accionesEliminar = [
-  {
-    texto: 'Inactivar',
-    icono: 'bi-pause-circle', // Icono para inactivar
-    color: 'warning',
-    accion: () => this.inactivarUsuario()
-  },
-  {
-    texto: 'Eliminar',
-    icono: 'bi-trash',
-    color: 'danger',
-    accion: () => this.confirmarEliminacionFisica()
+  accionesEliminar = [
+    {
+      texto: 'Inactivar',
+      icono: 'bi-pause-circle',
+      color: 'warning',
+      accion: () => this.inactivarUsuario()
+    },
+    {
+      texto: 'Eliminar',
+      icono: 'bi-trash',
+      color: 'danger',
+      accion: () => this.confirmarEliminacionFisica()
+    }
+  ];
+
+  accionesEliminarFisico = [
+    {
+      texto: 'Cancelar',
+      icono: 'bi-x-circle',
+      color: 'cancelar',
+      hover: 'btn-cancelar',
+      accion: () => this.cerrarModalEliminar()
+    },
+    {
+      texto: 'Eliminar',
+      icono: 'bi-trash',
+      color: 'pastel-danger',
+      hover: 'btn-pastel-danger',
+      accion: () => this.confirmarEliminacionFisica()
+    }
+  ];
+
+  constructor(private usuarioService: UsuarioService) {
+    // Inicializa controles del formFiltros
+    this.fieldsFiltros.forEach(f => {
+      if (f.type !== 'separator') {
+        this.formFiltros.addControl(f.name!, new FormControl(f.name === 'criterio' ? 'nombre' : ''));
+      }
+    });
   }
-];
-
-  // ===============================
-  // BOTONES DEL MODAL DE ELIMINAR
-  // ===============================
-accionesEliminarFisico = [
-  {
-    texto: 'Cancelar',
-    icono: 'bi-x-circle',
-    color: 'cancelar',
-    hover: 'btn-cancelar',
-    accion: () => this.cerrarModalEliminar()
-  },
-  {
-    texto: 'Eliminar',
-    icono: 'bi-trash',
-    color: 'pastel-danger',
-    hover: 'btn-pastel-danger',
-
-    accion: () => this.confirmarEliminacionFisica()
-  }
-];
-
-
-
-  constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     this.cargarUsuarios();
   }
 
   // ===============================
-  // MODAL ELIMINAR
+  // MODALES
   // ===============================
-
   abrirModalReportes(): void {
-  this.modalReportes.isOpen = true;
-}
+    this.modalReportes.isOpen = true;
+  }
 
   abrirModalEliminar(usuario: UsuarioModel): void {
     this.usuarioSeleccionado = usuario;
     this.modalEliminar.isOpen = true;
   }
 
-  
+  abrirModalEliminarFisico(usuario: UsuarioModel): void {
+    this.usuarioSeleccionado = usuario;
+    this.modalEliminarFisico.isOpen = true;
+  }
+
+  cerrarModalEliminar(): void {
+    this.modalEliminar.close();
+    this.usuarioSeleccionado = null;
+  }
 
   confirmarEliminacion(): void {
     if (!this.usuarioSeleccionado?.idUsuario) return;
-
     this.eliminarUsuario(this.usuarioSeleccionado.idUsuario);
     this.cerrarModalEliminar();
   }
-abrirModalEliminarFisico(usuario: UsuarioModel): void {
-  this.usuarioSeleccionado = usuario;
-  this.modalEliminarFisico.isOpen = true;
-}
 
-cerrarModalEliminar(): void {
-  this.modalEliminar.close();
-  this.usuarioSeleccionado = null;
-}
+  confirmarEliminacionFisica(): void {
+    if (!this.usuarioSeleccionado?.idUsuario) return;
 
-confirmarEliminacionFisica(): void {
-  if (!this.usuarioSeleccionado?.idUsuario) return;
+    this.usuarioService.eliminarFisico(this.usuarioSeleccionado.idUsuario).subscribe({
+      next: () => {
+        this.mensaje = 'Usuario eliminado permanentemente';
+        this.cargarUsuarios();
+        this.cerrarModalEliminar();
+        setTimeout(() => (this.mensaje = ''), 2500);
+      },
+      error: () => {
+        this.error = 'Error al eliminar el usuario';
+        setTimeout(() => (this.error = ''), 2500);
+      }
+    });
+  }
 
-  this.usuarioService.eliminarFisico(this.usuarioSeleccionado.idUsuario).subscribe({
-    next: () => {
-      this.mensaje =  'Usuario eliminado permanentemente';
-      this.cargarUsuarios();
-      this.cerrarModalEliminar();
+  inactivarUsuario(): void {
+    if (!this.usuarioSeleccionado?.idUsuario) return;
 
-      setTimeout(() => (this.mensaje = ''), 2500);
-    },
-    error: () => {
-      this.error = 'Error al eliminar el usuario';
-      setTimeout(() => (this.error = ''), 2500);
-    }
-  });
-}
-
-
-
-
-  
-inactivarUsuario(): void {
-  if (!this.usuarioSeleccionado?.idUsuario) return;
-
-  this.usuarioService.eliminarLogico(this.usuarioSeleccionado.idUsuario).subscribe({
-    next: () => {
-      this.mensaje = 'Usuario inactivado correctamente';
-      this.cargarUsuarios();
-      this.cerrarModalEliminar();
-      setTimeout(() => (this.mensaje = ''), 2500);
-    },
-    error: () => {
-      this.error = 'Error al inactivar el usuario';
-      setTimeout(() => (this.error = ''), 2500);
-    }
-  });
-}
-  
+    this.usuarioService.eliminarLogico(this.usuarioSeleccionado.idUsuario).subscribe({
+      next: () => {
+        this.mensaje = 'Usuario inactivado correctamente';
+        this.cargarUsuarios();
+        this.cerrarModalEliminar();
+        setTimeout(() => (this.mensaje = ''), 2500);
+      },
+      error: () => {
+        this.error = 'Error al inactivar el usuario';
+        setTimeout(() => (this.error = ''), 2500);
+      }
+    });
+  }
 
   // ===============================
-  // CARGAR USUARIOS
+  // USUARIOS
   // ===============================
   cargarUsuarios(): void {
     this.cargando = true;
-
     this.usuarioService.listar().subscribe({
       next: (data) => {
         this.usuarios = data;
@@ -221,11 +229,9 @@ inactivarUsuario(): void {
   // FILTROS
   // ===============================
   aplicarFiltroDesdeForm(): void {
-    const valor = {
-      nombre: this.filtroNombre,
-      correo: this.filtroCorreo,
-      documento: this.filtroDocumento
-    }[this.criterioSeleccionado];
+    const formValue = this.formFiltros.value;
+    const criterio = formValue.criterio;
+    const valor = formValue[criterio];
 
     if (!valor?.trim()) {
       this.cargarUsuarios();
@@ -234,7 +240,7 @@ inactivarUsuario(): void {
 
     this.cargando = true;
 
-    this.usuarioService.filtrar(this.criterioSeleccionado, valor).subscribe({
+    this.usuarioService.filtrar(criterio, valor).subscribe({
       next: (usuariosFiltrados) => {
         this.usuarios = usuariosFiltrados;
         this.mensaje = `${usuariosFiltrados.length} usuario(s) encontrado(s)`;
@@ -250,22 +256,15 @@ inactivarUsuario(): void {
   }
 
   limpiarFiltro(): void {
-    this.filtroNombre = '';
-    this.filtroCorreo = '';
-    this.filtroDocumento = '';
+    this.formFiltros.reset({ criterio: 'nombre' });
     this.cargarUsuarios();
   }
 
-   // ===============================
+  // ===============================
   // EXPORTAR REPORTES
   // ===============================
   exportarPDF(): void {
-    const filtros = {
-      nombre: this.filtroNombre || undefined,
-      correo: this.filtroCorreo || undefined,
-      documento: this.filtroDocumento || undefined
-    };
-
+    const filtros = this.formFiltros.value;
     this.usuarioService.descargarPDF(filtros).subscribe((data: Blob) => {
       const url = URL.createObjectURL(new Blob([data], { type: 'application/pdf' }));
       const link = document.createElement('a');
@@ -276,12 +275,7 @@ inactivarUsuario(): void {
   }
 
   exportarExcel(): void {
-    const filtros = {
-      nombre: this.filtroNombre || undefined,
-      correo: this.filtroCorreo || undefined,
-      documento: this.filtroDocumento || undefined
-    };
-
+    const filtros = this.formFiltros.value;
     this.usuarioService.descargarExcel(filtros).subscribe((data: Blob) => {
       const url = URL.createObjectURL(new Blob([data], { type: 'application/vnd.ms-excel' }));
       const link = document.createElement('a');
@@ -322,8 +316,9 @@ inactivarUsuario(): void {
     });
   }
 
-
-
+  // ===============================
+  // UTILES
+  // ===============================
   obtenerNombreRol(rolId?: number): string {
     return this.roles.find(r => r.id === rolId)?.nombre ?? 'Desconocido';
   }

@@ -30,6 +30,13 @@
   transform: scale(1.03);
 }
 
+.btn-custom-success-filled {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  color: white !important;
+  border-color: #16a34a !important;
+  transform: scale(1.03);
+}
+
 /* ================================
    1. Estado normal: outline rojo (#dc2626)
    ================================ */
@@ -148,3 +155,14 @@
   color: #374151 !important;              
   transform: scale(1.04);                 
 }
+
+
+.btn-custom-gray-filled {
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%) !important; /* tonos gris claros a oscuros */
+  color: white !important;          /* texto blanco */
+  border-color: #6b7280 !important; /* borde gris oscuro */
+  transform: scale(1.03);
+  transition: all 0.25s ease-in-out;
+  border-radius: 8px;
+}
+
