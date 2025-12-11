@@ -21,14 +21,17 @@ import { CrudPuntos } from '../../Logic/puntos-recoleccion/crud-puntos/crud-punt
 import { PuntosService } from '../../Services/puntos-reciclaje.service';
 import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
 import {SolicitudesLocalidadChartComponent} from "../../Logic/solicitudes-comp/solicitudes-localidad-chart-component/solicitudes-localidad-chart-component";
+import { RechazadasMotivoChartComponent } from '../../Logic/solicitudes-comp/rechazadas-motivo-chart-component/rechazadas-motivo-chart-component';
+import { PendientesAceptadasChartComponent } from '../../Logic/solicitudes-comp/pendientes-aceptadas-chart-component/pendientes-aceptadas-chart-component';
 import { Boton } from '../../shared/botones/boton/boton';
 import { Titulo } from '../../shared/titulo/titulo';
 import { Modal } from '../../shared/modal/modal';
 import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { FormComp } from '../../shared/form/form.comp/form.comp';
+import { Service } from '../../Services/solicitud.service';
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent,GraficoUsuariosLocalidad, 
+  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent, RechazadasMotivoChartComponent, PendientesAceptadasChartComponent, GraficoUsuariosLocalidad, 
     GraficoUsuariosBarrios ,RegistroAdmin, Usuario, ListarTabla, Solcitudes, 
     EditarUsuario, CapacitacionesLista, CargaMasiva,BarraLateral,Boton,Titulo,Modal,FormComp, PuntosIframe, CrudPuntos],
   templateUrl: './administrador.html',
@@ -64,7 +67,8 @@ export class Administrador {
     private usuarioService: UsuarioService,
     private router: Router,
     private authService : AuthService,
-    private puntosService: PuntosService
+    private puntosService: PuntosService,
+    private solicitudService: Service
   ) {}
 
   cargarPuntos(): void {
@@ -144,6 +148,107 @@ RegistroAdmin() {
       // Si no hay sesión, redirige al login
      
     }
+
+    // 🔍 DEBUGGING: Cargar datos reales de la API para verificar
+    this.cargarDatosRealesParaDebug();
+  }
+
+  private cargarDatosRealesParaDebug(): void {
+    console.group('📊 ANÁLISIS DE SOLICITUDES - DEBUG');
+
+    // Obtener TODAS las solicitudes
+    this.solicitudService.obtenerTodasLasSolicitudes().subscribe({
+      next: (todas) => {
+        console.log('📋 TODAS LAS SOLICITUDES:', todas);
+
+        // Agrupar por localidad
+        const porLocalidad: { [key: string]: number } = {};
+        const porEstado: { [key: string]: number } = {};
+        const porEstadoYLocalidad: { [estado: string]: { [localidad: string]: number } } = {};
+
+        todas.forEach((sol: any) => {
+          const loc = sol.localidad || sol.localidadDescripcion || 'Sin localidad';
+          const estRaw = sol.estadoPeticion ?? sol.estado ?? 'Sin estado';
+          const est = String(estRaw);
+
+          // Contar por localidad
+          porLocalidad[loc] = (porLocalidad[loc] || 0) + 1;
+
+          // Contar por estado
+          porEstado[est] = (porEstado[est] || 0) + 1;
+
+          // Contar por estado Y localidad
+          if (!porEstadoYLocalidad[est]) {
+            porEstadoYLocalidad[est] = {};
+          }
+          porEstadoYLocalidad[est][loc] = (porEstadoYLocalidad[est][loc] || 0) + 1;
+        });
+
+        console.log('✅ SOLICITUDES POR LOCALIDAD:', porLocalidad);
+        console.log('✅ SOLICITUDES POR ESTADO:', porEstado);
+        console.log('✅ SOLICITUDES POR ESTADO Y LOCALIDAD:', porEstadoYLocalidad);
+
+        // Resumen
+        console.log(`📊 RESUMEN:
+- Total solicitudes: ${todas.length}
+- Localidades: ${Object.keys(porLocalidad).length}
+- Estados: ${Object.keys(porEstado).length}
+- Pendientes: ${porEstado['Pendiente'] || 0}
+- Aceptadas: ${porEstado['Aceptada'] || 0}
+- Rechazadas: ${porEstado['Rechazada'] || 0}`);
+      },
+      error: (err) => {
+        console.error('❌ Error al obtener solicitudes:', err);
+      }
+    });
+
+    // También intentar los endpoints específicos de gráficos
+    console.group('📈 ENDPOINTS ESPECÍFICOS DE GRÁFICOS');
+
+    this.solicitudService.getSolicitudesPorLocalidad().subscribe({
+      next: (data) => {
+        console.log('✅ getSolicitudesPorLocalidad:', data);
+      },
+      error: (err) => {
+        console.warn('❌ getSolicitudesPorLocalidad falló:', err.message);
+        this.solicitudService.getSolicitudesPorLocalidadFactory().subscribe({
+          next: (data) => console.log('✅ getSolicitudesPorLocalidadFactory (fallback):', data),
+          error: (e) => console.warn('❌ Fallback también falló:', e.message)
+        });
+      }
+    });
+
+    this.solicitudService.getPendientesYAceptadas().subscribe({
+      next: (data) => {
+        console.log('✅ getPendientesYAceptadas:', data);
+      },
+      error: (err) => {
+        console.warn('❌ getPendientesYAceptadas falló:', err.message);
+      }
+    });
+
+    this.solicitudService.getRechazadasPorMotivo().subscribe({
+      next: (data) => {
+        console.log('✅ getRechazadasPorMotivo:', data);
+      },
+      error: (err) => {
+        console.warn('❌ getRechazadasPorMotivo falló:', err.message);
+      }
+    });
+
+    console.groupEnd();
+    console.groupEnd();
+  }
+
+  // Estado de autenticación para mostrar en UI
+  get isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  get tokenPreview(): string | null {
+    const t = this.authService.getToken();
+    if (!t) return null;
+    return t.length > 24 ? `${t.slice(0,12)}...${t.slice(-8)}` : t;
   }
 
   // ========================

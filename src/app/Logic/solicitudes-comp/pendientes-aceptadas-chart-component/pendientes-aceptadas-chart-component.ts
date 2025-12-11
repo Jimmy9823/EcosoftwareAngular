@@ -19,10 +19,52 @@ export class PendientesAceptadasChartComponent implements OnInit {
     // Inicializar con opciones básicas
     this.initializeEmptyChart();
     
-    this.service.getPendientesYAceptadas().subscribe((data: PendientesAceptadas) => {
-      this.updateChart(data);
+    // Obtener TODAS las solicitudes y contar por estado
+    this.service.listar().subscribe({
+      next: (todasLasSolicitudes: any[]) => {
+        console.log('[PendientesAceptadas] Todas las solicitudes:', todasLasSolicitudes);
+        
+        // Mostrar estados únicos para debugging (usar la propiedad real `estadoPeticion`)
+        const estadosUnicos = new Set(todasLasSolicitudes.map(sol => sol.estadoPeticion));
+        console.log('[PendientesAceptadas] Estados únicos en BD (estadoPeticion):', Array.from(estadosUnicos));
+        
+        // Contar por estado - permitir variaciones
+        let pendientes = 0;
+        let aceptadas = 0;
+
+        todasLasSolicitudes.forEach((sol: any) => {
+          const estadoRaw = sol.estadoPeticion ?? sol.estado ?? '';
+          const estado = (String(estadoRaw) || '').toLowerCase().trim();
+          console.log('[PendientesAceptadas] Procesando solicitud ID:', sol.idSolicitud ?? sol.id, 'Estado raw:', estadoRaw, 'Estado procesado:', estado);
+          
+          if (estado === 'pendiente' || estado === 'pendient') {
+            pendientes++;
+          } else if (estado === 'aceptada' || estado === 'aceptado') {
+            aceptadas++;
+          }
+        });
+
+        console.log('[PendientesAceptadas] Resultado final - Pendientes:', pendientes, 'Aceptadas:', aceptadas);
+        
+        this.errorMessage = null;
+        const data = { pendientes, aceptadas };
+        this.updateChart(data);
+      },
+      error: (err) => {
+        console.error('Error cargando solicitudes:', err);
+        // Usar datos de prueba si el endpoint falla
+        console.warn('[PendientesAceptadas] API no disponible, usando datos de prueba');
+        const mockData = {
+          pendientes: 15,
+          aceptadas: 28
+        };
+        this.errorMessage = '⚠️ Usando datos de prueba (API no disponible)';
+        this.updateChart(mockData);
+      }
     });
   }
+
+  public errorMessage: string | null = null;
 
   private initializeEmptyChart(): void {
     this.chartOptions = {
@@ -32,9 +74,9 @@ export class PendientesAceptadasChartComponent implements OnInit {
       }],
       chart: {
         type: 'bar',
-        height: 350,
+        height: 300,
         toolbar: {
-          show: true
+          show: false
         }
       },
       plotOptions: {
@@ -42,7 +84,7 @@ export class PendientesAceptadasChartComponent implements OnInit {
           borderRadius: 4,
           horizontal: false,
           columnWidth: '70%',
-          distributed: true // ¡IMPORTANTE! Esto hace que cada barra tenga su color
+          distributed: true
         }
       },
       dataLabels: {
@@ -57,14 +99,11 @@ export class PendientesAceptadasChartComponent implements OnInit {
         }
       },
       title: {
-        text: 'Solicitudes Pendientes vs Aceptadas',
-        align: 'center',
-        style: {
-          fontSize: '16px',
-          fontWeight: 'bold'
-        }
+        text: '',
+        align: 'center'
       },
-      colors: ['#FF4560', '#00E396'], // Rojo para Pendientes, Verde para Aceptadas
+      // Usar solo tonos de verde y azul
+      colors: ['#1e88e5', '#2e7d32'],
       fill: {
         opacity: 1
       }

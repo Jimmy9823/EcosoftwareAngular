@@ -18,63 +18,58 @@
       
       <app-titulo 
         titulo="Panel de Control" 
-        subtitulo="Una visión general de la plataforma"
+        subtitulo="Resumen de análisis y métricas de la plataforma"
         iconoBoton="bi bi-bell"
         colorBoton="outline-custom-success" 
         hoverColorBoton="custom-success-filled">
       </app-titulo>
 
-      <div class="row g-4">
+      <!-- Auth status removed -->
 
-        <!-- Card 1: Usuarios -->
-        <div class="col-md-4">
-          <div class="card card-interactiva shadow-sm">
-            <div class="contenido-por-defecto">
-              <i class="bi bi-people fs-1 text-success"></i>
-              <span class="mt-2">Usuarios</span>
-            </div>
-            <div class="contenido-completo">
-              <p class="mt-2 text-center">Por localidad</p>
-              <app-grafico-usuarios-localidad></app-grafico-usuarios-localidad>
-              <h5 class="mt-2 text-center">Usuarios por barrio</h5>
-              <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
-            </div>
+      <!-- FILA 1: Gráficos principales -->
+      <div class="analytics-grid">
+        
+        <!-- Gráfico 1: Usuarios por Localidad (Línea/Barras) -->
+        <div class="analytics-card">
+          <h6 class="card-title">Usuarios por Localidad</h6>
+          <div class="chart-container">
+            <app-grafico-usuarios-localidad></app-grafico-usuarios-localidad>
           </div>
         </div>
 
-        <!-- Card 2: Solicitudes -->
-        <div class="col-md-4">
-          <div class="card card-interactiva shadow-sm">
-            <div class="contenido-por-defecto">
-              <i class="bi bi-send fs-1 text-success"></i>
-              <span class="mt-2">Solicitudes</span>
-            </div>
-            <div class="contenido-completo">
-              <p class="mt-2 text-center">Por Localidad</p>
-              <app-solicitudes-localidad-chart></app-solicitudes-localidad-chart>
-              <p class="mt-2 text-center">Rechazadas / Pendientes</p>
-              <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
-            </div>
-          </div>
-        </div>
+        <!-- (Removed) Distribución por Barrio - usuario solicitó eliminar -->
 
-        <!-- Card 3: Recolección -->
-        <div class="col-md-4">
-          <div class="card card-interactiva shadow-sm">
-            <div class="contenido-por-defecto">
-              <i class="bi bi-backpack2 fs-1 text-success"></i>
-              <span class="mt-2">Recolección</span>
-            </div>
-            <div class="contenido-completo">
-              <p class="mt-2 text-center">Por Localidad</p>
-              <app-solicitudes-localidad-chart></app-solicitudes-localidad-chart>
-              <p class="mt-2 text-center">Rechazadas / Pendientes</p>
-              <app-grafica-usuarios-barrios></app-grafica-usuarios-barrios>
-            </div>
+        <!-- Gráfico 3: Solicitudes por Localidad -->
+        <div class="analytics-card">
+          <h6 class="card-title">Solicitudes por Localidad</h6>
+          <div class="chart-container">
+            <app-solicitudes-localidad-chart></app-solicitudes-localidad-chart>
           </div>
         </div>
 
       </div>
+
+      <!-- FILA 2: Indicadores complementarios -->
+      <div class="analytics-grid mt-4">
+        
+        <!-- Rechazadas por Motivo -->
+        <div class="analytics-card">
+          <h6 class="card-title">Solicitudes Rechazadas</h6>
+          <div class="chart-container">
+            <app-rechazadas-motivo-chart></app-rechazadas-motivo-chart>
+          </div>
+        </div>
+
+        <!-- Pendientes vs Aceptadas -->
+        <div class="analytics-card">
+          <h6 class="card-title">Estado de Solicitudes</h6>
+          <div class="chart-container">
+            <app-pendientes-aceptadas-chart></app-pendientes-aceptadas-chart>
+          </div>
+        </div>
+
+      </div>
+
     </ng-container>
 <ng-container *ngIf="vistaActual === 'editar-perfil'">
       <app-titulo

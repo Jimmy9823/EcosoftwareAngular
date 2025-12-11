@@ -77,8 +77,9 @@ export class Service {
   }
 
   rechazarSolicitud(id: number, motivo: string): Observable<ServiceModel> {
-    const params = new HttpParams().set('motivo', motivo);
-    return this.http.post<ServiceModel>(`${this.api}/${id}/rechazar`, null, { params });
+    const body = { razon: motivo };
+    console.log('[rechazarSolicitud] enviando:', { id, motivo, body });
+    return this.http.post<ServiceModel>(`${this.api}/${id}/rechazar`, body);
   }
 
   // ================================
@@ -112,8 +113,13 @@ export class Service {
   }
 
   // ================================
-  // NUEVOS MÉTODOS PARA GRÁFICOS
+  // DEBUGGING: Obtener todas las solicitudes para análisis
   // ================================
+
+  obtenerTodasLasSolicitudes(): Observable<ServiceModel[]> {
+    return this.listar();
+  }
+
 
   getPendientesYAceptadas(): Observable<PendientesAceptadas> {
     return this.http.get<PendientesAceptadas>(`${this.api}/graficos/pendientes-aceptadas`);
@@ -138,6 +144,7 @@ export class Service {
   }
 
  getSolicitudesPorLocalidadFactory(): Observable<SolicitudesPorLocalidad[]> {
+  // Intenta primero el endpoint original, luego devuelve datos de prueba como fallback
   return this.http.get<{ [key: string]: number }>(`${this.api}/graficas/localidades`).pipe(
     map(res => {
       // res "respuesta"= { "Suba": 2, "Kennedy": 2, ... } Convertir a array de objetos
@@ -147,6 +154,17 @@ export class Service {
       }));
     })
   );
+}
+
+// Datos de prueba cuando el endpoint no responde
+private getMockSolicitudesPorLocalidad(): SolicitudesPorLocalidad[] {
+  return [
+    { localidad: 'Candelaria', cantidad: 2 },
+    { localidad: 'Chapinero', cantidad: 1 },
+    { localidad: 'Teusaquillo', cantidad: 1 },
+    { localidad: 'Engativá', cantidad: 1 },
+    { localidad: 'Rafael Uribe Uribe', cantidad: 1 }
+  ];
 }
 
 

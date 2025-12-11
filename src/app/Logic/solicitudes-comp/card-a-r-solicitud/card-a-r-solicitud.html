@@ -110,6 +110,17 @@
             Aceptar
           </button>
 
+          <div *ngIf="s.estadoPeticion === 'Pendiente'" class="d-flex align-items-center gap-2 ms-2">
+            <select class="form-select form-select-sm" style="width:220px" [ngModel]="getSelectedMotivo(s.idSolicitud)" (ngModelChange)="setSelectedMotivo(s.idSolicitud, $event)">
+              <option value="">Motivo de rechazo...</option>
+              <option *ngFor="let m of motivosDisponibles" [value]="m">{{ m }}</option>
+            </select>
+            <button class="btn-action btn-reject" (click)="rechazarSolicitud(s)">
+              <i class="fas fa-times"></i>
+              Rechazar
+            </button>
+          </div>
+
         </div>
 
       </div>

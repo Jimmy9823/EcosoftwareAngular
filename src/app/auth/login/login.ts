@@ -96,7 +96,7 @@ export class Login implements OnInit, OnDestroy {
     this.authService.login(credenciales).subscribe({
       next: (response) => {
         console.log('Login exitoso');
-        localStorage.setItem('token', response.token);
+        localStorage.setItem('jwt_token', response.token);
         localStorage.setItem('rol', response.rol);
 
         switch (response.rol) {

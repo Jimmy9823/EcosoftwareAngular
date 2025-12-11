@@ -19,6 +19,14 @@ export class Solcitudes implements OnInit {
   solicitudes: ServiceModel[] = [];
   selectedSolicitud: ServiceModel | null = null;
   motivoRechazo: string = '';
+  selectedMotivo: string = '';
+  motivosDisponibles: string[] = [
+    'Datos incorrectos',
+    'Solicitud duplicada',
+    'Información incompleta',
+    'No cumple requisitos',
+    'Revisión administrativa'
+  ];
   mostrarModalRechazo = false;
     @ViewChild('modalReportes') modalReportes!: Modal;
 
@@ -109,19 +117,37 @@ cellTemplates = {
   abrirModalRechazo(solicitud: ServiceModel): void {
     this.selectedSolicitud = solicitud;
     this.motivoRechazo = '';
+    this.selectedMotivo = '';
     this.mostrarModalRechazo = true;
   }
 
   confirmarRechazo(): void {
     if (!this.selectedSolicitud) return;
 
-    this.solicitudesService.rechazarSolicitud(this.selectedSolicitud.idSolicitud!, this.motivoRechazo).subscribe({
+    const motivoFinal = this.selectedMotivo;
+    if (!motivoFinal || !motivoFinal.trim()) {
+      alert('Seleccione un motivo de rechazo');
+      return;
+    }
+
+    console.log('[confirmarRechazo] enviando rechazo:', { 
+      id: this.selectedSolicitud.idSolicitud, 
+      motivo: motivoFinal 
+    });
+
+    this.solicitudesService.rechazarSolicitud(this.selectedSolicitud.idSolicitud!, motivoFinal).subscribe({
       next: () => {
         alert(`Solicitud #${this.selectedSolicitud?.idSolicitud} rechazada correctamente`);
         this.cerrarModalRechazo();
         this.listarSolicitudes();
       },
-      error: (err) => console.error('❌ Error al rechazar la solicitud', err)
+      error: (err) => {
+        console.error('❌ Error al rechazar la solicitud:', err);
+        if (err.error) {
+          console.error('Detalle del error:', err.error);
+        }
+        alert(`Error al rechazar: ${err.message || err.statusText}`);
+      }
     });
   }
 

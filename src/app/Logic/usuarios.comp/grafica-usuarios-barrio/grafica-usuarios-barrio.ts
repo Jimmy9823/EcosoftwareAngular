@@ -54,7 +54,8 @@ export class GraficoUsuariosBarrios implements OnInit, AfterViewInit {
         this.cantidades = this.labels.map(key => barriosMap[key].cantidad);
         this.localidades = this.labels.map(key => barriosMap[key].localidad);
 
-        this.intentarGenerarGrafica();
+        // Usar setTimeout para asegurar que el DOM está listo
+        setTimeout(() => this.intentarGenerarGrafica(), 100);
       },
       error: (err) => {
         console.error('❌ Error cargando gráfica', err);

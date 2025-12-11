@@ -69,11 +69,16 @@ export class Usuario implements OnInit {
     { campo: 'nombre', titulo: 'Nombre' },
     { campo: 'correo', titulo: 'Correo' },
     { campo: 'telefono', titulo: 'Teléfono' },
+    { campo: 'localidad', titulo: 'Localidad' },
     { campo: 'rolId', titulo: 'Rol' },
     { campo: 'estado', titulo: 'Estado' }
   ];
 
   cellTemplatesUsuarios = {
+    localidad: (u: UsuarioModel) => {
+      if (!u.localidad) return 'N/A';
+      return String(u.localidad).replace(/_/g, ' ');
+    },
     rolId: (u: UsuarioModel) => this.obtenerNombreRol(u.rolId),
     estado: (u: UsuarioModel) => {
       const clase = u.estado ? 'activo' : 'inactivo';

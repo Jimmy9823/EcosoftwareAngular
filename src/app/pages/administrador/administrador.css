@@ -1,53 +1,135 @@
 :root {
-      --verde-principal: #198754;
-      --transicion-rapida: 0.3s ease;
-    }
-    
-    .card-interactiva {
-      min-height: 200px;
-      transition: all var(--transicion-rapida);
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-    }
-    
-    .card-interactiva .contenido-por-defecto {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      transition: all var(--transicion-rapida);
-    }
-    
-    .card-interactiva .contenido-completo {
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all var(--transicion-rapida);
-      height: 0;
-      overflow: hidden;
-    }
-    
-    .card-interactiva:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-    }
-    
-    .card-interactiva:hover .contenido-por-defecto {
-      height: 30%;
-      padding-bottom: 10px;
-    }
-    
-    .card-interactiva:hover .contenido-completo {
-      opacity: 1;
-      transform: translateY(0);
-      height: auto;
-      overflow: visible;
-    }
-    
-    .verde-principal {
-      color: var(--verde-principal);
-    }
+  --verde-principal: #198754;
+  --verde-claro: #dfeee0;
+  --transicion-rapida: 0.3s ease;
+}
+
+.dashboard.administrador {
+  background: linear-gradient(135deg, #dfeee0 0%, #e8f4ea 100%);
+  min-height: 100vh;
+}
+
+/* GRID DE ANALYTICS */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+  margin-bottom: 32px;
+}
+
+/* TARJETA DE ANÁLISIS */
+.analytics-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all var(--transicion-rapida);
+  border: 1px solid rgba(25, 135, 84, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.analytics-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  border-color: rgba(25, 135, 84, 0.2);
+}
+
+.analytics-card .card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--verde-principal);
+  padding-bottom: 10px;
+}
+
+/* CONTENEDOR DE GRÁFICOS */
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  min-height: 300px;
+  position: relative;
+  width: 100%;
+}
+
+.chart-container canvas {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.chart-container apx-chart {
+  width: 100%;
+  height: 100%;
+}
+
+/* ESTILOS ANTIGUOS MANTENIDOS PARA COMPATIBILIDAD */
+.card-interactiva {
+  min-height: 200px;
+  transition: all var(--transicion-rapida);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.card-interactiva .contenido-por-defecto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  transition: all var(--transicion-rapida);
+}
+
+.card-interactiva .contenido-completo {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all var(--transicion-rapida);
+  height: 0;
+  overflow: hidden;
+}
+
+.card-interactiva:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.card-interactiva:hover .contenido-por-defecto {
+  height: 30%;
+  padding-bottom: 10px;
+}
+
+.card-interactiva:hover .contenido-completo {
+  opacity: 1;
+  transform: translateY(0);
+  height: auto;
+  overflow: visible;
+}
+
+.verde-principal {
+  color: var(--verde-principal);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .analytics-card {
+    padding: 16px;
+  }
+
+  .chart-container {
+    min-height: 250px;
+  }
+}
     
     .grafico-placeholder {
       background-color: #f8f9fa;
@@ -58,3 +140,21 @@
       color: #6c757d;
       border: 1px dashed #dee2e6;
     }
+
+    /* Ajuste de los componentes de gráficos dentro de las tarjetas */
+.contenido-completo app-grafico-usuarios-localidad,
+.contenido-completo app-grafica-usuarios-barrios,
+.contenido-completo app-solicitudes-localidad-chart,
+.contenido-completo app-pendientes-aceptadas-chart {
+  width: 100%;
+  height: 250px; 
+  display: block;
+  margin: 10px 0;
+}
+
+.grafico-container {
+  width: 100%;
+  height: 250px; /* mismo alto para todos */
+  margin: 10px 0;
+}
+

@@ -55,12 +55,15 @@
           <button type="button" class="btn-close" (click)="cerrarModalRechazo()"></button>
         </div>
         <div class="modal-body">
-          <label for="motivo" class="form-label">Motivo del rechazo:</label>
-          <textarea id="motivo" [(ngModel)]="motivoRechazo" rows="3" class="form-control"></textarea>
+          <label for="motivoSelect" class="form-label">Seleccione motivo del rechazo:</label>
+          <select id="motivoSelect" class="form-select mb-2" [(ngModel)]="selectedMotivo">
+            <option value="">-- Seleccione --</option>
+            <option *ngFor="let m of motivosDisponibles" [value]="m">{{ m }}</option>
+          </select>
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary text-white" (click)="cerrarModalRechazo()">Cancelar</button>
-          <button class="btn btn-danger" (click)="confirmarRechazo()" [disabled]="!motivoRechazo.trim()">Confirmar</button>
+          <button class="btn btn-danger" (click)="confirmarRechazo()" [disabled]="!selectedMotivo || (selectedMotivo === 'Otro' && !motivoRechazo.trim())">Confirmar</button>
         </div>
       </div>
     </div>
