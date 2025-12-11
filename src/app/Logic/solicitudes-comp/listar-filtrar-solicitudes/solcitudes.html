@@ -41,7 +41,7 @@
   [cellTemplates]="cellTemplates"
   titulo="Solicitudes"
   (descargar)="abrirModalReportes()"
-  (ver)="selectedSolicitud = $event"
+  (ver)="abrirModalVerSolicitud($event)"
   (editar)="abrirModalEdicion($event)"
   (eliminar)="abrirModalRechazo($event)">
 </app-tabla>
@@ -69,38 +69,7 @@
     </div>
   </div>
 
-  <!-- MODAL DETALLE -->
-  <div class="modal fade show d-block" *ngIf="selectedSolicitud && !mostrarModalRechazo" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content modal-detalle">
-        <div class="modal-header header-suave">
-          <h5 class="modal-title"><i class="bi bi-info-circle me-2"></i> Detalle de Solicitud</h5>
-          <button type="button" class="btn-close" (click)="selectedSolicitud = null"></button>
-        </div>
-        <div class="modal-body">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item"><strong>ID:</strong> {{ selectedSolicitud.idSolicitud }}</li>
-            <li class="list-group-item"><strong>Tipo Residuo:</strong> {{ selectedSolicitud.tipoResiduo }}</li>
-            <li class="list-group-item"><strong>Cantidad:</strong> {{ selectedSolicitud.cantidad }}</li>
-            <li class="list-group-item"><strong>Localidad:</strong> {{ selectedSolicitud.localidad }}</li>
-            <li class="list-group-item"><strong>Estado:</strong>
-              <span class="badge"
-                [ngClass]="{
-                  'bg-success': selectedSolicitud.estadoPeticion === 'Aceptada',
-                  'bg-danger': selectedSolicitud.estadoPeticion === 'Rechazada',
-                  'bg-warning text-dark': selectedSolicitud.estadoPeticion === 'Pendiente'
-                }">
-                {{ selectedSolicitud.estadoPeticion }}
-              </span>
-            </li>
-          </ul>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-outline-success" (click)="selectedSolicitud = null">Cerrar</button>
-        </div>
-      </div>
-    </div>
-  </div>
+ 
 
 </div>
 <!-- =============================== -->
@@ -126,4 +95,107 @@
     </app-boton>
   </div>
 
+</app-modal>
+
+<app-modal #modalVerSolicitud [title]="'Detalles de la Solicitud'" [headerColor]="'#0d6efd'" [isOpen]="false">
+
+  <div class="p-3 modal-perfil-container">
+
+    <!-- ENCABEZADO VISUAL -->
+    <div class="text-center mb-4">
+      <i class="bi bi-receipt" style="font-size: 4.5rem; color: #0d6efd;"></i>
+      <h3 class="mt-2 mb-0">Solicitud #{{ selectedSolicitud?.idSolicitud || '---' }}</h3>
+      <small class="text-muted">Usuario ID: {{ selectedSolicitud?.usuarioId }}</small>
+    </div>
+
+    <!-- SECCIÓN 1: Información general -->
+    <h5 class="section-title">Información general</h5>
+
+    <div class="row mb-3">
+      <div class="col-6">
+        <label class="fw-bold">Tipo de Residuo:</label>
+        <div>{{ selectedSolicitud?.tipoResiduo || 'Sin especificar' }}</div>
+      </div>
+
+      <div class="col-6">
+        <label class="fw-bold">Cantidad:</label>
+        <div>{{ selectedSolicitud?.cantidad || 'Sin especificar' }}</div>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-6">
+        <label class="fw-bold">Estado de la petición:</label>
+        <div>{{ selectedSolicitud?.estadoPeticion || 'Pendiente' }}</div>
+      </div>
+
+      <div class="col-6">
+        <label class="fw-bold">Descripción:</label>
+        <div>{{ selectedSolicitud?.descripcion || 'Sin descripción' }}</div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: Ubicación -->
+    <h5 class="section-title">Ubicación</h5>
+
+    <div class="row mb-3">
+      <div class="col-6">
+        <label class="fw-bold">Localidad:</label>
+        <div>{{ selectedSolicitud?.localidad || 'Sin especificar' }}</div>
+      </div>
+
+      <div class="col-6">
+        <label class="fw-bold">Ubicación exacta:</label>
+        <div>{{ selectedSolicitud?.ubicacion || 'Sin especificar' }}</div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 3: Evidencia -->
+    <h5 class="section-title">Evidencia</h5>
+
+    <div class="mb-3">
+      <label class="fw-bold">Archivo o Imagen:</label>
+      <div>
+        <ng-container *ngIf="selectedSolicitud?.evidencia; else noEvidencia">
+          <a [href]="selectedSolicitud?.evidencia" target="_blank" class="text-primary">
+            Ver evidencia
+          </a>
+        </ng-container>
+        <ng-template #noEvidencia>
+          Sin evidencia adjunta
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 4: Fechas -->
+    <h5 class="section-title">Fechas</h5>
+
+    <div class="row mb-3">
+      <div class="col-6">
+        <label class="fw-bold">Fecha de creación:</label>
+        <div>{{ selectedSolicitud?.fechaCreacionSolicitud || 'No registrada' }}</div>
+      </div>
+
+      <div class="col-6">
+        <label class="fw-bold">Fecha programada:</label>
+        <div>{{ selectedSolicitud?.fechaProgramada || 'No definida' }}</div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 5: Recolección -->
+    <h5 class="section-title">Información de recolección</h5>
+
+    <div class="row mb-3">
+      <div class="col-6">
+        <label class="fw-bold">Aceptada por (Recolector ID):</label>
+        <div>{{ selectedSolicitud?.aceptadaPorId || 'Sin asignar' }}</div>
+      </div>
+
+      <div class="col-6">
+        <label class="fw-bold">Recolección ID:</label>
+        <div>{{ selectedSolicitud?.recoleccionId || 'Sin asignar' }}</div>
+      </div>
+    </div>
+
+  </div>
 </app-modal>

@@ -29,6 +29,7 @@ export class Solcitudes implements OnInit {
   ];
   mostrarModalRechazo = false;
     @ViewChild('modalReportes') modalReportes!: Modal;
+    @ViewChild('modalVerSolicitud') modalVerSolicitud!: Modal;
 
 
   // filtros
@@ -120,6 +121,12 @@ cellTemplates = {
     this.selectedMotivo = '';
     this.mostrarModalRechazo = true;
   }
+
+ abrirModalVerSolicitud(solicitud: ServiceModel) {
+  this.selectedSolicitud = solicitud;
+  this.modalVerSolicitud.isOpen = true;
+}
+
 
   confirmarRechazo(): void {
     if (!this.selectedSolicitud) return;

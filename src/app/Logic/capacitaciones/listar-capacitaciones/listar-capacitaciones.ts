@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CapacitacionesService } from '../../../Services/capacitacion.service';
 import { Capacitacion } from '../../../Models/capacitacion.model';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { Tabla, ColumnaTabla } from '../../../shared/tabla/tabla';
+import { Modal } from '../../../shared/modal/modal';
 
 @Component({
   selector: 'app-listar-capacitaciones',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, Tabla],
+  imports: [COMPARTIR_IMPORTS, Tabla,Modal],
   templateUrl: './listar-capacitaciones.html',
   styleUrl: './listar-capacitaciones.css'
 })
@@ -25,12 +26,15 @@ export class CapacitacionesLista implements OnInit {
 
   cargando = true;
   error = '';
+    @ViewChild('modalVerCapacitacion') modalVerCapacitacion!: Modal;
+  selectedCapacitacion: Capacitacion | undefined;
 
   constructor(private capacitacionesService: CapacitacionesService) {}
 
   ngOnInit(): void {
     this.cargarCapacitaciones();
   }
+
 
   cargarCapacitaciones(): void {
     this.capacitacionesService.listarTodasCapacitaciones().subscribe({
@@ -46,9 +50,10 @@ export class CapacitacionesLista implements OnInit {
   }
   // 🔵 EVENTOS DEL COMPONENTE ---------------------
 
-  ver(item: any) {
-    console.log("VER:", item);
-  }
+ abrirModalVerCapacitacion(capacitacion: Capacitacion) {
+  this.selectedCapacitacion = capacitacion;
+  this.modalVerCapacitacion.isOpen = true;
+}
 
   editar(item: any) {
     console.log("EDITAR:", item);

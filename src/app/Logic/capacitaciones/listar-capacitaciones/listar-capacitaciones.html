@@ -11,7 +11,7 @@
   [titulo]="'Listado de Capacitaciones'"
   [columnas]="columnas"
   [data]="data"
-  (ver)="ver($event)"
+  (ver)="abrirModalVerCapacitacion($event)"
   (editar)="editar($event)"
   (eliminar)="eliminar($event)">
 </app-tabla>
@@ -22,3 +22,72 @@
     No hay capacitaciones registradas.
   </p>
 </div>
+<app-modal
+  #modalVerCapacitacion
+  [title]="'Detalles de la Capacitación'"
+  [headerColor]="'#0d6efd'"
+  [isOpen]="false"
+>
+
+  <div class="p-3 modal-perfil-container">
+
+    <!-- ENCABEZADO -->
+    <div class="text-center mb-4">
+      <i class="bi bi-journal-bookmark" style="font-size: 4.5rem; color: #0d6efd;"></i>
+
+      <h3 class="mt-2 mb-0">
+        {{ selectedCapacitacion?.nombre || 'Sin nombre' }}
+      </h3>
+
+      <small class="text-muted">
+        ID: {{ selectedCapacitacion?.id || '---' }}
+      </small>
+    </div>
+
+    <!-- IMAGEN -->
+    <div class="text-center mb-4">
+      <ng-container *ngIf="selectedCapacitacion?.imagen; else noImage">
+        <img 
+          [src]="selectedCapacitacion?.imagen"
+          alt="Imagen de capacitación"
+          class="img-fluid rounded shadow"
+          style="max-height: 250px; object-fit: cover;"
+        />
+      </ng-container>
+
+      <ng-template #noImage>
+        <div class="text-muted fst-italic">Sin imagen disponible</div>
+      </ng-template>
+    </div>
+
+    <!-- INFORMACIÓN GENERAL -->
+    <h5 class="section-title">Información general</h5>
+
+    <div class="row mb-3">
+      <div class="col-6">
+        <label class="fw-bold">Número de clases:</label>
+        <div>{{ selectedCapacitacion?.numeroDeClases || 'No definido' }}</div>
+      </div>
+
+      <div class="col-6">
+        <label class="fw-bold">Duración:</label>
+        <div>{{ selectedCapacitacion?.duracion || 'No definida' }}</div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="fw-bold">Descripción:</label>
+      <div>{{ selectedCapacitacion?.descripcion || 'Sin descripción' }}</div>
+    </div>
+
+  
+
+    
+
+    <ng-template #noModules>
+      <div class="text-muted fst-italic">Esta capacitación no tiene módulos registrados.</div>
+    </ng-template>
+
+  </div>
+
+</app-modal>

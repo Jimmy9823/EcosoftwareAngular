@@ -1,80 +1,6 @@
 /* =============================== */
-/* CONTENEDOR PRINCIPAL DE AUTENTICACIÓN */
+/* CONTENEDOR DEL FORMULARIO */
 /* =============================== */
-.auth-container {
-  min-height: 100vh;
-  display: flex;
-}
-
-/* ------------------------------- */
-/* Sección Izquierda: Mensaje de Bienvenida */
-/* ------------------------------- */
-.welcome-section {
-  flex: 1;
-  background: linear-gradient(135deg, #8efcb6 0%, #38ca6d 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  color: white;
-}
-
-.welcome-content {
-  max-width: 500px;
-  text-align: center;
-}
-
-.welcome-content h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.welcome-subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 3rem;
-  opacity: 0.9;
-  line-height: 1.6;
-}
-
-.welcome-message h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-}
-
-.welcome-message p {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  line-height: 1.6;
-  opacity: 0.9;
-}
-
-.benefits-list {
-  text-align: left;
-  list-style: none;
-  padding: 0;
-}
-
-.benefits-list li {
-  padding: 0.5rem 0;
-  font-size: 1rem;
-  position: relative;
-  padding-left: 1.5rem;
-}
-
-.benefits-list li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: #48bb78;
-  font-weight: bold;
-}
-
-/* ------------------------------- */
-/* Sección Derecha: Formulario */
-/* ------------------------------- */
 .form-section {
   flex: 1;
   display: flex;
@@ -116,13 +42,13 @@
 .auth-form {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem; /* espacio entre columnas */
+  gap: 1rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  flex: 1 1 100%; /* default full width */
+  flex: 1 1 100%;
 }
 
 .form-group.full {
@@ -130,14 +56,14 @@
 }
 
 .form-group.half {
-  flex: 1 1 48%; /* aproximadamente la mitad */
+  flex: 1 1 48%;
 }
 
 .form-group.third {
-  flex: 1 1 30%; /* aproximadamente un tercio */
+  flex: 1 1 30%;
 }
 
-/* Inputs, select, textarea */
+/* Inputs, textarea, select */
 .form-group .form-input,
 .form-group textarea {
   width: 100%;
@@ -162,13 +88,6 @@ textarea.ng-invalid.ng-touched {
   border-color: #fc8181;
 }
 
-.error {
-  color: #e53e3e;
-  font-size: 12px;
-  margin-top: 4px;
-  font-weight: 500;
-}
-
 label {
   font-weight: 600;
   color: #4a5568;
@@ -176,44 +95,17 @@ label {
   font-size: 14px;
 }
 
-.submit-btn {
-  background: #38ca6d;
-  color: white;
-  border: none;
-  padding: 14px 20px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 10px;
+/* Error */
+.error {
+  color: #e53e3e;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
 }
 
-.submit-btn:hover:not(:disabled) {
-  background: #70ffa5;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
-}
-
-.submit-btn:disabled {
-  background: #35443a;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.auth-footer {
-  text-align: center;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #e2e8f0;
-}
-
-.auth-footer p {
-  color: #718096;
-  font-size: 14px;
-}
-
+/* =============================== */
+/* Links */
+/* =============================== */
 .auth-link {
   color: #38ca6d;
   text-decoration: none;
@@ -224,21 +116,43 @@ label {
   text-decoration: underline;
 }
 
+.form-footer-container {
+  flex: 1 1 100%;    /* Ocupa todo el ancho del formulario */
+  margin-top: 1rem;
+  text-align: center;
+}
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper i {
+  position: absolute;
+  right: 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.password-wrapper i:hover {
+  color: #334155;
+}
+
+
+
+
+
 /* =============================== */
-/* Responsive */
+/* RESPONSIVE */
 /* =============================== */
 @media (max-width: 768px) {
-  .auth-container {
-    flex-direction: column;
-  }
-
-  .welcome-section,
   .form-section {
     padding: 30px 20px;
   }
 
   .form-group.half,
   .form-group.third {
-    flex: 1 1 100%; /* columnas ocupan todo el ancho en móvil */
+    flex: 1 1 100%;
   }
 }

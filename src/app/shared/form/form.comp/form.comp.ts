@@ -11,6 +11,10 @@ export interface FieldConfig {
   options?: { value: string | number; text: string }[];
   cols?: number;
   showIf?: () => boolean;
+  showToggle?: boolean;
+  icon?: string;      
+iconPosition?: 'left' | 'right'; 
+
 }
 
 @Component({
@@ -30,10 +34,18 @@ export class FormComp implements OnInit {
 
   @Input() showSubmitButton: boolean = true;
   @Input() submitButtonText: string = '';
+  @Input() submitButtonClass: string = '';
   @Input() submitButtonIcon: string = 'fa fa-paper-plane';
 @Input() submitButtonColor: string = 'custom-success-filled';
 
   constructor(private cdr: ChangeDetectorRef) {}
+
+  showPasswordMap: Record<string, boolean> = {};
+
+togglePassword(name: string) {
+  this.showPasswordMap[name] = !this.showPasswordMap[name];
+}
+
 
   ngOnInit(): void {
     if (!this.formGroup) {

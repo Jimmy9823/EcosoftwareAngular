@@ -21,7 +21,7 @@ export class Login implements OnInit, OnDestroy {
 
   campos: FieldConfig[] = [
     { name: 'correo', label: 'Correo', type: 'email', placeholder: 'Ingrese su correo' },
-    { name: 'contrasena', label: 'Contraseña', type: 'password', placeholder: 'Ingrese su contraseña' }
+    { name: 'contrasena', label: 'Contraseña', type: 'password', placeholder: 'Ingrese su contraseña', showToggle: true }
   ];
 
   fade = false;

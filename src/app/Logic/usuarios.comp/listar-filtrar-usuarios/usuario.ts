@@ -1,3 +1,4 @@
+import { Header } from './../../../core/header/header';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { UsuarioService } from '../../../Services/usuario.service';
@@ -28,6 +29,7 @@ export class Usuario implements OnInit {
   @ViewChild('modalReportes') modalReportes!: Modal;
   @ViewChild('modalEliminar') modalEliminar!: Modal;
   @ViewChild('modalEliminarFisico') modalEliminarFisico!: Modal;
+@ViewChild('modalVerPerfil') modalVerPerfil!: Modal;
 
   usuarioSeleccionado?: UsuarioModel | null = null;
 
@@ -74,6 +76,26 @@ export class Usuario implements OnInit {
     { campo: 'estado', titulo: 'Estado' }
   ];
 
+ acciones = [
+  {
+    icon: 'bi bi-eye',
+    texto: 'Ver',
+    color: '#0d6efd',
+    hover: '#0b5ed7',
+    evento: (item: any) => this.abrirModalVer(item)
+  },
+ 
+  {
+    icon: 'bi bi-trash',
+    texto: 'Eliminar',
+    color: '#dc3545',
+    hover: '#bb2d3b',
+    evento: (item: any) => this.eliminarUsuario(item.idUsuario)
+  }
+];
+
+
+
   cellTemplatesUsuarios = {
     localidad: (u: UsuarioModel) => {
       if (!u.localidad) return 'N/A';
@@ -104,6 +126,16 @@ export class Usuario implements OnInit {
       accion: () => this.exportarExcel()
     }
   ];
+
+  HeaderbotonesHeader = [
+  {
+    texto: '',
+    icono: 'bi-download',
+    color: 'outline-custom-primary',
+    accion: () => this.exportarPDF()
+  }
+];
+
 
   accionesEliminar = [
     {
@@ -167,6 +199,12 @@ export class Usuario implements OnInit {
     this.modalEliminarFisico.isOpen = true;
   }
 
+ abrirModalVer(usuario: UsuarioModel): void {
+  this.usuarioSeleccionado = usuario;
+  this.modalVerPerfil.isOpen = true;
+}
+
+
   cerrarModalEliminar(): void {
     this.modalEliminar.close();
     this.usuarioSeleccionado = null;
@@ -211,6 +249,8 @@ export class Usuario implements OnInit {
       }
     });
   }
+
+  
 
   // ===============================
   // USUARIOS
@@ -306,6 +346,8 @@ export class Usuario implements OnInit {
       }
     });
   }
+
+
 
   eliminarUsuarioFisico(id: number): void {
     this.usuarioService.eliminarLogico(id).subscribe({

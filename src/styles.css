@@ -58,3 +58,47 @@
   height: 100vh;
   width: 100%;
 }
+/*modal de ver*/
+
+
+/* Contenedor del contenido del modal */
+.modal-perfil-container {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+
+/* Títulos de secciones */
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #132f70;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  border-bottom: 1px solid #dbe2ea;
+  padding-bottom: 4px;
+}
+
+/* Mejor separación visual */
+label.fw-bold {
+  color: #374151;
+}
+
+.perfil-card div {
+  font-size: 0.92rem;
+  color: #4b5563;
+}
+
+/* Scroll suave */
+.modal-perfil-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-perfil-container::-webkit-scrollbar-thumb {
+  background: #cdcdcd;
+  border-radius: 10px;
+}
+
+.modal-perfil-container::-webkit-scrollbar-track {
+  background: #e5e7eb;
+}

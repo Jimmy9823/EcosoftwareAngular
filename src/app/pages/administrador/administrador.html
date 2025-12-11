@@ -1,13 +1,8 @@
 <div class="d-flex">
 
   <!-- BARRA LATERAL -->
-  <app-barra-lateral 
-    [menu]="menu" 
-    [vistaActual]="vistaActual" 
-    [nombreUsuario]="nombreUsuario"
-    (vistaChange)="cambiarVista($event)" 
-    (logout)="logout()"
-    (edit)="editarPerfil()">
+  <app-barra-lateral [menu]="menu" [vistaActual]="vistaActual" [nombreUsuario]="nombreUsuario"
+    (vistaChange)="cambiarVista($event)" (logout)="logout()" (edit)="editarPerfil()">
   </app-barra-lateral>
 
   <!-- CONTENIDO PRINCIPAL -->
@@ -15,20 +10,16 @@
 
     <!-- PANEL DE CONTROL -->
     <ng-container *ngIf="vistaActual === 'panel'">
-      
-      <app-titulo 
-        titulo="Panel de Control" 
-        subtitulo="Resumen de análisis y métricas de la plataforma"
-        iconoBoton="bi bi-bell"
-        colorBoton="outline-custom-success" 
-        hoverColorBoton="custom-success-filled">
+
+      <app-titulo titulo="Panel de Control" subtitulo="Resumen de análisis y métricas de la plataforma"
+        iconoBoton="bi bi-bell" colorBoton="outline-custom-success" hoverColorBoton="custom-success-filled">
       </app-titulo>
 
       <!-- Auth status removed -->
 
       <!-- FILA 1: Gráficos principales -->
       <div class="analytics-grid">
-        
+
         <!-- Gráfico 1: Usuarios por Localidad (Línea/Barras) -->
         <div class="analytics-card">
           <h6 class="card-title">Usuarios por Localidad</h6>
@@ -51,7 +42,7 @@
 
       <!-- FILA 2: Indicadores complementarios -->
       <div class="analytics-grid mt-4">
-        
+
         <!-- Rechazadas por Motivo -->
         <div class="analytics-card">
           <h6 class="card-title">Solicitudes Rechazadas</h6>
@@ -71,30 +62,20 @@
       </div>
 
     </ng-container>
-<ng-container *ngIf="vistaActual === 'editar-perfil'">
-      <app-titulo
-        titulo="Editar Perfil"
-        subtitulo="Actualiza tu información personal"
-        iconoBoton="bi bi-eye"
-        colorBoton="outline-custom-success"
-        
-        >
-        
+    <ng-container *ngIf="vistaActual === 'editar-perfil'">
+      <app-titulo titulo="Editar Perfil" subtitulo="Actualiza tu información personal" iconoBoton="bi bi-eye"
+        colorBoton="outline-custom-success">
+
       </app-titulo>
       <app-editar-usuario></app-editar-usuario>
-</ng-container>
+    </ng-container>
     <!-- USUARIOS -->
 
     <ng-container *ngIf="vistaActual === 'usuarios'">
 
-      <app-titulo 
-        titulo="Usuarios" 
-        subtitulo="Gestión de usuarios del sistema"
-        [textoBoton]="mostrarNuevoUsuario ? 'Mostrar usuarios' : 'Agregar nuevo usuario'"
-        iconoBoton="bi bi-plus-circle"
-        colorBoton="outline-custom-success"
-        hoverColorBoton="custom-success-filled"
-        (clickBoton)="toggleNuevoUsuario()">
+      <app-titulo titulo="Usuarios" subtitulo="Gestión de usuarios del sistema"
+        [textoBoton]="mostrarNuevoUsuario ? 'Mostrar usuarios' : 'Agregar nuevo usuario'" iconoBoton="bi bi-plus-circle"
+        colorBoton="outline-custom-success" hoverColorBoton="custom-success-filled" (clickBoton)="toggleNuevoUsuario()">
       </app-titulo>
 
       <div class="contenedor-toggle">
@@ -103,18 +84,17 @@
         <ng-container *ngIf="mostrarNuevoUsuario">
           <div class="contenido-solicitud">
             <!-- En cualquier template -->
-          <!-- En el dashboard de administrador -->
-<app-registro-admin></app-registro-admin>
+            <!-- En el dashboard de administrador -->
+            <app-registro-admin></app-registro-admin>
           </div>
         </ng-container>
 
         <!-- Lista de usuarios -->
         <ng-container *ngIf="!mostrarNuevoUsuario">
           <div class="contenido-solicitud">
-             <app-usuario-tabla></app-usuario-tabla>
+            <app-usuario-tabla></app-usuario-tabla>
 
-            <div *ngIf="!cargando && usuarios.length === 0"
-              class="alert alert-warning text-center shadow-sm py-2 mt-3">
+            <div *ngIf="!cargando && usuarios.length === 0" class="alert alert-warning text-center shadow-sm py-2 mt-3">
               No se encontraron usuarios registrados.
             </div>
           </div>
@@ -125,18 +105,14 @@
 
     <!-- SOLICITUDES -->
     <ng-container *ngIf="vistaActual === 'solicitudes'">
-      <app-titulo 
-        titulo="Solicitudes de Recolección" 
-        subtitulo="Gestión de solicitudes de recolección">
+      <app-titulo titulo="Solicitudes de Recolección" subtitulo="Gestión de solicitudes de recolección">
       </app-titulo>
       <app-solcitudes></app-solcitudes>
     </ng-container>
 
     <!-- RECOLECCIONES -->
     <ng-container *ngIf="vistaActual === 'recolecciones'">
-      <app-titulo 
-        titulo="Recolecciones" 
-        subtitulo="Gestión de recolecciones">
+      <app-titulo titulo="Recolecciones" subtitulo="Gestión de recolecciones">
       </app-titulo>
 
       <app-listar-tabla></app-listar-tabla>
@@ -144,12 +120,8 @@
 
     <!-- PUNTOS DE RECICLAJE -->
     <ng-container *ngIf="vistaActual === 'puntos'">
-      <app-titulo 
-        titulo="Puntos de Reciclaje" 
-        subtitulo="Listado y gestión de puntos" 
-        iconoBoton="bi bi-plus-circle"
-        colorBoton="outline-custom-success"
-        hoverColorBoton="custom-success-filled"
+      <app-titulo titulo="Puntos de Reciclaje" subtitulo="Listado y gestión de puntos" iconoBoton="bi bi-plus-circle"
+        colorBoton="outline-custom-success" hoverColorBoton="custom-success-filled"
         (clickBoton)="openCreateFromTitulo()">
       </app-titulo>
 
@@ -160,14 +132,9 @@
 
     <!-- CAPACITACIONES -->
     <ng-container *ngIf="vistaActual === 'capacitaciones'">
-      <app-titulo 
-        titulo="Capacitaciones y Módulos"
-        subtitulo="Gestión de capacitaciones y módulos"
-        [textoBoton]="capacitaciones ? 'Mostrar capacitaciones' : 'Mostrar Módulos'"
-        iconoBoton="bi bi-plus-circle"
-        colorBoton="outline-custom-success"
-        hoverColorBoton="custom-success-filled"
-        (clickBoton)="toggleVista()">
+      <app-titulo titulo="Capacitaciones y Módulos" subtitulo="Gestión de capacitaciones y módulos"
+        [textoBoton]="capacitaciones ? 'Mostrar capacitaciones' : 'Mostrar Módulos'" iconoBoton="bi bi-plus-circle"
+        colorBoton="outline-custom-success" hoverColorBoton="custom-success-filled" (clickBoton)="toggleVista()">
       </app-titulo>
 
       <div class="contenedor-toggle">
@@ -193,13 +160,10 @@
 
     <!-- NOTICIAS -->
     <ng-container *ngIf="vistaActual === 'noticias'">
-      <app-titulo 
-        titulo="Noticias" 
-        subtitulo="Gestión de noticias y novedades">
+      <app-titulo titulo="Noticias" subtitulo="Gestión de noticias y novedades">
       </app-titulo>
     </ng-container>
 
   </main>
 
 </div>
-
