@@ -1,4 +1,4 @@
-<div class="container">
+<!--<div class="container">
       <h2 class="section-title">Consejos Ecológicos</h2>
       <div class="row">
         <div class="col-lg-6">
@@ -34,3 +34,37 @@
         </div>
       </div>
     </div>
+  -->
+
+<div class="eco-section">
+  <div class="section-title">
+    <h2>Impacto Ambiental Positivo</h2>
+    <p>Pequeños cambios en tu día a día que generan grandes beneficios para nuestro planeta</p>
+  </div>
+
+  <div class="benefits-layout">
+    <!-- Centro - Planta -->
+    <div class="center-plant">
+    <img src="https://png.pngtree.com/png-clipart/20240211/original/pngtree-mahogany-tree-creative-digital-artwork-png-image_14289758.png" class="plant-img" />
+</div>
+
+    <!-- Tips alrededor -->
+    <div class="tips-wrapper">
+      <div class="tip-benefit" 
+     *ngFor="let tip of tips; let i = index"
+     [ngClass]="'pos-' + (i + 1)">
+
+  <div class="benefit-icon">
+    <i [class]="'bi ' + tip.icon"></i>
+  </div>
+
+  <div class="benefit-text">
+    <h3 class="benefit-title">{{ tip.title }}</h3>
+    <p class="benefit-description">{{ tip.description }}</p>
+  </div>
+
+</div>
+
+    </div>
+  </div>
+</div>

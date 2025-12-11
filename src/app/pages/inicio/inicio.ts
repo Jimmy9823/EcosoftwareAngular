@@ -8,11 +8,12 @@ import { Hero } from '../../core/hero/hero';
 import { ServiciosSection } from '../../core/servicios-section/servicios-section';
 import { WasteCarrusel } from '../../core/waste-carrusel/waste-carrusel';
 import { Consejos } from '../../core/consejos/consejos';
+import { Cifras } from "../../core/cifras/cifras";
 
 @Component({
   selector: 'app-Inicio',
   standalone: true,
-  imports: [CommonModule, Header,Footer, Hero, ServiciosSection, WasteCarrusel, Consejos],
+  imports: [CommonModule, Header, Footer, Hero, ServiciosSection, WasteCarrusel, Consejos, Cifras],
   templateUrl: './inicio.html',
   styleUrl: './inicio.css'
 })
