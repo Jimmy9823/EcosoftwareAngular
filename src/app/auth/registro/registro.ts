@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { LocalidadNombrePipe } from "../../core/pipes/LocalidadNombrePipe";
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, LocalidadNombrePipe],
   templateUrl: './registro.html',
   styleUrls: ['./registro.css']
 })
@@ -91,4 +92,36 @@ export class Registro {
   contrasenasCoinciden(): boolean {
     return this.usuario.contrasena === this.verificarContrasena;
   }
+
+  getLocalidadNombre(localidadBD: string): string {
+  switch (localidadBD) {
+    case 'Usaquen': return 'Usaquén';
+    case 'Chapinero': return 'Chapinero';
+    case 'Santa_Fe': return 'Santa Fe';
+    case 'San_Cristobal': return 'San Cristóbal';
+    case 'Usme': return 'Usme';
+    case 'Tunjuelito': return 'Tunjuelito';
+    case 'Bosa': return 'Bosa';
+    case 'Kennedy': return 'Kennedy';
+    case 'Fontibon': return 'Fontibón';
+    case 'Engativa': return 'Engativá';
+    case 'Suba': return 'Suba';
+    case 'Barrios_Unidos': return 'Barrios Unidos';
+    case 'Teusaquillo': return 'Teusaquillo';
+    case 'Los_Martires': return 'Los Mártires';
+    case 'Antonio_Nariño': return 'Antonio Nariño';
+    case 'Puente_Aranda': return 'Puente Aranda';
+    case 'Candelaria': return 'Candelaria';
+    case 'Rafael_Uribe_Uribe': return 'Rafael Uribe Uribe';
+    case 'Ciudad_Bolivar': return 'Ciudad Bolívar';
+    case 'Sumapaz': return 'Sumapaz';
+
+    default:
+      // Si llega una localidad nueva o escrita distinto, fallback automático
+      return localidadBD
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, l => l.toUpperCase());
+  }
+}
+
 }

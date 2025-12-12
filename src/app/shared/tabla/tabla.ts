@@ -1,8 +1,7 @@
 import { Header } from './../../core/header/header';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { COMPARTIR_IMPORTS } from '../imports';
 import { Boton } from '../botones/boton/boton';
-import { icon } from 'leaflet';
 
 export interface ColumnaTabla {
   campo: string;
@@ -11,22 +10,23 @@ export interface ColumnaTabla {
 
 @Component({
   selector: 'app-tabla',
-  imports: [COMPARTIR_IMPORTS,Boton],
+  imports: [COMPARTIR_IMPORTS, Boton],
   templateUrl: './tabla.html',
   styleUrls: ['./tabla.css']
 })
-export class Tabla {
+export class Tabla implements OnChanges {
+
   @Input() columnas: ColumnaTabla[] = [];
   @Input() data: any[] = [];
   @Input() titulo: string = 'Listado';
-    @Input() cellTemplates: { [campo: string]: (item: any) => string } = {};
-
+  @Input() cellTemplates: { [campo: string]: (item: any) => string } = {};
 
   @Output() ver = new EventEmitter<any>();
   @Output() editar = new EventEmitter<any>();
   @Output() eliminar = new EventEmitter<any>();
   @Output() descargar = new EventEmitter<void>();
 
+  @Input() iconosAcciones: any = {};   // ← ya existía
 
   pagina: number = 1;
   porPagina: number = 10;
@@ -34,44 +34,45 @@ export class Tabla {
   orden: string = '';
   ascendente: boolean = true;
 
-  // ACCIONES DINÁMICAS
-    acciones = [
-      
-  {
-    icon: 'bi-pencil',
-    texto: '',
-    color: 'pastel-success',
-    hover: 'btn-pastel-success',
-    evento: (item: any) => this.editar.emit(item)
-  },
-  {
-    icon: 'bi-trash',
-    texto: '',
-    color: 'pastel-danger',
-    hover: 'btn-pastel-danger',
-    evento: (item: any) => this.eliminar.emit(item)
-  },
-  {
-    icon: 'bi-eye',
-    texto: '',
-    color: 'pastel-info',
-    hover: 'btn-pastel-info',
-    evento: (item: any) => this.ver.emit(item)
+  // 🔥 AHORA acciones es dinámico y seguro
+  acciones: any[] = [];
+
+  Header = [
+    {
+      icon: 'bi-download',
+      texto: '',
+      color: 'outline-custom-success',
+      hover: 'custom-success-filled',
+      evento: () => this.descargar.emit()
+    }
+  ];
+
+  // 🔥 ESTE ES EL CAMBIO MÁS IMPORTANTE (para que iconosAcciones sí funcione)
+  ngOnChanges(changes: SimpleChanges) {
+    this.acciones = [
+      {
+        icon: this.iconosAcciones.editar || 'bi-pencil',
+        texto: '',
+        color: 'pastel-success',
+        hover: 'btn-pastel-success',
+        evento: (item: any) => this.editar.emit(item)
+      },
+      {
+        icon: this.iconosAcciones.eliminar || 'bi-trash',
+        texto: '',
+        color: 'pastel-danger',
+        hover: 'btn-pastel-danger',
+        evento: (item: any) => this.eliminar.emit(item)
+      },
+      {
+        icon: this.iconosAcciones.ver || 'bi-eye',
+        texto: '',
+        color: 'pastel-info',
+        hover: 'btn-pastel-info',
+        evento: (item: any) => this.ver.emit(item)
+      }
+    ];
   }
-];
-
-Header = [
-  {
-    icon: 'bi-download',
-    texto: '',
-    color: 'outline-custom-success',
-    hover: 'custom-success-filled',
-    evento: () => this.descargar.emit()  // dispara el Output
-  }
-];
-
-
-
 
   cambiarPagina(p: number) {
     this.pagina = p;
@@ -109,7 +110,6 @@ Header = [
     return calc > this.data.length ? this.data.length : calc;
   }
 
-  // Páginas visibles (máx 5 botones)
   get paginasAMostrar() {
     const total = this.totalPaginas;
     const arr: number[] = [];

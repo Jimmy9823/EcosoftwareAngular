@@ -132,7 +132,10 @@
           <label>Localidad *</label>
           <select [(ngModel)]="usuario.localidad" name="localidad" required #localidad="ngModel" class="form-input">
             <option value="">Selecciona tu localidad</option>
-            <option *ngFor="let loc of localidades" [value]="loc">{{loc}}</option>
+            <option *ngFor="let loc of localidades" [value]="loc">
+  {{ loc | localidadNombre }}
+</option>
+
           </select>
           <div class="error" *ngIf="localidad.invalid && localidad.touched">Selecciona tu localidad</div>
         </div>

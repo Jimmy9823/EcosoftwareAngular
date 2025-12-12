@@ -20,7 +20,7 @@ import { PuntosIframe } from '../../shared/puntos-iframe/puntos-iframe';
 import { CrudPuntos } from '../../Logic/puntos-recoleccion/crud-puntos/crud-puntos';
 import { PuntosService } from '../../Services/puntos-reciclaje.service';
 import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
-import {SolicitudesLocalidadChartComponent} from "../../Logic/solicitudes-comp/solicitudes-localidad-chart-component/solicitudes-localidad-chart-component";
+import { SolicitudesLocalidadChartComponent } from "../../Logic/solicitudes-comp/solicitudes-localidad-chart-component/solicitudes-localidad-chart-component";
 import { RechazadasMotivoChartComponent } from '../../Logic/solicitudes-comp/rechazadas-motivo-chart-component/rechazadas-motivo-chart-component';
 import { PendientesAceptadasChartComponent } from '../../Logic/solicitudes-comp/pendientes-aceptadas-chart-component/pendientes-aceptadas-chart-component';
 import { Boton } from '../../shared/botones/boton/boton';
@@ -32,9 +32,12 @@ import { Service } from '../../Services/solicitud.service';
 import { Rutas } from "../../Logic/rutas/rutas";
 import { ReporteService } from '../../Services/reporte.service';
 import { ServiceModel } from '../../Models/solicitudes.model';
+import { AceptarRechazarUsuarios } from '../../Logic/usuarios.comp/aceptar-rechazar-usuarios/aceptar-rechazar-usuarios';
+
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent, RechazadasMotivoChartComponent, PendientesAceptadasChartComponent, GraficoUsuariosLocalidad,
+  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent, AceptarRechazarUsuarios,
+    RechazadasMotivoChartComponent, PendientesAceptadasChartComponent, GraficoUsuariosLocalidad,
     GraficoUsuariosBarrios, RegistroAdmin, Usuario, ListarTabla, Solcitudes,
     EditarUsuario, CapacitacionesLista, CargaMasiva, BarraLateral, Boton, Titulo, Modal, FormComp, PuntosIframe, CrudPuntos, Rutas],
   templateUrl: './administrador.html',
@@ -54,7 +57,7 @@ export class Administrador {
   mensaje: string = '';
   cargandoReporte: boolean = false;
 
-  vistaActual:'panel'|'editar-perfil'|'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'capacitaciones'|'noticias' = 'panel';
+  vistaActual: 'panel' | 'editar-perfil' | 'usuarios' | 'solicitudes' | 'recolecciones' | 'Aceptar-Rechazar-Usuarios' | 'puntos' | 'capacitaciones' | 'noticias' = 'noticias';
 
   menuAbierto = true;
   perfilMenuAbierto = false;
@@ -79,11 +82,11 @@ export class Administrador {
   constructor(
     private usuarioService: UsuarioService,
     private router: Router,
-    private authService : AuthService,
+    private authService: AuthService,
     private puntosService: PuntosService,
     private solicitudService: Service,
     private reporteService: ReporteService
-  ) {}
+  ) { }
 
   cargarPuntos(): void {
     this.puntosService.obtenerTodos().subscribe({
@@ -166,42 +169,43 @@ export class Administrador {
     }
   }
 
-  menu: { 
-  vista: 'panel'|'usuarios'|'solicitudes'|'recolecciones'|'puntos'|'capacitaciones'|'noticias',
-  label: string,
-  icon: string
-}[] = [
-  { vista: 'panel', label: 'Panel de Control', icon: 'bi bi-speedometer2' },
-  { vista: 'usuarios', label: 'Usuarios', icon: 'bi bi-people' },
-  { vista: 'solicitudes', label: 'Solicitudes', icon: 'bi bi-bar-chart-line' },
-  { vista: 'recolecciones', label: 'Recolecciones', icon: 'bi bi-truck' },
-  { vista: 'puntos', label: 'Puntos de Reciclaje', icon: 'bi bi-geo-alt' },
-  { vista: 'capacitaciones', label: 'Capacitaciones', icon: 'bi bi-mortarboard-fill' },
-  { vista: 'noticias', label: 'Noticias', icon: 'bi bi-newspaper' },
-];
+  menu: {
+    vista: 'panel' | 'usuarios' | 'solicitudes' | 'recolecciones' | 'puntos' | 'capacitaciones' | 'noticias' |
+    'Aceptar-Rechazar-Usuarios',
+    label: string,
+    icon: string
+  }[] = [
+      { vista: 'panel', label: 'Panel de Control', icon: 'bi bi-speedometer2' },
+      { vista: 'usuarios', label: 'Usuarios', icon: 'bi bi-people' },
+      { vista: 'solicitudes', label: 'Solicitudes', icon: 'bi bi-bar-chart-line' },
+      { vista: 'recolecciones', label: 'Recolecciones', icon: 'bi bi-truck' },
+      { vista: 'puntos', label: 'Puntos de Reciclaje', icon: 'bi bi-geo-alt' },
+      { vista: 'capacitaciones', label: 'Capacitaciones', icon: 'bi bi-mortarboard-fill' },
+      { vista: 'noticias', label: 'Noticias', icon: 'bi bi-newspaper' },
+    ];
 
-registroAdmin = [
-  {
-    icono: 'bi bi-download',
-    texto: '',
-    color: 'outline-custom-success',
-    hoverColor: 'custom-success-filled',
-    onClick: () => this.RegistroAdmin()   // Llama al método correctamente
+  registroAdmin = [
+    {
+      icono: 'bi bi-download',
+      texto: '',
+      color: 'outline-custom-success',
+      hoverColor: 'custom-success-filled',
+      onClick: () => this.RegistroAdmin()   // Llama al método correctamente
+    }
+  ];
+
+
+  RegistroAdmin() {
+    this.registro.emit();  // dispara el Output que ya tienes
   }
-];
-
-
-RegistroAdmin() {
-  this.registro.emit();  // dispara el Output que ya tienes
-}
 
 
 
-// ========================
-// Botones de alternar vistas
-// ========================
+  // ========================
+  // Botones de alternar vistas
+  // ========================
 
-// Alternar vista de capacitaciones
+  // Alternar vista de capacitaciones
   toggleVista(): void {
     this.capacitaciones = !this.capacitaciones;
   }
@@ -212,7 +216,27 @@ RegistroAdmin() {
   }
 
   ngOnInit(): void {
-    this.vistaActual = 'panel';
+
+    
+ 
+  this.usuarioService.contarPendientes().subscribe({
+    next: (pendientes: number) => {
+
+      // Si hay pendientes → mostrar vista Aceptar/Rechazar
+      if (pendientes > 0) {
+        this.vistaActual = 'Aceptar-Rechazar-Usuarios';
+      } else {
+        //Si  no hay pendientes → mostrar panel
+        this.vistaActual = 'panel';
+      }
+    },
+    error: (err) => {
+      console.error('Error contando usuarios pendientes:', err);
+
+      // Por seguridad, mostrar panel si falla
+      this.vistaActual = 'panel';
+    }
+  });
     this.consultarUsuarios();
 
     // Cargar solicitudes para reportes
@@ -235,7 +259,7 @@ RegistroAdmin() {
       this.nombreRol = this.obtenerNombreRol(this.usuarioActual.rolId!);
     } else {
       // Si no hay sesión, redirige al login
-     
+
     }
 
     // DEBUGGING: Cargar datos reales de la API para verificar
@@ -337,13 +361,13 @@ RegistroAdmin() {
   get tokenPreview(): string | null {
     const t = this.authService.getToken();
     if (!t) return null;
-    return t.length > 24 ? `${t.slice(0,12)}...${t.slice(-8)}` : t;
+    return t.length > 24 ? `${t.slice(0, 12)}...${t.slice(-8)}` : t;
   }
 
   // ========================
   // CAMBIAR VISTA
   // ========================
-  cambiarVista(vista: 'panel'|'editar-perfil'|'usuarios'|'solicitudes'|'recolecciones'|'puntos'|'capacitaciones'|'noticias') {
+  cambiarVista(vista: 'panel' | 'editar-perfil' | 'Aceptar-Rechazar-Usuarios' | 'usuarios' | 'solicitudes' | 'recolecciones' | 'puntos' | 'capacitaciones' | 'noticias') {
     this.vistaActual = vista;
   }
 
@@ -391,7 +415,7 @@ RegistroAdmin() {
   // ========================
   // CERRAR SESIÓN
   // ========================
-   logout(): void {
+  logout(): void {
     this.authService.logout();
     this.router.navigate(['/']);
   }
@@ -415,5 +439,5 @@ RegistroAdmin() {
 
   editarPerfil(): void {
     this.vistaActual = 'editar-perfil';
-}
+  }
 }

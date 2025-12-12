@@ -103,7 +103,7 @@ export class Login implements OnInit, OnDestroy {
           case 'Administrador': this.router.navigate(['/administrador']); break;
           case 'Ciudadano': this.router.navigate(['/ciudadano']); break;
           case 'Empresa': this.router.navigate(['/empresa']); break;
-          case 'Reciclador': this.router.navigate(['/reciclador']); break;
+          case 'Reciclador': this.router.navigate(['/empresa']); break;
           default: this.router.navigate(['/login']);
         }
       },
