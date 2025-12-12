@@ -36,16 +36,9 @@ export class Tabla implements OnChanges {
 
   // 🔥 AHORA acciones es dinámico y seguro
   acciones: any[] = [];
+  Header: any[] = [];
 
-  Header = [
-    {
-      icon: 'bi-download',
-      texto: '',
-      color: 'outline-custom-success',
-      hover: 'custom-success-filled',
-      evento: () => this.descargar.emit()
-    }
-  ];
+  
 
   // 🔥 ESTE ES EL CAMBIO MÁS IMPORTANTE (para que iconosAcciones sí funcione)
   ngOnChanges(changes: SimpleChanges) {
@@ -72,6 +65,15 @@ export class Tabla implements OnChanges {
         evento: (item: any) => this.ver.emit(item)
       }
     ];
+    this.Header = [
+    {
+      icon: this.iconosAcciones.descargar || 'bi-download',
+      texto: '',
+      color: 'outline-custom-success',
+      hover: 'custom-success-filled',
+      evento: () => this.descargar.emit()
+    }
+  ];
   }
 
   cambiarPagina(p: number) {
