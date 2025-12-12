@@ -4,7 +4,9 @@
 <app-tabla
   *ngIf="!cargando && data.length > 0"
     [titulo]="'Listado de Recolecciones'"
-
+[iconosAcciones]="{
+    descargar: 'bi-plus-circle'
+  }"
   [columnas]="columnas"
   [data]="data"
   (ver)="ver($event)"

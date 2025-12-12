@@ -81,14 +81,23 @@
       </app-titulo>
       <app-editar-usuario></app-editar-usuario>
     </ng-container>
+
     <!-- USUARIOS -->
 
     <ng-container *ngIf="vistaActual === 'usuarios'">
 
-      <app-titulo titulo="Usuarios" subtitulo="Gestión de usuarios del sistema"
-        [textoBoton]="mostrarNuevoUsuario ? 'Mostrar usuarios' : 'Agregar nuevo usuario'" iconoBoton="bi bi-plus-circle"
-        colorBoton="outline-custom-success" hoverColorBoton="custom-success-filled" (clickBoton)="toggleNuevoUsuario()">
-      </app-titulo>
+    <app-titulo 
+  titulo="Usuarios" 
+  subtitulo="Gestión de usuarios del sistema" 
+  [textoBoton]="mostrarNuevoUsuario ? 'Mostrar usuarios' : 'Agregar nuevo usuario'"
+  [iconoBoton]="'bi bi-plus-circle'"
+  [colorBoton]="'outline-custom-success'"
+  [hoverColorBoton]="'custom-success-filled'"
+  (clickBoton)="toggleNuevoUsuario()">
+</app-titulo>
+
+
+
 
       <div class="contenedor-toggle">
 
@@ -117,14 +126,14 @@
 
     <!-- SOLICITUDES -->
     <ng-container *ngIf="vistaActual === 'solicitudes'">
-      <app-titulo titulo="Solicitudes de Recolección" subtitulo="Gestión de solicitudes de recolección">
+      <app-titulo titulo="Solicitudes de Recolección" subtitulo="Gestión de solicitudes de recolección" >
       </app-titulo>
       <app-solcitudes></app-solcitudes>
     </ng-container>
 
     <!-- RECOLECCIONES -->
     <ng-container *ngIf="vistaActual === 'recolecciones'">
-      <app-titulo titulo="Recolecciones" subtitulo="Gestión de recolecciones">
+      <app-titulo titulo="Recolecciones" subtitulo="Gestión de recolecciones" >
       </app-titulo>
 
       <app-listar-tabla></app-listar-tabla>
@@ -176,9 +185,9 @@
       </app-titulo>
       <app-rutas></app-rutas>
     </ng-container>
-    
+
     <ng-container *ngIf="vistaActual === 'Aceptar-Rechazar-Usuarios'">
-    
+
       <app-aceptar-rechazar-usuarios></app-aceptar-rechazar-usuarios>
     </ng-container>
 
