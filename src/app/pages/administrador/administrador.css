@@ -9,6 +9,37 @@
   min-height: 100vh;
 }
 
+/* BOTONES DE REPORTES */
+.reportes-buttons-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.reportes-buttons-row .btn {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  font-weight: 500;
+  transition: all var(--transicion-rapida);
+  border-radius: 8px;
+}
+
+.reportes-buttons-row .btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.reportes-buttons-row .btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.reportes-buttons-row .btn i {
+  font-size: 14px;
+}
+
 /* GRID DE ANALYTICS */
 .analytics-grid {
   display: grid;
@@ -128,6 +159,14 @@
 
   .chart-container {
     min-height: 250px;
+  }
+
+  .reportes-buttons-row {
+    flex-direction: column;
+  }
+
+  .reportes-buttons-row .btn {
+    width: 100%;
   }
 }
     
