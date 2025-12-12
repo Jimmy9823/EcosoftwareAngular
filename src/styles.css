@@ -27,7 +27,15 @@
     background: #fef3c7;
     color: #92400e;
 }
+.status-progreso {
+  background: #cff4fc;
+  color: #055160;
+}
 
+.status-fallida {
+  background: #f8d7da;
+  color: #842029;
+}
 
 
 

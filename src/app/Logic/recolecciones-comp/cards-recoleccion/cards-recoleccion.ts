@@ -2,15 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { RecoleccionService } from '../../../Services/recoleccion.service';
 import { ModeloRecoleccion, EstadoRecoleccion } from '../../../Models/modelo-recoleccion';
+import { Boton } from '../../../shared/botones/boton/boton';
 
 
 @Component({
   selector: 'app-cards-recoleccion',
-  imports: [COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS,Boton],
   templateUrl: './cards-recoleccion.html',
   styleUrl: './cards-recoleccion.css'
 })
 export class CardsRecoleccion implements OnInit {
+abrirModalVerRecoleccion(_t9: ModeloRecoleccion) {
+throw new Error('Method not implemented.');
+}
+abrirModalEdicion(_t9: ModeloRecoleccion) {
+throw new Error('Method not implemented.');
+}
 
   recolecciones: ModeloRecoleccion[] = [];
   cargando = true;
