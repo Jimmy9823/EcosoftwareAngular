@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { RecoleccionService } from '../../../Services/recoleccion.service';
 import { ModeloRecoleccion } from '../../../Models/modelo-recoleccion';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla';
+import { Modal } from '../../../shared/modal/modal';
 
 @Component({
   selector: 'app-listar-tabla',
-  imports: [COMPARTIR_IMPORTS, Tabla],
+  imports: [COMPARTIR_IMPORTS, Tabla, Modal],
   templateUrl: './listar-tabla.html',
   styleUrl: './listar-tabla.css'
 })
 export class ListarTabla {
+
   columnas: ColumnaTabla[] = [
     { campo: 'idRecoleccion', titulo: 'ID' },
     { campo: 'solicitudId', titulo: 'Solicitud' },
@@ -21,11 +23,12 @@ export class ListarTabla {
     { campo: 'observaciones', titulo: 'Observaciones' }
   ];
 
-  
-
   data: ModeloRecoleccion[] = [];
   cargando = true;
   error = '';
+
+  @ViewChild('modalVerRecoleccion') modalVerRecoleccion!: Modal;
+  selectedRecoleccion: ModeloRecoleccion | null = null;
 
   constructor(private recoleccionService: RecoleccionService) {}
 
@@ -42,12 +45,15 @@ export class ListarTabla {
     });
   }
 
-  ver(item: any) {
-    console.log("VER:", item);
+  ver(item: ModeloRecoleccion) {
+    this.selectedRecoleccion = item;
+    this.modalVerRecoleccion.isOpen = true;
   }
+
   editar(item: any) {
     console.log("EDITAR:", item);
   }
+
   eliminar(item: any) {
     console.log("ELIMINAR:", item);
   }

@@ -11,3 +11,84 @@
   (editar)="editar($event)"
   (eliminar)="eliminar($event)">
 </app-tabla>
+<app-modal
+  #modalVerRecoleccion
+  [title]="'Detalles de la Recolección'"
+  [headerColor]="'#4f69d9'"
+  [isOpen]="false"
+>
+  <div class="p-3 modal-perfil-container">
+
+    <!-- ENCABEZADO -->
+    <div class="text-center mb-4">
+      <h3 class="mt-2 mb-0">Recolección #{{ selectedRecoleccion?.idRecoleccion || '---' }}</h3>
+      <small class="text-muted">Solicitud ID: {{ selectedRecoleccion?.solicitudId }}</small>
+    </div>
+
+    <!-- SECCIÓN 1: Información general -->
+    <h5 class="section-title">Información general</h5>
+
+    <div class="row mb-3">
+      <div class="col-6">
+        <label class="fw-bold">Estado:</label>
+        <div>{{ selectedRecoleccion?.estado || 'Sin estado' }}</div>
+      </div>
+
+      <div class="col-6">
+        <label class="fw-bold">Fecha de recolección:</label>
+        <div>{{ selectedRecoleccion?.fechaRecoleccion || 'No definida' }}</div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="fw-bold">Observaciones:</label>
+      <div>{{ selectedRecoleccion?.observaciones || 'Sin observaciones' }}</div>
+    </div>
+
+    <!-- SECCIÓN 2: Asignaciones -->
+    <h5 class="section-title">Asignaciones</h5>
+
+    <div class="row mb-3">
+      <div class="col-6">
+        <label class="fw-bold">Recolector ID:</label>
+        <div>{{ selectedRecoleccion?.recolectorId || 'No asignado' }}</div>
+      </div>
+
+      <div class="col-6">
+        <label class="fw-bold">Ruta ID:</label>
+        <div>{{ selectedRecoleccion?.rutaId || 'Sin ruta' }}</div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 3: Evidencia -->
+    <h5 class="section-title">Evidencia</h5>
+
+    <div>
+      <ng-container *ngIf="selectedRecoleccion?.evidencia; else noEvidencia">
+        <a 
+          [href]="selectedRecoleccion?.evidencia" 
+          target="_blank" 
+          class="text-primary">
+          Ver evidencia adjunta
+        </a>
+      </ng-container>
+
+      <ng-template #noEvidencia>
+        <div class="text-muted fst-italic">
+          Sin evidencia registrada
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- SECCIÓN 4: Fechas -->
+    <h5 class="section-title">Fechas</h5>
+
+    <div class="row mb-3">
+      <div class="col-12">
+        <label class="fw-bold">Fecha de creación:</label>
+        <div>{{ selectedRecoleccion?.fechaCreacionRecoleccion || 'No registrada' }}</div>
+      </div>
+    </div>
+
+  </div>
+</app-modal>
