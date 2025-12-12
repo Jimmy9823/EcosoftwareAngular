@@ -1,6 +1,6 @@
 import { RegistroAdmin } from './../../auth/registro-admin/registro-admin';
 // src/app/usuario/administrador/administrador.ts
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../Services/usuario.service';
 import { UsuarioModel } from '../../Models/usuario';
@@ -30,6 +30,8 @@ import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-u
 import { FormComp } from '../../shared/form/form.comp/form.comp';
 import { Service } from '../../Services/solicitud.service';
 import { Rutas } from "../../Logic/rutas/rutas";
+import { ReporteService } from '../../Services/reporte.service';
+import { ServiceModel } from '../../Models/solicitudes.model';
 @Component({
   selector: 'app-administrador',
   imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent, RechazadasMotivoChartComponent, PendientesAceptadasChartComponent, GraficoUsuariosLocalidad,
@@ -50,6 +52,7 @@ export class Administrador {
   cargando: boolean = false;
   error: string = '';
   mensaje: string = '';
+  cargandoReporte: boolean = false;
 
   vistaActual:'panel'|'editar-perfil'|'usuarios' | 'solicitudes' | 'recolecciones' |'puntos'|'capacitaciones'|'noticias' = 'panel';
 
@@ -62,14 +65,24 @@ export class Administrador {
   capacitaciones = false;
   registro: any;
 
+  // Referencias a gráficos para captura
+  @ViewChild('usuariosGrafico') usuariosGrafico!: ElementRef;
+  @ViewChild('solicitudesLocalidadGrafico') solicitudesLocalidadGrafico!: ElementRef;
+  @ViewChild('rechazadasGrafico') rechazadasGrafico!: ElementRef;
+  @ViewChild('estadoGrafico') estadoGrafico!: ElementRef;
+
   @ViewChild(CrudPuntos) puntosCrud!: CrudPuntos;
 
-    constructor(
+  // Lista de solicitudes para reportes
+  solicitudes: ServiceModel[] = [];
+
+  constructor(
     private usuarioService: UsuarioService,
     private router: Router,
     private authService : AuthService,
     private puntosService: PuntosService,
-    private solicitudService: Service
+    private solicitudService: Service,
+    private reporteService: ReporteService
   ) {}
 
   cargarPuntos(): void {
@@ -86,6 +99,71 @@ export class Administrador {
         console.error('Error al cargar puntos:', err);
       }
     });
+  }
+
+  /**
+   * Genera el reporte de usuarios en PDF
+   */
+  async generarReporteUsuarios(): Promise<void> {
+    try {
+      this.cargandoReporte = true;
+
+      // Obtener el elemento del gráfico
+      const graficoElement = this.usuariosGrafico?.nativeElement || null;
+
+      // Generar el reporte
+      await this.reporteService.generarReporteUsuarios(this.usuarios, graficoElement);
+
+      this.mensaje = 'Reporte de usuarios generado exitosamente';
+      setTimeout(() => this.mensaje = '', 3000);
+    } catch (error) {
+      console.error('Error al generar reporte de usuarios:', error);
+      this.error = 'Error al generar el reporte de usuarios';
+      setTimeout(() => this.error = '', 3000);
+    } finally {
+      this.cargandoReporte = false;
+    }
+  }
+
+  /**
+   * Genera el reporte de solicitudes en PDF
+   */
+  async generarReporteSolicitudes(): Promise<void> {
+    try {
+      this.cargandoReporte = true;
+
+      // Cargar solicitudes si no las hay
+      if (this.solicitudes.length === 0) {
+        await new Promise((resolve, reject) => {
+          this.solicitudService.listar().subscribe({
+            next: (data) => {
+              this.solicitudes = data;
+              resolve(data);
+            },
+            error: reject
+          });
+        });
+      }
+
+      // Obtener referencias a los elementos de los gráficos
+      const graficoElements = {
+        localidad: this.solicitudesLocalidadGrafico?.nativeElement || null,
+        rechazadas: this.rechazadasGrafico?.nativeElement || null,
+        estado: this.estadoGrafico?.nativeElement || null
+      };
+
+      // Generar el reporte
+      await this.reporteService.generarReporteSolicitudes(this.solicitudes, graficoElements);
+
+      this.mensaje = 'Reporte de solicitudes generado exitosamente';
+      setTimeout(() => this.mensaje = '', 3000);
+    } catch (error) {
+      console.error('Error al generar reporte de solicitudes:', error);
+      this.error = 'Error al generar el reporte de solicitudes';
+      setTimeout(() => this.error = '', 3000);
+    } finally {
+      this.cargandoReporte = false;
+    }
   }
 
   menu: { 
@@ -137,10 +215,20 @@ RegistroAdmin() {
     this.vistaActual = 'panel';
     this.consultarUsuarios();
 
+    // Cargar solicitudes para reportes
+    this.solicitudService.listar().subscribe({
+      next: (data) => {
+        this.solicitudes = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar solicitudes:', err);
+      }
+    });
+
     // Cargar puntos para el mapa cuando el admin abra la sección
     this.cargarPuntos();
 
-    // 🔸 Recuperar usuario logueado
+    // Recuperar usuario logueado
     this.usuarioActual = this.usuarioService.obtenerUsuarioActual();
     if (this.usuarioActual) {
       this.nombreUsuario = this.usuarioActual.nombre;
@@ -150,17 +238,17 @@ RegistroAdmin() {
      
     }
 
-    // 🔍 DEBUGGING: Cargar datos reales de la API para verificar
+    // DEBUGGING: Cargar datos reales de la API para verificar
     this.cargarDatosRealesParaDebug();
   }
 
   private cargarDatosRealesParaDebug(): void {
-    console.group('📊 ANÁLISIS DE SOLICITUDES - DEBUG');
+    console.group('ANÁLISIS DE SOLICITUDES - DEBUG');
 
     // Obtener TODAS las solicitudes
     this.solicitudService.obtenerTodasLasSolicitudes().subscribe({
       next: (todas) => {
-        console.log('📋 TODAS LAS SOLICITUDES:', todas);
+        console.log('TODAS LAS SOLICITUDES:', todas);
 
         // Agrupar por localidad
         const porLocalidad: { [key: string]: number } = {};
@@ -185,12 +273,12 @@ RegistroAdmin() {
           porEstadoYLocalidad[est][loc] = (porEstadoYLocalidad[est][loc] || 0) + 1;
         });
 
-        console.log('✅ SOLICITUDES POR LOCALIDAD:', porLocalidad);
-        console.log('✅ SOLICITUDES POR ESTADO:', porEstado);
-        console.log('✅ SOLICITUDES POR ESTADO Y LOCALIDAD:', porEstadoYLocalidad);
+        console.log('SOLICITUDES POR LOCALIDAD:', porLocalidad);
+        console.log('SOLICITUDES POR ESTADO:', porEstado);
+        console.log('SOLICITUDES POR ESTADO Y LOCALIDAD:', porEstadoYLocalidad);
 
         // Resumen
-        console.log(`📊 RESUMEN:
+        console.log(`RESUMEN:
 - Total solicitudes: ${todas.length}
 - Localidades: ${Object.keys(porLocalidad).length}
 - Estados: ${Object.keys(porEstado).length}
@@ -199,41 +287,41 @@ RegistroAdmin() {
 - Rechazadas: ${porEstado['Rechazada'] || 0}`);
       },
       error: (err) => {
-        console.error('❌ Error al obtener solicitudes:', err);
+        console.error('Error al obtener solicitudes:', err);
       }
     });
 
     // También intentar los endpoints específicos de gráficos
-    console.group('📈 ENDPOINTS ESPECÍFICOS DE GRÁFICOS');
+    console.group('ENDPOINTS ESPECÍFICOS DE GRÁFICOS');
 
     this.solicitudService.getSolicitudesPorLocalidad().subscribe({
       next: (data) => {
-        console.log('✅ getSolicitudesPorLocalidad:', data);
+        console.log('getSolicitudesPorLocalidad:', data);
       },
       error: (err) => {
-        console.warn('❌ getSolicitudesPorLocalidad falló:', err.message);
+        console.warn('getSolicitudesPorLocalidad falló:', err.message);
         this.solicitudService.getSolicitudesPorLocalidadFactory().subscribe({
-          next: (data) => console.log('✅ getSolicitudesPorLocalidadFactory (fallback):', data),
-          error: (e) => console.warn('❌ Fallback también falló:', e.message)
+          next: (data) => console.log('getSolicitudesPorLocalidadFactory (fallback):', data),
+          error: (e) => console.warn('Fallback también falló:', e.message)
         });
       }
     });
 
     this.solicitudService.getPendientesYAceptadas().subscribe({
       next: (data) => {
-        console.log('✅ getPendientesYAceptadas:', data);
+        console.log('getPendientesYAceptadas:', data);
       },
       error: (err) => {
-        console.warn('❌ getPendientesYAceptadas falló:', err.message);
+        console.warn('getPendientesYAceptadas falló:', err.message);
       }
     });
 
     this.solicitudService.getRechazadasPorMotivo().subscribe({
       next: (data) => {
-        console.log('✅ getRechazadasPorMotivo:', data);
+        console.log('getRechazadasPorMotivo:', data);
       },
       error: (err) => {
-        console.warn('❌ getRechazadasPorMotivo falló:', err.message);
+        console.warn('getRechazadasPorMotivo falló:', err.message);
       }
     });
 
