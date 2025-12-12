@@ -7,11 +7,12 @@ import { Boton } from "../../../shared/botones/boton/boton";
 import { UsuarioService } from '../../../Services/usuario.service';
 import { UsuarioModel } from '../../../Models/usuario';
 import { AuthService } from '../../../auth/auth.service';
+import { LocalidadNombrePipe } from "../../../core/pipes/LocalidadNombrePipe";
 
 @Component({
   selector: 'app-cards-solicitud',
   standalone: true,              // 👈 importante si estás usando standalone
-  imports: [CommonModule, COMPARTIR_IMPORTS, Boton],       // 👈 aquí agregamos CommonModule para usar *ngFor y *ngIf
+  imports: [CommonModule, COMPARTIR_IMPORTS, Boton, LocalidadNombrePipe],       // 👈 aquí agregamos CommonModule para usar *ngFor y *ngIf
   templateUrl: './cards-solicitud.html',
   styleUrls: ['./cards-solicitud.css']
 })

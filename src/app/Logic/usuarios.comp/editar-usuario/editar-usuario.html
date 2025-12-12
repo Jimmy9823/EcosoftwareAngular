@@ -26,7 +26,7 @@
         <div class="col-md-6">
           <p><strong>Dirección:</strong> {{ usuario.direccion || 'No especificada' }}</p>
           <p><strong>Barrio:</strong> {{ usuario.barrio || 'No especificado' }}</p>
-          <p><strong>Localidad:</strong> {{ usuario.localidad || 'No especificada' }}</p>
+          <p><strong>Localidad:</strong> {{ usuario.localidad ?(usuario.localidad | localidadNombre): 'No especificada' }}</p>
         </div>
       </div>
       

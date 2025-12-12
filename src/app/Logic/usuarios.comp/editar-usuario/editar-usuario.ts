@@ -5,11 +5,12 @@ import { UsuarioModel } from '../../../Models/usuario';
 import { Router } from '@angular/router';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { AuthService } from '../../../auth/auth.service';
+import { LocalidadNombrePipe } from "../../../core/pipes/LocalidadNombrePipe";
 
 @Component({
   selector: 'app-editar-usuario',
   templateUrl: './editar-usuario.html',
-  imports: [COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS, LocalidadNombrePipe],
   styleUrls: ['./editar-usuario.css']
 })
 export class EditarUsuario implements OnInit {

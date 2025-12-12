@@ -4,11 +4,12 @@ import { Localidad, EstadoPeticion, TipoResiduo, ServiceModel } from '../../../.
 import { Service } from '../../../../Services/solicitud.service';
 import { COMPARTIR_IMPORTS } from '../../../../shared/imports';
 import { Router } from '@angular/router';
+import { LocalidadNombrePipe } from "../../../../core/pipes/LocalidadNombrePipe";
 
 @Component({
   selector: 'app-form-registro',
   templateUrl: './form-registro.html',
-  imports: [COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS, LocalidadNombrePipe],
   styleUrls: ['./form-registro.css']
 })
 export class FormRegistro {

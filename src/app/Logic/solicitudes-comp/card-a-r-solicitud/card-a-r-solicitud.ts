@@ -5,12 +5,13 @@ import { Service } from '../../../Services/solicitud.service';
 import { ServiceModel } from '../../../Models/solicitudes.model';
 import { Boton } from "../../../shared/botones/boton/boton";
 import { Modal } from "../../../shared/modal/modal";
-import { Alerta } from '../../../shared/alerta/alerta'; // Importa tu componente alerta
+import { Alerta } from '../../../shared/alerta/alerta';
+import { LocalidadNombrePipe } from "../../../core/pipes/LocalidadNombrePipe"; // Importa tu componente alerta
 
 @Component({
   selector: 'app-card-a-r-solicitud',
   standalone: true,
-  imports: [CommonModule, FormsModule, Boton, Modal, Alerta],
+  imports: [CommonModule, FormsModule, Boton, Modal, Alerta, LocalidadNombrePipe],
   templateUrl: './card-a-r-solicitud.html',
   styleUrls: ['./card-a-r-solicitud.css']
 })

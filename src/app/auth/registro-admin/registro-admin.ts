@@ -4,11 +4,12 @@ import { UsuarioService } from '../../Services/usuario.service';
 import { UsuarioModel, Localidad } from '../../Models/usuario';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LocalidadNombrePipe } from "../../core/pipes/LocalidadNombrePipe";
 
 @Component({
   selector: 'app-registro-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LocalidadNombrePipe],
   templateUrl: './registro-admin.html',
   styleUrls: ['./registro-admin.css']
 })

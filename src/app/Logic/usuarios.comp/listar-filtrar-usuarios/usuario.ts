@@ -9,12 +9,13 @@ import { Boton } from '../../../shared/botones/boton/boton';
 import { Modal } from '../../../shared/modal/modal';
 import { FieldConfig, FormComp } from '../../../shared/form/form.comp/form.comp';
 import { Alerta } from '../../../shared/alerta/alerta';
+import { LocalidadNombrePipe } from "../../../core/pipes/LocalidadNombrePipe";
 
 @Component({
   selector: 'app-usuario-tabla',
   templateUrl: './usuario.html',
   styleUrls: ['./usuario.css'],
-  imports: [COMPARTIR_IMPORTS, Tabla, Boton, Modal, FormComp, Alerta],
+  imports: [COMPARTIR_IMPORTS, Tabla, Boton, Modal, FormComp, Alerta, LocalidadNombrePipe],
 })
 export class Usuario implements OnInit {
 

@@ -6,11 +6,12 @@ import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla';
 import { Modal } from "../../../shared/modal/modal";
 import { Boton } from "../../../shared/botones/boton/boton";
+import { LocalidadNombrePipe } from "../../../core/pipes/LocalidadNombrePipe";
 
 @Component({
   selector: 'app-solcitudes',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, Tabla, Modal, Boton],
+  imports: [COMPARTIR_IMPORTS, Tabla, Modal, Boton, LocalidadNombrePipe],
   templateUrl: './solcitudes.html',
   styleUrls: ['./solcitudes.css']
 })
