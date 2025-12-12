@@ -2,16 +2,13 @@
 <!-- ALERTAS FIJAS ARRIBA A LA DERECHA -->
 <!-- =============================== -->
 <div class="alertas-container">
-  <div *ngIf="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ mensaje }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  </div>
-
-  <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
-    {{ error }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  </div>
+  <app-alerta 
+    [tipo]="tipoAlerta" 
+    [mensaje]="mensajeAlerta" 
+    [mostrar]="mostrarAlerta">
+  </app-alerta>
 </div>
+
 
 <!-- =============================== -->
 <!-- CONTENEDOR PRINCIPAL DE TABLA Y FILTROS -->

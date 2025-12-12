@@ -8,12 +8,13 @@ import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla';
 import { Boton } from '../../../shared/botones/boton/boton';
 import { Modal } from '../../../shared/modal/modal';
 import { FieldConfig, FormComp } from '../../../shared/form/form.comp/form.comp';
+import { Alerta } from '../../../shared/alerta/alerta';
 
 @Component({
   selector: 'app-usuario-tabla',
   templateUrl: './usuario.html',
   styleUrls: ['./usuario.css'],
-  imports: [COMPARTIR_IMPORTS, Tabla, Boton, Modal,FormComp],
+  imports: [COMPARTIR_IMPORTS, Tabla, Boton, Modal, FormComp, Alerta],
 })
 export class Usuario implements OnInit {
 
@@ -26,36 +27,58 @@ export class Usuario implements OnInit {
   mensaje = '';
   error = '';
 
+  // ============================
+  // ALERTA (propiedades necesarias)
+  // ============================
+  tipoAlerta: 'success' | 'error' | 'warning' | 'info' = 'info';
+  mensajeAlerta: string = '';
+  mostrarAlerta: boolean = false;
+
   @ViewChild('modalReportes') modalReportes!: Modal;
   @ViewChild('modalEliminar') modalEliminar!: Modal;
   @ViewChild('modalEliminarFisico') modalEliminarFisico!: Modal;
-@ViewChild('modalVerPerfil') modalVerPerfil!: Modal;
+  @ViewChild('modalVerPerfil') modalVerPerfil!: Modal;
 
   usuarioSeleccionado?: UsuarioModel | null = null;
 
-  // ===============================
+  // =========================================
   // Filtros con FormComp
-  // ===============================
+  // =========================================
   formFiltros: FormGroup = new FormGroup({});
 
   fieldsFiltros: FieldConfig[] = [
-  { type: 'select', name: 'criterio', label: 'Criterio', cols: 4, options: [
+    { type: 'select', name: 'criterio', label: 'Criterio', cols: 4, options: [
       { value: 'nombre', text: 'Nombre' },
       { value: 'correo', text: 'Correo' },
       { value: 'documento', text: 'Documento' }
-  ] },
-  { type: 'text', name: 'nombre', label: 'Buscar por nombre', placeholder: 'Ingrese nombre', cols: 4,
-    showIf: () => this.formFiltros.get('criterio')?.value === 'nombre' },
-  { type: 'text', name: 'correo', label: 'Buscar por correo', placeholder: 'Ingrese correo', cols: 4,
-    showIf: () => this.formFiltros.get('criterio')?.value === 'correo' },
-  { type: 'text', name: 'documento', label: 'Buscar por documento', placeholder: 'Ingrese documento', cols: 4,
-    showIf: () => this.formFiltros.get('criterio')?.value === 'documento' }
-];
+    ] },
+    { type: 'text', name: 'nombre', label: 'Buscar por nombre', placeholder: 'Ingrese nombre', cols: 4,
+      showIf: () => this.formFiltros.get('criterio')?.value === 'nombre' },
+    { type: 'text', name: 'correo', label: 'Buscar por correo', placeholder: 'Ingrese correo', cols: 4,
+      showIf: () => this.formFiltros.get('criterio')?.value === 'correo' },
+    { type: 'text', name: 'documento', label: 'Buscar por documento', placeholder: 'Ingrese documento', cols: 4,
+      showIf: () => this.formFiltros.get('criterio')?.value === 'documento' }
+  ];
 
+  // =========================
+  // Función para lanzar alerta
+  // =========================
+  mostrarAlertaGlobal(
+    mensaje: string,
+    tipo: 'success' | 'error' | 'warning' | 'info' = 'info'
+  ) {
+    this.mensajeAlerta = mensaje;
+    this.tipoAlerta = tipo;
+    this.mostrarAlerta = true;
 
-  // ===============================
+    setTimeout(() => {
+      this.mostrarAlerta = false;
+    }, 4000);
+  }
+
+  // ============================
   // Roles
-  // ===============================
+  // ============================
   roles = [
     { id: 1, nombre: 'Administrador' },
     { id: 2, nombre: 'Ciudadano' },
@@ -63,9 +86,9 @@ export class Usuario implements OnInit {
     { id: 4, nombre: 'Reciclador' }
   ];
 
-  // ===============================
+  // ============================
   // Tabla
-  // ===============================
+  // ============================
   columnasUsuarios: ColumnaTabla[] = [
     { campo: 'idUsuario', titulo: 'ID' },
     { campo: 'nombre', titulo: 'Nombre' },
@@ -76,25 +99,22 @@ export class Usuario implements OnInit {
     { campo: 'estado', titulo: 'Estado' }
   ];
 
- acciones = [
-  {
-    icon: 'bi bi-eye',
-    texto: 'Ver',
-    color: '#0d6efd',
-    hover: '#0b5ed7',
-    evento: (item: any) => this.abrirModalVer(item)
-  },
- 
-  {
-    icon: 'bi bi-trash',
-    texto: 'Eliminar',
-    color: '#dc3545',
-    hover: '#bb2d3b',
-    evento: (item: any) => this.eliminarUsuario(item.idUsuario)
-  }
-];
-
-
+  acciones = [
+    {
+      icon: 'bi bi-eye',
+      texto: 'Ver',
+      color: '#0d6efd',
+      hover: '#0b5ed7',
+      evento: (item: any) => this.abrirModalVer(item)
+    },
+    {
+      icon: 'bi bi-trash',
+      texto: 'Eliminar',
+      color: '#dc3545',
+      hover: '#bb2d3b',
+      evento: (item: any) => this.eliminarUsuario(item.idUsuario)
+    }
+  ];
 
   cellTemplatesUsuarios = {
     localidad: (u: UsuarioModel) => {
@@ -110,7 +130,7 @@ export class Usuario implements OnInit {
   };
 
   // ===============================
-  // BOTONES MODALES
+  // BOTONES MODALES — NO SE TOCARON
   // ===============================
   botonesReporte = [
     {
@@ -128,14 +148,13 @@ export class Usuario implements OnInit {
   ];
 
   HeaderbotonesHeader = [
-  {
-    texto: '',
-    icono: 'bi-download',
-    color: 'outline-custom-primary',
-    accion: () => this.exportarPDF()
-  }
-];
-
+    {
+      texto: '',
+      icono: 'bi-download',
+      color: 'outline-custom-primary',
+      accion: () => this.exportarPDF()
+    }
+  ];
 
   accionesEliminar = [
     {
@@ -170,10 +189,13 @@ export class Usuario implements OnInit {
   ];
 
   constructor(private usuarioService: UsuarioService) {
-    // Inicializa controles del formFiltros
+    // Inicializa controles del form
     this.fieldsFiltros.forEach(f => {
       if (f.type !== 'separator') {
-        this.formFiltros.addControl(f.name!, new FormControl(f.name === 'criterio' ? 'nombre' : ''));
+        this.formFiltros.addControl(
+          f.name!,
+          new FormControl(f.name === 'criterio' ? 'nombre' : '')
+        );
       }
     });
   }
@@ -199,11 +221,10 @@ export class Usuario implements OnInit {
     this.modalEliminarFisico.isOpen = true;
   }
 
- abrirModalVer(usuario: UsuarioModel): void {
-  this.usuarioSeleccionado = usuario;
-  this.modalVerPerfil.isOpen = true;
-}
-
+  abrirModalVer(usuario: UsuarioModel): void {
+    this.usuarioSeleccionado = usuario;
+    this.modalVerPerfil.isOpen = true;
+  }
 
   cerrarModalEliminar(): void {
     this.modalEliminar.close();
@@ -221,14 +242,12 @@ export class Usuario implements OnInit {
 
     this.usuarioService.eliminarFisico(this.usuarioSeleccionado.idUsuario).subscribe({
       next: () => {
-        this.mensaje = 'Usuario eliminado permanentemente';
+        this.mostrarAlertaGlobal('Usuario eliminado permanentemente', 'success');
         this.cargarUsuarios();
         this.cerrarModalEliminar();
-        setTimeout(() => (this.mensaje = ''), 2500);
       },
       error: () => {
-        this.error = 'Error al eliminar el usuario';
-        setTimeout(() => (this.error = ''), 2500);
+        this.mostrarAlertaGlobal('Error al eliminar el usuario', 'error');
       }
     });
   }
@@ -238,19 +257,15 @@ export class Usuario implements OnInit {
 
     this.usuarioService.eliminarLogico(this.usuarioSeleccionado.idUsuario).subscribe({
       next: () => {
-        this.mensaje = 'Usuario inactivado correctamente';
+        this.mostrarAlertaGlobal('Usuario inactivado correctamente', 'success');
         this.cargarUsuarios();
         this.cerrarModalEliminar();
-        setTimeout(() => (this.mensaje = ''), 2500);
       },
       error: () => {
-        this.error = 'Error al inactivar el usuario';
-        setTimeout(() => (this.error = ''), 2500);
+        this.mostrarAlertaGlobal('Error al inactivar el usuario', 'error');
       }
     });
   }
-
-  
 
   // ===============================
   // USUARIOS
@@ -263,9 +278,8 @@ export class Usuario implements OnInit {
         this.cargando = false;
       },
       error: () => {
-        this.error = 'Error al cargar usuarios';
+        this.mostrarAlertaGlobal('Error al cargar usuarios', 'error');
         this.cargando = false;
-        setTimeout(() => (this.error = ''), 2500);
       }
     });
   }
@@ -288,14 +302,15 @@ export class Usuario implements OnInit {
     this.usuarioService.filtrar(criterio, valor).subscribe({
       next: (usuariosFiltrados) => {
         this.usuarios = usuariosFiltrados;
-        this.mensaje = `${usuariosFiltrados.length} usuario(s) encontrado(s)`;
+        this.mostrarAlertaGlobal(
+          `${usuariosFiltrados.length} usuario(s) encontrado(s)`,
+          'info'
+        );
         this.cargando = false;
-        setTimeout(() => (this.mensaje = ''), 2500);
       },
       error: () => {
-        this.error = 'Error al filtrar usuarios';
+        this.mostrarAlertaGlobal('Error al filtrar usuarios', 'error');
         this.cargando = false;
-        setTimeout(() => (this.error = ''), 2500);
       }
     });
   }
@@ -336,29 +351,23 @@ export class Usuario implements OnInit {
   eliminarUsuario(id: number): void {
     this.usuarioService.eliminarLogico(id).subscribe({
       next: () => {
-        this.mensaje = 'Usuario eliminado correctamente';
+        this.mostrarAlertaGlobal('Usuario eliminado correctamente', 'success');
         this.cargarUsuarios();
-        setTimeout(() => (this.mensaje = ''), 2500);
       },
       error: () => {
-        this.error = 'No se pudo eliminar el usuario';
-        setTimeout(() => (this.error = ''), 2500);
+        this.mostrarAlertaGlobal('No se pudo eliminar el usuario', 'error');
       }
     });
   }
 
-
-
   eliminarUsuarioFisico(id: number): void {
     this.usuarioService.eliminarLogico(id).subscribe({
       next: () => {
-        this.mensaje = 'Usuario inactivado correctamente';
+        this.mostrarAlertaGlobal('Usuario inactivado correctamente', 'success');
         this.cargarUsuarios();
-        setTimeout(() => (this.mensaje = ''), 2500);
       },
       error: () => {
-        this.error = 'No se pudo eliminar el usuario';
-        setTimeout(() => (this.error = ''), 2500);
+        this.mostrarAlertaGlobal('No se pudo eliminar el usuario', 'error');
       }
     });
   }
