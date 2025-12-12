@@ -27,6 +27,7 @@ import {SolicitudesLocalidadChartComponent} from "./Logic/solicitudes-comp/solic
 import {ListarPorRecolector} from "./Logic/recolecciones-comp/listar-por-recolector/listar-por-recolector";
 import { Rutas } from './Logic/rutas/rutas';
 import { AceptarRechazarUsuarios } from './Logic/usuarios.comp/aceptar-rechazar-usuarios/aceptar-rechazar-usuarios';
+import { CardsNoticias } from './Logic/cards-noticias.component/cards-noticias.component';
 
 export const routes: Routes = [
   { path: '', component: Inicio },
@@ -41,6 +42,7 @@ export const routes: Routes = [
   { path: 'listar-por-recolector', component: ListarPorRecolector  },
   { path: 'rutas', component: Rutas  },
   {path: 'aceptar-rechazar-usuarios', component: AceptarRechazarUsuarios},
+  {path: 'noticias', component: CardsNoticias},
 
   { path: 'login', component: Login},
   {

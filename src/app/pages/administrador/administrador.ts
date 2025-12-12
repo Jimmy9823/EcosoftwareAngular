@@ -33,13 +33,14 @@ import { Rutas } from "../../Logic/rutas/rutas";
 import { ReporteService } from '../../Services/reporte.service';
 import { ServiceModel } from '../../Models/solicitudes.model';
 import { AceptarRechazarUsuarios } from '../../Logic/usuarios.comp/aceptar-rechazar-usuarios/aceptar-rechazar-usuarios';
+import { CardsNoticias } from "../../Logic/cards-noticias.component/cards-noticias.component";
 
 @Component({
   selector: 'app-administrador',
   imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent, AceptarRechazarUsuarios,
     RechazadasMotivoChartComponent, PendientesAceptadasChartComponent, GraficoUsuariosLocalidad,
     GraficoUsuariosBarrios, RegistroAdmin, Usuario, ListarTabla, Solcitudes,
-    EditarUsuario, CapacitacionesLista, CargaMasiva, BarraLateral, Boton, Titulo, Modal, FormComp, PuntosIframe, CrudPuntos, Rutas],
+    EditarUsuario, CapacitacionesLista, CargaMasiva, BarraLateral, Boton, Titulo, Modal, FormComp, PuntosIframe, CrudPuntos, Rutas, CardsNoticias],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })

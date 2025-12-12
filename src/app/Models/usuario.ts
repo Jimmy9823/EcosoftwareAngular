@@ -47,3 +47,15 @@ export interface UsuarioModel {
   representanteLegal?: string;   // empresa
   rol?: string
 }
+
+export enum TipoDeMaterial {
+
+  Plastico = 'Plastico',
+  Papel = 'Papel',
+  Vidrio = 'Vidrio',
+  Metal = 'Metal',
+  Organico = 'Organico',
+  Electronico = 'Electronico',
+  Otro = 'Otro'
+}
+
