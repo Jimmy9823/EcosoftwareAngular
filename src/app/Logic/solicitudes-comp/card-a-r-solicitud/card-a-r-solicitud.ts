@@ -1,24 +1,25 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Service } from '../../../Services/solicitud.service';
 import { ServiceModel } from '../../../Models/solicitudes.model';
-import { UsuarioService } from '../../../Services/usuario.service';
+import { Boton } from "../../../shared/botones/boton/boton";
+import { Modal } from "../../../shared/modal/modal";
+import { Alerta } from '../../../shared/alerta/alerta'; // Importa tu componente alerta
 
 @Component({
   selector: 'app-card-a-r-solicitud',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Boton, Modal, Alerta],
   templateUrl: './card-a-r-solicitud.html',
   styleUrls: ['./card-a-r-solicitud.css']
 })
 export class CardARSolicitud implements OnInit {
 
   @Input() solicitudes: ServiceModel[] = [];
+  @ViewChild('modalRechazo') modalRechazo!: Modal;
 
-  idRecolector: number = 3 ; //puede ser id 3 o 4
-  motivoRechazo: string = '';
-u: any;
+  selectedSolicitud: ServiceModel | null = null;
   motivosDisponibles: string[] = [
     'Datos incorrectos',
     'Solicitud duplicada',
@@ -28,8 +29,31 @@ u: any;
   ];
   selectedMotivos: { [id: number]: string } = {};
 
+  // PROPIEDADES PARA ALERTAS
+  mostrarAlerta: boolean = false;
+  mensajeAlerta: string = '';
+  tipoAlerta: 'success' | 'error' | 'warning' | 'info' = 'info';
 
   constructor(private service: Service) {}
+
+  ngOnInit(): void {
+    if (!this.solicitudes || this.solicitudes.length === 0) {
+      this.cargarSolicitudesPendientes();
+    }
+  }
+
+  mostrarAlertaMensaje(mensaje: string, tipo: 'success' | 'error' | 'warning' | 'info' = 'info') {
+    this.mensajeAlerta = mensaje;
+    this.tipoAlerta = tipo;
+    this.mostrarAlerta = true;
+  }
+
+  cargarSolicitudesPendientes(): void {
+    this.service.listarPorEstado('Pendiente').subscribe({
+      next: (data) => { this.solicitudes = data; },
+      error: (err) => this.mostrarAlertaMensaje(`Error al cargar solicitudes: ${err.message || err.statusText}`, 'error')
+    });
+  }
 
   getSelectedMotivo(id: number | undefined): string {
     if (!id) return '';
@@ -41,63 +65,46 @@ u: any;
     this.selectedMotivos[id] = value;
   }
 
-  ngOnInit(): void {
-    if (!this.solicitudes || this.solicitudes.length === 0) {
-      this.cargarSolicitudesPendientes();
-    }
-  }
-
-  //  SOLO SOLICITUDES PENDIENTES
-  cargarSolicitudesPendientes(): void {
-    this.service.listarPorEstado('Pendiente').subscribe({
-      next: (data) => {
-        this.solicitudes = data;
-      },
-      error: (err) => console.error('Error al cargar solicitudes pendientes', err)
-    });
-  }
+  ver(s: ServiceModel) { console.log('VER', s); }
 
   aceptarSolicitud(solicitud: ServiceModel): void {
     this.service.aceptarSolicitud(solicitud.idSolicitud!).subscribe({
       next: () => {
-        alert(` Solicitud #${solicitud.idSolicitud} aceptada correctamente`);
+        this.mostrarAlertaMensaje(`Solicitud #${solicitud.idSolicitud} aceptada correctamente`, 'success');
         this.cargarSolicitudesPendientes();
       },
-      error: (err) => console.error('Error al aceptar la solicitud', err)
+      error: (err) => this.mostrarAlertaMensaje(`Error al aceptar la solicitud: ${err.message || err.statusText}`, 'error')
     });
   }
 
-  rechazarSolicitud(solicitud: ServiceModel): void {
-    const id = solicitud.idSolicitud!;
-    const motivoFinal = this.selectedMotivos[id];
-    if (!motivoFinal || !motivoFinal.trim()) {
-      alert('Seleccione un motivo de rechazo antes de continuar.');
+  abrirModalRechazo(solicitud: ServiceModel) {
+    this.selectedSolicitud = solicitud;
+    if (this.modalRechazo) this.modalRechazo.isOpen = true;
+  }
+
+  cerrarModalRechazo() {
+    if (this.modalRechazo) this.modalRechazo.isOpen = false;
+    this.selectedSolicitud = null;
+  }
+
+  confirmarRechazo() {
+    if (!this.selectedSolicitud) return;
+
+    const id = this.selectedSolicitud.idSolicitud!;
+    const motivo = this.selectedMotivos[id];
+    if (!motivo || !motivo.trim()) {
+      this.mostrarAlertaMensaje('Seleccione un motivo de rechazo antes de continuar.', 'warning');
       return;
     }
 
-    this.service.rechazarSolicitud(id, motivoFinal).subscribe({
+    this.service.rechazarSolicitud(id, motivo).subscribe({
       next: () => {
-        alert(` Solicitud #${id} rechazada`);
-        // limpiar selección
         delete this.selectedMotivos[id];
-        
+        this.cerrarModalRechazo();
         this.cargarSolicitudesPendientes();
+        this.mostrarAlertaMensaje(`Solicitud #${id} rechazada correctamente`, 'success');
       },
-      error: (err) => {
-        console.error('Error al rechazar la solicitud:', err);
-        if (err.error) {
-          console.error('Detalle del error:', err.error);
-        }
-        alert(`Error al rechazar: ${err.message || err.statusText}`);
-      }
+      error: (err) => this.mostrarAlertaMensaje(`Error al rechazar la solicitud: ${err.message || err.statusText}`, 'error')
     });
-  }
-
-  editar(s: any) {
-    console.log('EDITAR', s);
-  }
-
-  ver(s: any) {
-    console.log('VER', s);
   }
 }

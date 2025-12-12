@@ -1,41 +1,118 @@
-<div class="row" *ngIf="recolecciones.length > 0; else sinRecolecciones">
-  <div class="col-md-4 mb-3" *ngFor="let reco of recolecciones">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h6 class="card-title">
-          <strong>Estado:</strong> {{ reco.estado }}
-        </h6>
+<div class="container-cards">
 
+  <div class="row" *ngIf="recolecciones.length > 0; else sinRecolecciones">
+    <div class="col-12 mb-4" *ngFor="let reco of recolecciones">
+      <div class="solicitud-card">
+        <div class="card-accent"></div>
+        <div class="card-content">
 
-        <p *ngIf="reco.evidencia">
-          <strong>Evidencia:</strong> {{ reco.evidencia }}
-        </p>
+          <!-- Header -->
+          <div class="card-header-row">
+            <div class="solicitud-id">
+              <div class="icon-wrapper">
+                <i class="bi bi-truck"></i>
+              </div>
+              <div>
+                <p class="id-text">#REC-{{ reco.idRecoleccion }}</p>
+                <p class="id-subtext">{{ reco.fechaCreacionRecoleccion | date:'dd MMM, yyyy' }}</p>
+              </div>
+            </div>
+            <span class="status-badge" 
+                  [ngClass]="{
+                    'status-pendiente': reco.estado === 'Pendiente',
+                    'status-progreso': reco.estado === 'En_Progreso',
+                    'status-fallida': reco.estado === 'Fallida',
+                    'status-cancelada': reco.estado === 'Cancelada',
+                    'status-aceptada': reco.estado === 'Completada'
+                  }">
+              <i class="bi" [ngClass]="{
+                'bi-clock': reco.estado === 'Pendiente',
+                'bi-truck': reco.estado === 'En_Progreso',
+                'bi-x-circle': reco.estado === 'Fallida',
+                'bi-x-square': reco.estado === 'Cancelada',
+                'bi-check-circle': reco.estado === 'Completada'
+              }"></i>
+              {{ reco.estado }}
+            </span>
+          </div>
 
-        <p>
-          <strong>Fecha de Recoleccion:</strong>
-          {{ reco.fechaRecoleccion| date:'dd/MM/yyyy HH:mm:ss' }}
-        </p>
-      </div>
+          <!-- Info Grid -->
+          <div class="card-info-grid mt-2">
 
-      <p>
-          <strong>Observaciones</strong> {{ reco.observaciones}}
-        </p>
+            <div class="info-box">
+              <div class="info-icon-circle">
+                <i class="bi bi-calendar-week"></i>
+              </div>
+              <div class="info-text">
+                <div class="info-label">Fecha de Recolección</div>
+                <div class="info-value">{{ reco.fechaRecoleccion | date:'dd MMM - HH:mm' }}</div>
+              </div>
+            </div>
 
-      <!-- ✅ Mostrar botones solo si la recolección está pendiente -->
-      <div class="card-footer d-flex justify-content-between"
-           *ngIf="mostrarBotones(reco.estado)">
-        <button class="btn btn-success btn-sm" (click)="aceptarRecoleccion(reco.idRecoleccion)">
-          Completar
-        </button>
+            <div class="info-box" *ngIf="reco.observaciones">
+              <div class="info-icon-circle">
+                <i class="bi bi-chat-dots"></i>
+              </div>
+              <div class="info-text">
+                <div class="info-label">Observaciones</div>
+                <div class="info-value">{{ reco.observaciones }}</div>
+              </div>
+            </div>
 
-        <button class="btn btn-danger btn-sm" (click)="cancelarRecoleccion(reco.idRecoleccion)">
-          Cancelar
-        </button>
+            <div class="info-box" *ngIf="reco.evidencia">
+              <div class="info-icon-circle">
+                <i class="bi bi-image"></i>
+              </div>
+              <div class="info-text">
+                <div class="info-label">Evidencia</div>
+                <div class="info-value">{{ reco.evidencia }}</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Footer con botones -->
+          <div class="card-footer-row text-right ">
+                                    <div class="action-btns" *ngIf="mostrarBotones(reco.estado)">
+
+           
+
+            <app-boton
+              icono="bi-eye"
+              color="pastel-info"
+              [tipo]="'button'"
+              (click)="abrirModalVerRecoleccion(reco)"
+              title="Ver detalles">
+            </app-boton>
+
+            <app-boton
+              icono="bi-check-circle"
+              color="pastel-success"
+              [tipo]="'button'"
+              (click)="aceptarRecoleccion(reco.idRecoleccion)"
+              title="Completar">
+            </app-boton>
+
+            <app-boton
+              icono="bi-x-circle"
+              color="pastel-danger"
+              [tipo]="'button'"
+              (click)="cancelarRecoleccion(reco.idRecoleccion)"
+              title="Cancelar">
+            </app-boton>
+          </div>
+</div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<ng-template #sinRecolecciones>
-  <p class="text-center mt-3">No tienes recolecciones asignadas.</p>
-</ng-template>
+  <!-- Sin recolecciones -->
+  <ng-template #sinRecolecciones>
+    <div class="sin-recolecciones text-center mt-5">
+      <i class="fas fa-inbox fa-2x mb-2"></i>
+      <p>No tienes recolecciones asignadas.</p>
+    </div>
+  </ng-template>
+
+</div>

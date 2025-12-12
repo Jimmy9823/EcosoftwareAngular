@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
 import { RecoleccionService } from '../../../Services/recoleccion.service';
 import { ModeloRecoleccion, EstadoRecoleccion } from '../../../Models/modelo-recoleccion';
+import { Boton } from '../../../shared/botones/boton/boton';
+import { Modal } from '../../../shared/modal/modal';
 
 @Component({
   selector: 'app-cards-recoleccion-ciudadano',
-  imports: [COMPARTIR_IMPORTS],
+  imports: [COMPARTIR_IMPORTS, Boton, Modal],
   templateUrl: './cards-recoleccion-ciudadano.html',
   styleUrl: './cards-recoleccion-ciudadano.css'
 })
@@ -19,6 +21,9 @@ export class CardsRecoleccionCiudadano implements OnInit {
   fechaProgramadaEditable: string = '';
   estadoEditable: EstadoRecoleccion = EstadoRecoleccion.Pendiente;
 
+  @ViewChild('modalVerRecoleccion') modalVerRecoleccion!: Modal;
+  @ViewChild('modalEdicion') modalEdicion!: Modal;
+
   constructor(private recoleccionService: RecoleccionService) {}
 
   ngOnInit(): void {
@@ -27,7 +32,7 @@ export class CardsRecoleccionCiudadano implements OnInit {
 
   cargarMisRecolecciones(): void {
     this.recoleccionService.listarActivas().subscribe({
-      next: (data) => {
+      next: data => {
         this.recolecciones = data;
         this.cargando = false;
       },
@@ -49,52 +54,49 @@ export class CardsRecoleccionCiudadano implements OnInit {
       });
   }
 
+  // Modal edición
   abrirModalEdicion(reco: ModeloRecoleccion) {
-    this.recoleccionSeleccionada = { ...reco }; // clonar
-
-    // Cargar valores iniciales
+    this.recoleccionSeleccionada = { ...reco };
     this.estadoEditable = reco.estado as EstadoRecoleccion;
     this.fechaProgramadaEditable = reco.fechaRecoleccion
       ? new Date(reco.fechaRecoleccion).toISOString().slice(0, 16)
       : '';
-
-    const modal = document.getElementById('modalEdicion');
-    if (modal) {
-      const modalBootstrap = new (window as any).bootstrap.Modal(modal);
-      modalBootstrap.show();
-    }
+    if (this.modalEdicion) this.modalEdicion.isOpen = true;
   }
 
   guardarEdicion() {
-  if (!this.recoleccionSeleccionada) return;
+    if (!this.recoleccionSeleccionada) return;
 
-  this.recoleccionSeleccionada.estado = this.estadoEditable;
+    this.recoleccionSeleccionada.estado = this.estadoEditable;
+    this.recoleccionSeleccionada.fechaRecoleccion = new Date(this.fechaProgramadaEditable).toISOString();
 
-  // ✅ Convertimos el Date a string ISO (formato válido para backend)
-  this.recoleccionSeleccionada.fechaRecoleccion = new Date(this.fechaProgramadaEditable).toISOString();
+    this.recoleccionService.actualizarRecoleccion(
+      this.recoleccionSeleccionada.idRecoleccion!,
+      this.recoleccionSeleccionada
+    ).subscribe({
+      next: actualizada => {
+        this.recolecciones = this.recolecciones.map(r =>
+          r.idRecoleccion === actualizada.idRecoleccion ? actualizada : r
+        );
+        this.cerrarModalEdicion();
+      },
+      error: err => console.error('Error al actualizar', err)
+    });
+  }
 
-  this.recoleccionService.actualizarRecoleccion(
-    this.recoleccionSeleccionada.idRecoleccion!,
-    this.recoleccionSeleccionada
-  ).subscribe({
-    next: (actualizada) => {
-      this.recolecciones = this.recolecciones.map(r =>
-        r.idRecoleccion === actualizada.idRecoleccion ? actualizada : r
-      );
-      this.cerrarModal();
-    },
-    error: err => console.error('Error al actualizar', err)
-  });
-}
+  cerrarModalEdicion() {
+    if (this.modalEdicion) this.modalEdicion.isOpen = false;
+    this.recoleccionSeleccionada = null;
+  }
 
-  cerrarModal() {
-    const modal = document.getElementById('modalEdicion');
-    if (modal) {
-      const modalBootstrap = (window as any).bootstrap.Modal.getInstance(modal);
-      if (modalBootstrap) {
-        modalBootstrap.hide();
-      }
-    }
+  // Modal ver detalles
+  abrirModalVerRecoleccion(reco: ModeloRecoleccion) {
+    this.recoleccionSeleccionada = reco;
+    if (this.modalVerRecoleccion) this.modalVerRecoleccion.isOpen = true;
+  }
+
+  cerrarModalVerRecoleccion() {
+    if (this.modalVerRecoleccion) this.modalVerRecoleccion.isOpen = false;
     this.recoleccionSeleccionada = null;
   }
 }
