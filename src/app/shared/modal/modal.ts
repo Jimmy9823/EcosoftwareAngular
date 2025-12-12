@@ -17,6 +17,7 @@ export class Modal {
 
   @Output() closed = new EventEmitter<void>();
 
+  
   close() {
     this.isOpen = false;
     this.closed.emit();

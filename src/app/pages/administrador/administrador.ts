@@ -29,11 +29,12 @@ import { Modal } from '../../shared/modal/modal';
 import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { FormComp } from '../../shared/form/form.comp/form.comp';
 import { Service } from '../../Services/solicitud.service';
+import { Rutas } from "../../Logic/rutas/rutas";
 @Component({
   selector: 'app-administrador',
-  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent, RechazadasMotivoChartComponent, PendientesAceptadasChartComponent, GraficoUsuariosLocalidad, 
-    GraficoUsuariosBarrios ,RegistroAdmin, Usuario, ListarTabla, Solcitudes, 
-    EditarUsuario, CapacitacionesLista, CargaMasiva,BarraLateral,Boton,Titulo,Modal,FormComp, PuntosIframe, CrudPuntos],
+  imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent, RechazadasMotivoChartComponent, PendientesAceptadasChartComponent, GraficoUsuariosLocalidad,
+    GraficoUsuariosBarrios, RegistroAdmin, Usuario, ListarTabla, Solcitudes,
+    EditarUsuario, CapacitacionesLista, CargaMasiva, BarraLateral, Boton, Titulo, Modal, FormComp, PuntosIframe, CrudPuntos, Rutas],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })

@@ -1,14 +1,14 @@
 export interface ModeloRecoleccion {
   idRecoleccion: number;
-  solicitudId: number;
+  solicitudId?: number;
   recolectorId?: number;
-  rutaId?: number | null;   // puede venir null desde el backend
-
-  estado: EstadoRecoleccion;
-  fechaRecoleccion: string;            // LocalDateTime → se maneja como string en JSON
-  observaciones: string;
-  evidencia: string;
-  fechaCreacionRecoleccion: string;    // OffsetDateTime → también string
+  rutaId?: number | null;
+  estado: string;
+  fechaRecoleccion?: string | null; 
+  ordenParada?: number | null;
+  observaciones?: string;
+  evidencia?: string;
+  fechaCreacionRecoleccion?: string; 
 }
 
 export enum EstadoRecoleccion {
