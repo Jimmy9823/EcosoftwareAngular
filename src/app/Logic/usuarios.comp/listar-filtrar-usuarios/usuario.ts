@@ -1,6 +1,6 @@
 import { Header } from './../../../core/header/header';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UsuarioService } from '../../../Services/usuario.service';
 import { UsuarioModel } from '../../../Models/usuario';
 import { COMPARTIR_IMPORTS } from '../../../shared/imports';
@@ -39,6 +39,7 @@ export class Usuario implements OnInit {
   @ViewChild('modalEliminar') modalEliminar!: Modal;
   @ViewChild('modalEliminarFisico') modalEliminarFisico!: Modal;
   @ViewChild('modalVerPerfil') modalVerPerfil!: Modal;
+  @ViewChild('modalEditarUsuario') modalEditarUsuario!: Modal;
 
   usuarioSeleccionado?: UsuarioModel | null = null;
 
@@ -107,6 +108,13 @@ export class Usuario implements OnInit {
       color: '#0d6efd',
       hover: '#0b5ed7',
       evento: (item: any) => this.abrirModalVer(item)
+    },
+    {
+      icon: 'bi bi-pencil',
+      texto: 'Editar',
+      color: '#ffc107',
+      hover: '#e0a800',
+      evento: (item: any) => this.abrirModalEditar(item)
     },
     {
       icon: 'bi bi-trash',
@@ -189,6 +197,10 @@ export class Usuario implements OnInit {
     }
   ];
 
+  // Formulario de edición
+  formEditarUsuario: FormGroup = new FormGroup({});
+  fieldsEditarUsuario: FieldConfig[] = [];
+
   constructor(private usuarioService: UsuarioService) {
     // Inicializa controles del form
     this.fieldsFiltros.forEach(f => {
@@ -203,6 +215,8 @@ export class Usuario implements OnInit {
 
   ngOnInit(): void {
     this.cargarUsuarios();
+    // Inicializa el formulario de edición vacío
+    this.initFormEditarUsuario();
   }
 
   // ===============================
@@ -227,9 +241,26 @@ export class Usuario implements OnInit {
     this.modalVerPerfil.isOpen = true;
   }
 
+  abrirModalEditar(usuario: UsuarioModel): void {
+    // Asegúrate de que usuario tenga idUsuario y datos completos
+    if (!usuario || !usuario.idUsuario) return;
+    this.usuarioSeleccionado = usuario;
+    this.initFormEditarUsuario(usuario);
+    // Forzar apertura del modal
+    if (this.modalEditarUsuario) {
+      this.modalEditarUsuario.isOpen = true;
+    }
+  }
+
   cerrarModalEliminar(): void {
     this.modalEliminar.close();
     this.usuarioSeleccionado = null;
+  }
+
+  cerrarModalEditar(): void {
+    this.modalEditarUsuario.close();
+    this.usuarioSeleccionado = null;
+    this.formEditarUsuario.reset();
   }
 
   confirmarEliminacion(): void {
@@ -369,6 +400,98 @@ export class Usuario implements OnInit {
       },
       error: () => {
         this.mostrarAlertaGlobal('No se pudo eliminar el usuario', 'error');
+      }
+    });
+  }
+
+  // ===============================
+  // EDICIÓN DE USUARIO
+  // ===============================
+  initFormEditarUsuario(usuario?: UsuarioModel) {
+    // Campos base
+    const baseFields: FieldConfig[] = [
+      { type: 'text', name: 'nombre', label: 'Nombre', placeholder: 'Nombre', cols: 6 },
+      { type: 'text', name: 'telefono', label: 'Teléfono', placeholder: 'Teléfono', cols: 6 },
+      { type: 'text', name: 'cedula', label: 'Documento', placeholder: 'Documento', cols: 6 },
+      { type: 'email', name: 'correo', label: 'Correo', placeholder: 'Correo', cols: 6 },
+      { type: 'select', name: 'localidad', label: 'Localidad', cols: 6, options: [
+        { value: '', text: 'Seleccione' },
+        { value: 'Usaquen', text: 'Usaquén' },
+        { value: 'Chapinero', text: 'Chapinero' },
+        { value: 'Santa_Fe', text: 'Santa Fe' },
+        { value: 'San_Cristobal', text: 'San Cristóbal' },
+        { value: 'Usme', text: 'Usme' },
+        { value: 'Tunjuelito', text: 'Tunjuelito' },
+        { value: 'Bosa', text: 'Bosa' },
+        { value: 'Kennedy', text: 'Kennedy' },
+        { value: 'Fontibon', text: 'Fontibón' },
+        { value: 'Engativa', text: 'Engativá' },
+        { value: 'Suba', text: 'Suba' },
+        { value: 'Barrios_Unidos', text: 'Barrios Unidos' },
+        { value: 'Teusaquillo', text: 'Teusaquillo' },
+        { value: 'Los_Martires', text: 'Los Mártires' },
+        { value: 'Antonio_Nariño', text: 'Antonio Nariño' },
+        { value: 'Puente_Aranda', text: 'Puente Aranda' },
+        { value: 'Candelaria', text: 'Candelaria' },
+        { value: 'Rafael_Uribe_Uribe', text: 'Rafael Uribe Uribe' },
+        { value: 'Ciudad_Bolivar', text: 'Ciudad Bolívar' },
+        { value: 'Sumapaz', text: 'Sumapaz' }
+      ] },
+      { type: 'text', name: 'direccion', label: 'Dirección', placeholder: 'Dirección', cols: 6 },
+      { type: 'text', name: 'barrio', label: 'Barrio', placeholder: 'Barrio', cols: 6 },
+    ];
+
+    // Campos por rol
+    let extraFields: FieldConfig[] = [];
+    const rolId = usuario?.rolId;
+
+    if (rolId === 3) { // Empresa
+      extraFields = [
+        { type: 'text', name: 'nit', label: 'NIT', placeholder: 'NIT', cols: 6 },
+        { type: 'text', name: 'representanteLegal', label: 'Representante Legal', placeholder: 'Representante Legal', cols: 6 }
+      ];
+    }
+    if (rolId === 3 || rolId === 4) { // Empresa o Reciclador
+      extraFields = [
+        ...extraFields,
+        { type: 'text', name: 'tipoMaterial', label: 'Tipo de material', placeholder: 'Tipo de material', cols: 6 },
+        { type: 'text', name: 'cantidad_minima', label: 'Cantidad mínima', placeholder: 'Cantidad mínima', cols: 6 },
+        { type: 'text', name: 'otrosMateriales', label: 'Otros materiales', placeholder: 'Otros materiales', cols: 12 },
+        { type: 'text', name: 'horario', label: 'Horario', placeholder: 'Horario', cols: 6 },
+        { type: 'text', name: 'zona_de_trabajo', label: 'Zona de trabajo', placeholder: 'Zona de trabajo', cols: 6 }
+      ];
+    }
+
+    this.fieldsEditarUsuario = [
+      ...baseFields,
+      ...extraFields
+    ];
+
+    // Inicializa el formGroup
+    const group: any = {};
+    this.fieldsEditarUsuario.forEach(f => {
+      group[f.name!] = new FormControl(usuario ? usuario[f.name as keyof UsuarioModel] ?? '' : '', f.type === 'email' ? [Validators.email] : []);
+    });
+    this.formEditarUsuario = new FormGroup(group);
+  }
+
+  actualizarUsuario(): void {
+    if (!this.usuarioSeleccionado?.idUsuario) return;
+    if (this.formEditarUsuario.invalid) return;
+
+    const datosActualizados = {
+      ...this.usuarioSeleccionado,
+      ...this.formEditarUsuario.value
+    };
+
+    this.usuarioService.actualizar(this.usuarioSeleccionado.idUsuario, datosActualizados).subscribe({
+      next: () => {
+        this.mostrarAlertaGlobal('Usuario actualizado correctamente', 'success');
+        this.cerrarModalEditar();
+        this.cargarUsuarios();
+      },
+      error: () => {
+        this.mostrarAlertaGlobal('Error al actualizar el usuario', 'error');
       }
     });
   }

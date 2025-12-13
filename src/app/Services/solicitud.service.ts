@@ -53,6 +53,10 @@ export class Service {
     return this.http.put<ServiceModel>(`${this.api}/${id}`, solicitud);
   }
 
+  eliminarSolicitud(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.api}/${id}`);
+  }
+
   listarPorUsuario(id: number): Observable<ServiceModel[]> {
     return this.http.get<ServiceModel[]>(`${this.api}/usuario/${id}`);
   }
