@@ -31,7 +31,9 @@ import { CardsNoticias } from './Logic/cards-noticias.component/cards-noticias.c
 
 export const routes: Routes = [
   { path: '', component: Inicio },
-  { path: 'solicitudes', component: Solcitudes },
+  { path: 'solicitudes', component: Solcitudes,
+    canActivate: [AuthGuard],  data: { rol: 'Administrador' }
+   },
   { path: 'usuarios', component: Usuario },
   { path: 'registro', component: Registro },
   { path: 'usuarios', component: Usuario },
@@ -57,6 +59,11 @@ export const routes: Routes = [
     path:'empresa', component: Empresa,
     canActivate: [AuthGuard], data: { roles: ['Empresa', 'Reciclador'] }
   },
+  {
+    path:'c', component: Empresa,
+    canActivate: [AuthGuard], data: { roles: ['Empresa', 'Reciclador'] }
+  },
+
   { path: 'editar-usuario', component: EditarUsuario },
   { path: 'card-solicitud', component: CardsSolicitud },
   { path: 'card-re-acpt-solicitud', component: CardARSolicitud },
