@@ -112,7 +112,8 @@ obtenerCapacitacionPorNombre(nombre: string): Observable<any> {
     let params = new HttpParams()
       .set('usuarioId', usuarioId)
       .set('cursoId', cursoId);
-    return this.http.post<Inscripcion>(`${this.apiUrl}/inscripciones`, null, { params });
+    // Cambia null por {} en el body
+    return this.http.post<Inscripcion>(`${this.apiUrl}/inscripciones`, {}, { params });
   }
 
   actualizarEstadoInscripcion(id: number, estado: EstadoCurso): Observable<Inscripcion> {

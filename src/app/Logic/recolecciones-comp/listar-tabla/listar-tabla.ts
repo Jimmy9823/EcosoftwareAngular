@@ -13,7 +13,7 @@ import { FormComp } from '../../../shared/form/form.comp/form.comp';
   selector: 'app-listar-tabla',
   imports: [COMPARTIR_IMPORTS, Tabla, Modal, FormComp, Boton],
   templateUrl: './listar-tabla.html',
-  styleUrl: './listar-tabla.css'
+  styleUrls: ['./listar-tabla.css'] // Corrige aquí
 })
 export class ListarTabla {
 
@@ -74,11 +74,8 @@ export class ListarTabla {
 
   initFormEditarRecoleccion(recoleccion?: any) {
     this.fieldsEditarRecoleccion = [
-      { type: 'text', name: 'estado', label: 'Estado', placeholder: 'Estado', cols: 6 },
       { type: 'date', name: 'fechaRecoleccion', label: 'Fecha de recolección', cols: 6 },
-      { type: 'text', name: 'observaciones', label: 'Observaciones', placeholder: 'Observaciones', cols: 12 },
-      { type: 'text', name: 'recolectorId', label: 'Recolector ID', placeholder: 'Recolector', cols: 6 },
-      { type: 'text', name: 'rutaId', label: 'Ruta ID', placeholder: 'Ruta', cols: 6 }
+      { type: 'text', name: 'observaciones', label: 'Observaciones', placeholder: 'Observaciones', cols: 12 }
     ];
     const group: any = {};
     this.fieldsEditarRecoleccion.forEach(f => {
@@ -127,4 +124,9 @@ export class ListarTabla {
     this.modalEliminarRecoleccion.close();
     this.selectedRecoleccion = null;
   }
+
+  // Métodos para enlazar con la tabla
+  onVer = (item: ModeloRecoleccion) => this.ver(item);
+  onEditar = (item: ModeloRecoleccion) => this.editar(item);
+  onEliminar = (item: ModeloRecoleccion) => this.eliminar(item);
 }

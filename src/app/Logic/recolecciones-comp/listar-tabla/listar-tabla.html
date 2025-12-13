@@ -3,15 +3,15 @@
 
 <app-tabla
   *ngIf="!cargando && data.length > 0"
-    [titulo]="'Listado de Recolecciones'"
-[iconosAcciones]="{
+  [titulo]="'Listado de Recolecciones'"
+  [iconosAcciones]="{
     descargar: 'bi-plus-circle'
   }"
   [columnas]="columnas"
   [data]="data"
-  (ver)="ver($event)"
-  (editar)="editar($event)"
-  (eliminar)="eliminar($event)">
+  (ver)="onVer($event)"
+  (editar)="onEditar($event)"
+  (eliminar)="onEliminar($event)">
 </app-tabla>
 <app-modal
   #modalVerRecoleccion
@@ -114,9 +114,7 @@
     </app-form-comp>
   </div>
   <ng-container modal-footer>
-    <div class="d-flex justify-content-end">
-      <app-boton texto="Cancelar" icono="bi bi-x-circle" color="custom-gray-filled" (click)="cerrarModalEditarRecoleccion()"></app-boton>
-    </div>
+    
   </ng-container>
 </app-modal>
 

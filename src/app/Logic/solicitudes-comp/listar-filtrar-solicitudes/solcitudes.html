@@ -41,9 +41,9 @@
   [cellTemplates]="cellTemplates"
   titulo="Solicitudes"
   (descargar)="abrirModalReportes()"
-  (ver)="abrirModalVerSolicitud($event)"
-  (editar)="abrirModalEdicion($event)"
-  (eliminar)="eliminarSolicitud($event)">
+  (ver)="onVerSolicitud($event)"
+  (editar)="onEditarSolicitud($event)"
+  (eliminar)="onEliminarSolicitud($event)">
 </app-tabla>
 
   <!-- MODAL RECHAZO -->

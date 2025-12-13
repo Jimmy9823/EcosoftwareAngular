@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NoticiaService } from '../../Services/noticias.service';
 import { Noticia } from '../../Models/noticia';
+import { Titulo } from "../../shared/titulo/titulo";
 
 @Component({
   selector: 'cards-noticias',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Titulo],
   templateUrl: './cards-noticias.component.html',
   styleUrls: ['./cards-noticias.component.css']
 })

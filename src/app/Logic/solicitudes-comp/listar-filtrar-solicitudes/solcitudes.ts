@@ -367,4 +367,9 @@ export class Solcitudes implements OnInit {
     const d = new Date();
     return `${d.getFullYear()}${(d.getMonth()+1).toString().padStart(2,'0')}${d.getDate().toString().padStart(2,'0')}_${d.getHours().toString().padStart(2,'0')}${d.getMinutes().toString().padStart(2,'0')}`;
   }
+
+  // Añade métodos para manejar los eventos de la tabla y abrir los modales correctamente
+  onVerSolicitud = (item: ServiceModel) => this.abrirModalVerSolicitud(item);
+  onEditarSolicitud = (item: ServiceModel) => this.abrirModalEdicion(item);
+  onEliminarSolicitud = (item: ServiceModel) => this.eliminarSolicitud(item);
 }
