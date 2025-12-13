@@ -23,6 +23,7 @@ export class CardsRecoleccionCiudadano implements OnInit {
 
   @ViewChild('modalVerRecoleccion') modalVerRecoleccion!: Modal;
   @ViewChild('modalEdicion') modalEdicion!: Modal;
+  @ViewChild('modalCancelar') modalCancelar!: Modal; // Nuevo modal
 
   constructor(private recoleccionService: RecoleccionService) {}
 
@@ -98,5 +99,22 @@ export class CardsRecoleccionCiudadano implements OnInit {
   cerrarModalVerRecoleccion() {
     if (this.modalVerRecoleccion) this.modalVerRecoleccion.isOpen = false;
     this.recoleccionSeleccionada = null;
+  }
+
+  // Modal cancelar
+  abrirModalCancelar(reco: ModeloRecoleccion) {
+    this.recoleccionSeleccionada = reco;
+    if (this.modalCancelar) this.modalCancelar.isOpen = true;
+  }
+
+  cerrarModalCancelar() {
+    if (this.modalCancelar) this.modalCancelar.isOpen = false;
+    this.recoleccionSeleccionada = null;
+  }
+
+  confirmarCancelar() {
+    if (!this.recoleccionSeleccionada) return;
+    this.cancelarRecoleccion(this.recoleccionSeleccionada.idRecoleccion!);
+    this.cerrarModalCancelar();
   }
 }

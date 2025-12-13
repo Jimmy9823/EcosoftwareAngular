@@ -73,35 +73,37 @@
 
           <!-- Footer con botones -->
           <div class="card-footer-row text-right ">
-                                    <div class="action-btns" *ngIf="mostrarBotones(reco.estado)">
-
-           
-
-            <app-boton
-              icono="bi-eye"
-              color="pastel-info"
-              [tipo]="'button'"
-              (click)="abrirModalVerRecoleccion(reco)"
-              title="Ver detalles">
-            </app-boton>
-
-            <app-boton
-              icono="bi-check-circle"
-              color="pastel-success"
-              [tipo]="'button'"
-              (click)="aceptarRecoleccion(reco.idRecoleccion)"
-              title="Completar">
-            </app-boton>
-
-            <app-boton
-              icono="bi-x-circle"
-              color="pastel-danger"
-              [tipo]="'button'"
-              (click)="cancelarRecoleccion(reco.idRecoleccion)"
-              title="Cancelar">
-            </app-boton>
-          </div>
-</div>
+    <div class="action-btns" *ngIf="mostrarBotones(reco.estado)">
+      <app-boton
+        icono="bi-pencil"
+        color="pastel-success"
+        [tipo]="'button'"
+        (click)="abrirModalEdicion(reco)"
+        title="Editar">
+      </app-boton>
+      <app-boton
+        icono="bi-eye"
+        color="pastel-info"
+        [tipo]="'button'"
+        (click)="abrirModalVerRecoleccion(reco)"
+        title="Ver detalles">
+      </app-boton>
+      <app-boton
+        icono="bi-check-circle"
+        color="pastel-success"
+        [tipo]="'button'"
+        (click)="aceptarRecoleccion(reco.idRecoleccion)"
+        title="Completar">
+      </app-boton>
+      <app-boton
+        icono="bi-x-circle"
+        color="pastel-danger"
+        [tipo]="'button'"
+        (click)="cancelarRecoleccion(reco.idRecoleccion)"
+        title="Cancelar">
+      </app-boton>
+    </div>
+  </div>
         </div>
       </div>
     </div>
@@ -115,4 +117,82 @@
     </div>
   </ng-template>
 
+  <!-- MODAL VER DETALLES -->
+<app-modal #modalVerRecoleccion
+           [title]="'Detalles de la Recolección'"
+           [headerColor]="'#4f69d9'"
+           [isOpen]="false">
+  <div class="p-3 modal-perfil-container">
+    <div class="text-center mb-4">
+      <h3>Recolección #{{ recoleccionSeleccionada?.idRecoleccion || '---' }}</h3>
+      <small class="text-muted">Solicitud ID: {{ recoleccionSeleccionada?.solicitudId || '---' }}</small>
+    </div>
+    <h5 class="section-title">Información general</h5>
+    <div class="row mb-3">
+      <div class="col-6">
+        <label class="fw-bold">Estado:</label>
+        <div>{{ recoleccionSeleccionada?.estado || 'Pendiente' }}</div>
+      </div>
+      <div class="col-6">
+        <label class="fw-bold">Observaciones:</label>
+        <div>{{ recoleccionSeleccionada?.observaciones || 'Sin observaciones' }}</div>
+      </div>
+    </div>
+    <h5 class="section-title">Fechas</h5>
+    <div class="row mb-3">
+      <div class="col-6">
+        <label class="fw-bold">Fecha de creación:</label>
+        <div>{{ recoleccionSeleccionada?.fechaCreacionRecoleccion || 'No registrada' }}</div>
+      </div>
+      <div class="col-6">
+        <label class="fw-bold">Fecha programada:</label>
+        <div>{{ recoleccionSeleccionada?.fechaRecoleccion || 'No definida' }}</div>
+      </div>
+    </div>
+    <h5 class="section-title">Evidencia</h5>
+    <div class="mb-3">
+      <ng-container *ngIf="recoleccionSeleccionada?.evidencia; else noEvidencia">
+        <a [href]="recoleccionSeleccionada?.evidencia" target="_blank" class="text-primary">Ver evidencia</a>
+      </ng-container>
+      <ng-template #noEvidencia>Sin evidencia adjunta</ng-template>
+    </div>
+    <h5 class="section-title">Recolección</h5>
+    <div class="row mb-3">
+      <div class="col-6">
+        <label class="fw-bold">Recolector ID:</label>
+        <div>{{ recoleccionSeleccionada?.recolectorId || 'Sin asignar' }}</div>
+      </div>
+      <div class="col-6">
+        <label class="fw-bold">Ruta ID:</label>
+        <div>{{ recoleccionSeleccionada?.rutaId || 'Sin asignar' }}</div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <app-boton texto="Cerrar" color="secondary" (click)="cerrarModalVerRecoleccion()"></app-boton>
+    </div>
+  </div>
+</app-modal>
+
+<!-- MODAL EDICIÓN -->
+<app-modal #modalEdicion
+           [title]="'Editar Recolección'"
+           [headerColor]="'#4f69d9'"
+           [isOpen]="false">
+  <div class="p-3">
+    <div class="mb-3">
+      <label class="form-label fw-bold">Estado</label>
+      <select class="form-select" [(ngModel)]="estadoEditable">
+        <option *ngFor="let estado of (EstadoRecoleccion | keyvalue)" [value]="estado.value">{{ estado.value }}</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-bold">Fecha Programada</label>
+      <input type="datetime-local" class="form-control" [(ngModel)]="fechaProgramadaEditable">
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <app-boton texto="Cancelar" color="secondary" (click)="cerrarModalEdicion()"></app-boton>
+      <app-boton texto="Guardar" color="success" (click)="guardarEdicion()"></app-boton>
+    </div>
+  </div>
+</app-modal>
 </div>
