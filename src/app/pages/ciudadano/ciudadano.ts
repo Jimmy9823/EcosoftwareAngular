@@ -16,13 +16,14 @@ import { Boton } from '../../shared/botones/boton/boton';
 import { Titulo } from '../../shared/titulo/titulo';
 import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitaciones/listar-capacitaciones';
+import { CardsNoticias } from "../../Logic/cards-noticias.component/cards-noticias.component";
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, FormRegistro, 
-    EditarUsuario, 
-    CardsSolicitud, CardsRecoleccionCiudadano,BarraLateral,Titulo,CapacitacionesLista, PuntosIframe, CrudPuntos],
+  imports: [COMPARTIR_IMPORTS, FormRegistro,
+    EditarUsuario,
+    CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CapacitacionesLista, PuntosIframe, CrudPuntos, CardsNoticias],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })
@@ -74,10 +75,11 @@ export class Ciudadano {
   { vista: 'panel', label: 'Panel de Control', icon: 'bi bi-speedometer2' },
   { vista: 'solicitudes', label: 'Solicitudes', icon: 'bi bi-bar-chart-line' },
   { vista: 'recolecciones', label: 'Recolecciones', icon: 'bi bi-truck' },
-  { vista: 'puntos', label: 'Puntos de Reciclaje', icon: 'bi bi-geo-alt' },
+  { vista: 'puntos', label: 'Puntos de Reciclaje', icon: 'bi bi-geo-alt' }, // ✅ ICONO CORREGIDO
   { vista: 'capacitaciones', label: 'Capacitaciones', icon: 'bi bi-mortarboard-fill' },
-  { vista: 'noticias', label: 'Noticias', icon: 'bi bi-newspaper' },
+  { vista: 'noticias', label: 'Noticias', icon: 'bi bi-newspaper' }
 ];
+
 
 
 

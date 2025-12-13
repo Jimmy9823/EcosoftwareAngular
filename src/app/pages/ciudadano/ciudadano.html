@@ -8,7 +8,6 @@
     (vistaChange)="cambiarVista($event)"
     (logout)="cerrarSesion()"
     (edit)="editarPerfil()">
-    
   </app-barra-lateral>
 
   <!-- CONTENIDO PRINCIPAL -->
@@ -57,20 +56,19 @@
       </div>
     </ng-container>
 
-    
-     <ng-container *ngIf="vistaActual === 'editar-perfil'">
+    <!-- EDITAR PERFIL -->
+    <ng-container *ngIf="vistaActual === 'editar-perfil'">
       <app-titulo
         titulo="Editar Perfil"
         subtitulo="Actualiza tu información personal"
         iconoBoton="bi bi-eye"
-        colorBoton="outline-custom-success"
-        >
+        colorBoton="outline-custom-success">
       </app-titulo>
 
       <app-editar-usuario></app-editar-usuario>
+    </ng-container>
 
-     </ng-container>
-
+    <!-- SOLICITUDES -->
     <ng-container *ngIf="vistaActual === 'solicitudes'">
       <app-titulo
         titulo="Solicitudes"
@@ -117,12 +115,21 @@
       <app-listar-capacitaciones></app-listar-capacitaciones>
     </ng-container>
 
+    <!-- NOTICIAS -->
+    <ng-container *ngIf="vistaActual === 'noticias'">
+      <app-titulo
+        titulo="Noticias"
+        subtitulo="Entérate de las últimas novedades">
+      </app-titulo>
+
+      <cards-noticias></cards-noticias>
+    </ng-container>
+
     <!-- PUNTOS DE RECICLAJE -->
     <ng-container *ngIf="vistaActual === 'puntos'">
       <div class="contenido-solicitud">
         <app-titulo
           titulo="Mis puntos"
-          subtitulo=""
           [textoBoton]="mostrarPuntos ? 'Gestionar' : 'Registrar puntos'"
           iconoBoton="bi bi-plus-lg"
           colorBoton="outline-custom-success"
@@ -133,7 +140,6 @@
         <div class="contenedor-toggle mt-2">
           <ng-container *ngIf="mostrarPuntos">
             <div class="contenido-solicitud">
-              <!-- Mostrar inline form y tarjetas al registrar puntos -->
               <app-crud-puntos [compact]="true"></app-crud-puntos>
             </div>
           </ng-container>
@@ -141,10 +147,6 @@
           <ng-container *ngIf="!mostrarPuntos">
             <div class="contenido-solicitud">
               <app-puntos-iframe></app-puntos-iframe>
-
-              <div class="d-flex justify-content-end align-items-center mt-3">
-              </div>
-              <!-- Cards removed here: only the PHP iframe is displayed in the map area -->
             </div>
           </ng-container>
         </div>

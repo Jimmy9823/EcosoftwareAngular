@@ -56,7 +56,6 @@
       </div>
     </ng-container>
 
-    
     <!-- SOLICITUDES -->
     <ng-container *ngIf="vistaActual === 'solicitudes'">
       <app-titulo 
@@ -70,16 +69,17 @@
       <app-card-a-r-solicitud></app-card-a-r-solicitud>
     </ng-container>
 
+    <!-- EDITAR PERFIL -->
     <ng-container *ngIf="vistaActual === 'editar-perfil'">
       <app-titulo
         titulo="Editar Perfil"
         subtitulo="Actualiza tu información personal"
         iconoBoton="bi bi-eye"
-        colorBoton="outline-custom-success"
-        >
+        colorBoton="outline-custom-success">
       </app-titulo>
       <app-editar-usuario></app-editar-usuario>
-      </ng-container>
+    </ng-container>
+
     <!-- RECOLECCIONES -->
     <ng-container *ngIf="vistaActual === 'recolecciones'">
       <app-titulo 
@@ -95,7 +95,6 @@
 
     <!-- PUNTOS DE RECICLAJE -->
     <ng-container *ngIf="vistaActual === 'puntos'">
-      <!-- keep only the action button (no visible title) -->
       <app-titulo
         titulo="Mis puntos"
         subtitulo=""
@@ -109,7 +108,6 @@
       <div class="contenedor-toggle">
         <ng-container *ngIf="mostrarPuntos">
           <div class="contenido-solicitud">
-            <!-- Mostrar inline form y tarjetas al registrar puntos -->
             <app-crud-puntos [compact]="true"></app-crud-puntos>
           </div>
         </ng-container>
@@ -120,10 +118,19 @@
 
             <div class="d-flex justify-content-end align-items-center mt-3">
             </div>
-            <!-- Cards removed here: only the PHP iframe is displayed in the map area -->
           </div>
         </ng-container>
       </div>
+    </ng-container>
+
+    <!-- NOTICIAS -->
+    <ng-container *ngIf="vistaActual === 'noticias'">
+      <app-titulo
+        titulo="Noticias"
+        subtitulo="Entérate de las últimas novedades">
+      </app-titulo>
+
+      <cards-noticias></cards-noticias>
     </ng-container>
 
   </main>
