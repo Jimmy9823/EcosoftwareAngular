@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { AppRoutingModule } from "../../app-routing.module";
+
 
 @Component({
   selector: 'app-servicios-section',
-  imports: [AppRoutingModule],
+  imports: [],
   templateUrl: './servicios-section.html',
   styleUrl: './servicios-section.css'
 })
