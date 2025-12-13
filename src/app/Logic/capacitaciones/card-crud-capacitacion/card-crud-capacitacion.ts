@@ -12,7 +12,6 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./card-crud-capacitacion.css']
 })
 export class CapacitacionesCrudComponent implements OnInit {
-
   // 📌 Lista de capacitaciones
   capacitaciones: Capacitacion[] = [];
 
@@ -85,5 +84,21 @@ export class CapacitacionesCrudComponent implements OnInit {
         this.obtenerCapacitaciones();
       });
     }
+  }
+
+  inscribirse(cap: Capacitacion) {
+    const usuarioId = 1;
+    if (!cap.id) {
+      alert('No se puede inscribir: capacitación sin ID');
+      return;
+    }
+    this.capacitacionesService.inscribirse(usuarioId, cap.id).subscribe({
+      next: () => {
+        alert(`Inscripción exitosa a "${cap.nombre}"`);
+      },
+      error: (err) => {
+        alert('Error al inscribirse: ' + (err?.error?.message || err.message || ''));
+      }
+    });
   }
 }

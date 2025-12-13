@@ -17,13 +17,14 @@ import { Titulo } from '../../shared/titulo/titulo';
 import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitaciones/listar-capacitaciones';
 import { CardsNoticias } from "../../Logic/cards-noticias.component/cards-noticias.component";
+import { CapacitacionesCrudComponent } from "../../Logic/capacitaciones/card-crud-capacitacion/card-crud-capacitacion";
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
   imports: [COMPARTIR_IMPORTS, FormRegistro,
     EditarUsuario,
-    CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CapacitacionesLista, PuntosIframe, CrudPuntos, CardsNoticias],
+    CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CapacitacionesLista, PuntosIframe, CrudPuntos, CardsNoticias, CapacitacionesCrudComponent],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })

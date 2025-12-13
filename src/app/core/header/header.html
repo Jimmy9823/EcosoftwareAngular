@@ -1,12 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
   <div class="container px-4">
     <!-- Logo -->
-    <a class="navbar-brand fw-bold fs-4 verde-principal" routerLink="/">
+    <a class="navbar-brand fw-bold fs-4 verde-principal" routerLink="/inicio">
       EcoSoftware
     </a>
 
     <!-- Botón hamburguesa para móvil -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
       aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,25 +16,25 @@
       <!-- Menú de navegación (centrado) -->
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/capacitacion" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: false}">
+          <a class="nav-link" routerLink="/capacitaciones" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: false}">
             Capacitación
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/puntos-reciclaje" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: false}">
+            [routerLinkActiveOptions]="{exact: false}">
             Puntos de Reciclaje
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/hf">
+          <a class="nav-link" routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
             Solicitudes
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/noticias" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: false}">
+            [routerLinkActiveOptions]="{exact: false}">
             Noticias
           </a>
         </li>
@@ -42,60 +42,68 @@
 
       <!-- Botón de Mi Perfil -->
       <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
-  <div class="container px-4">
-    <!-- Logo -->
-    <a class="navbar-brand fw-bold fs-4 verde-principal" routerLink="/">
-      EcoSoftware
-    </a>
+        <div class="container px-4">
+          <!-- Logo -->
+          <a class="navbar-brand fw-bold fs-4 verde-principal" routerLink="/inicio">
+            EcoSoftware
+          </a>
 
-    <!-- Botón hamburguesa para móvil -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
-      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+          <!-- Botón hamburguesa para móvil -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-    <!-- Contenido del navbar -->
-    <div class="collapse navbar-collapse" id="navbarContent">
-      <!-- Menú de navegación (centrado) -->
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/capacitacion" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: false}">
-            Capacitación
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/puntos-reciclaje" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: false}">
-            Puntos de Reciclaje
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/solicitudes" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: false}">
-            Solicitudes
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/noticias" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: false}">
-            Noticias
-          </a>
-        </li>
-      </ul>
+          <!-- Contenido del navbar -->
+          <div class="collapse navbar-collapse" id="navbarContent">
+            <!-- Menú de navegación (centrado) -->
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/capacitaciones" routerLinkActive="active"
+                  [routerLinkActiveOptions]="{exact: false}">
+                  Capacitación
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/puntos-reciclaje" routerLinkActive="active"
+                  [routerLinkActiveOptions]="{exact: false}">
+                  Puntos de Reciclaje
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/inicio" routerLinkActive="active"
+                  [routerLinkActiveOptions]="{exact: false}">
+                  Solicitudes
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/noticias" routerLinkActive="active"
+                  [routerLinkActiveOptions]="{exact: false}">
+                  Noticias
+                </a>
+              </li>
+            </ul>
 
-      <!-- Botón de Mi Perfil -->
-      <div class="d-flex align-items-center">
-        <a class="btn btn-outline-success me-2" routerLink="/login">
-          Login
-        </a>
-        <button class="btn btn-danger" (click)="onLogoutClick()" routerLink="/registro">
-          Registrarse
-        </button>
-      </div>
-    </div>
-  </div>
-</nav>
+            <!-- Botón de Mi Perfil -->
+            <div class="d-flex align-items-center gap-2">
+  <app-boton
+    texto="Login"
+    icono="bi bi-box-arrow-in-right"
+    color="pastel-success"
+    routerLink="/login">
+  </app-boton>
+
+  <app-boton
+    texto="Registrarse"
+    icono="bi bi-person-plus"
+    color="pastel-danger"
+    routerLink="/registro">
+  </app-boton>
+</div>
+
+          </div>
+        </div>
+      </nav>
 
     </div>
   </div>

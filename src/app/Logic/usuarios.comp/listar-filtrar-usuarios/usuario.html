@@ -45,7 +45,8 @@
   titulo="Usuarios"
     (descargar)="abrirModalReportes()" 
     (eliminar)="abrirModalEliminar($event)" 
-    (ver)="abrirModalVer($event)">
+    (ver)="abrirModalVer($event)"
+    (editar)="abrirModalEditar($event)">
   </app-tabla>
 
   <!-- MENSAJE CUANDO NO HAY USUARIOS -->
@@ -273,4 +274,25 @@
 
   </div>
 
+</app-modal>
+
+<!-- =============================== -->
+<!-- MODAL DE EDITAR USUARIO -->
+<!-- =============================== -->
+<app-modal #modalEditarUsuario [title]="'Editar usuario'" [headerColor]="'#ffc107'" [isOpen]="false">
+  <div class="p-3">
+    <app-form-comp
+      *ngIf="usuarioSeleccionado"
+      [formGroup]="formEditarUsuario"
+      [fields]="fieldsEditarUsuario"
+      [submitButtonText]="'Actualizar'"
+      [submitButtonIcon]="'bi bi-save'"
+      [submitButtonColor]="'custom-success-filled'"
+      (submitForm)="actualizarUsuario()"
+      [showSubmitButton]="true">
+    </app-form-comp>
+  </div>
+  <ng-container modal-footer>
+   
+  </ng-container>
 </app-modal>

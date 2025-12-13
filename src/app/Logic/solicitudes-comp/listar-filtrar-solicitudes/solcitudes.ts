@@ -7,11 +7,13 @@ import { ColumnaTabla, Tabla } from '../../../shared/tabla/tabla';
 import { Modal } from "../../../shared/modal/modal";
 import { Boton } from "../../../shared/botones/boton/boton";
 import { LocalidadNombrePipe } from "../../../core/pipes/LocalidadNombrePipe";
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FieldConfig, FormComp } from '../../../shared/form/form.comp/form.comp';
 
 @Component({
   selector: 'app-solcitudes',
   standalone: true,
-  imports: [COMPARTIR_IMPORTS, Tabla, Modal, Boton, LocalidadNombrePipe],
+  imports: [COMPARTIR_IMPORTS, Tabla, Modal, Boton, LocalidadNombrePipe, FormComp],
   templateUrl: './solcitudes.html',
   styleUrls: ['./solcitudes.css']
 })
@@ -29,9 +31,12 @@ export class Solcitudes implements OnInit {
     'Revisión administrativa'
   ];
   mostrarModalRechazo = false;
-    @ViewChild('modalReportes') modalReportes!: Modal;
-    @ViewChild('modalVerSolicitud') modalVerSolicitud!: Modal;
-
+  @ViewChild('modalReportes') modalReportes!: Modal;
+  @ViewChild('modalVerSolicitud') modalVerSolicitud!: Modal;
+  @ViewChild('modalEditarSolicitud') modalEditarSolicitud!: Modal;
+  @ViewChild('modalEliminarSolicitud') modalEliminarSolicitud!: Modal;
+  formEditarSolicitud: FormGroup = new FormGroup({});
+  fieldsEditarSolicitud: FieldConfig[] = [];
 
   // filtros
   estadoFilter: string = '';
@@ -44,47 +49,42 @@ export class Solcitudes implements OnInit {
   constructor(private solicitudesService: Service) {}
 
   // justo dentro de tu clase Solcitudes
-columnasSolicitudes: ColumnaTabla[] = [
-  { campo: 'idSolicitud', titulo: 'ID' },
-  { campo: 'tipoResiduo', titulo: 'Tipo Residuo' },
-  { campo: 'cantidad', titulo: 'Cantidad' },
-  { campo: 'localidad', titulo: 'Localidad' },
-  { campo: 'estadoPeticion', titulo: 'Estado' }
-];
+  columnasSolicitudes: ColumnaTabla[] = [
+    { campo: 'idSolicitud', titulo: 'ID' },
+    { campo: 'tipoResiduo', titulo: 'Tipo Residuo' },
+    { campo: 'cantidad', titulo: 'Cantidad' },
+    { campo: 'localidad', titulo: 'Localidad' },
+    { campo: 'estadoPeticion', titulo: 'Estado' }
+  ];
 
-cellTemplates = {
-  estadoPeticion: (item: ServiceModel): string => {
-    const estado = item.estadoPeticion || '';
-    let icon = '';
-    let clase = '';
+  cellTemplates = {
+    estadoPeticion: (item: ServiceModel): string => {
+      const estado = item.estadoPeticion || '';
+      let icon = '';
+      let clase = '';
 
-    switch (estado) {
-      case 'Pendiente':
-        icon = '<i class="bi bi-clock"></i>';
-        clase = 'status-pendiente';
-        break;
-      case 'Aceptada':
-        icon = '<i class="bi bi-check-circle"></i>';
-        clase = 'status-aceptada';
-        break;
-      case 'Cancelada':
-        icon = '<i class="bi bi-x-circle"></i>';
-        clase = 'status-cancelada';
-        break;
-      case 'Rechazada':
-        icon = '<i class="bi bi-slash-circle"></i>';
-        clase = 'status-rechazada';
-        break;
+      switch (estado) {
+        case 'Pendiente':
+          icon = '<i class="bi bi-clock"></i>';
+          clase = 'status-pendiente';
+          break;
+        case 'Aceptada':
+          icon = '<i class="bi bi-check-circle"></i>';
+          clase = 'status-aceptada';
+          break;
+        case 'Cancelada':
+          icon = '<i class="bi bi-x-circle"></i>';
+          clase = 'status-cancelada';
+          break;
+        case 'Rechazada':
+          icon = '<i class="bi bi-slash-circle"></i>';
+          clase = 'status-rechazada';
+          break;
+      }
+
+      return `<span class="status-badge ${clase}">${icon} ${estado}</span>`;
     }
-
-    return `<span class="status-badge ${clase}">${icon} ${estado}</span>`;
-  }
-};
-
-
-
-
-
+  };
 
   ngOnInit(): void { 
     this.listarSolicitudes();
@@ -115,7 +115,6 @@ cellTemplates = {
     this.modalReportes.isOpen = true;
   }
 
-
   abrirModalRechazo(solicitud: ServiceModel): void {
     this.selectedSolicitud = solicitud;
     this.motivoRechazo = '';
@@ -123,11 +122,98 @@ cellTemplates = {
     this.mostrarModalRechazo = true;
   }
 
- abrirModalVerSolicitud(solicitud: ServiceModel) {
-  this.selectedSolicitud = solicitud;
-  this.modalVerSolicitud.isOpen = true;
-}
+  cerrarModalRechazo(): void {
+    this.mostrarModalRechazo = false;
+    this.selectedSolicitud = null;
+    this.motivoRechazo = '';
+    this.selectedMotivo = '';
+  }
 
+  abrirModalVerSolicitud(solicitud: ServiceModel) {
+    this.selectedSolicitud = solicitud;
+    this.modalVerSolicitud.isOpen = true;
+  }
+
+  abrirModalEdicion(solicitud: ServiceModel): void {
+    this.selectedSolicitud = solicitud;
+    this.initFormEditarSolicitud(solicitud);
+    this.modalEditarSolicitud.isOpen = true;
+  }
+
+  eliminarSolicitud(item: ServiceModel) {
+    this.selectedSolicitud = item;
+    this.modalEliminarSolicitud.isOpen = true;
+  }
+
+  cerrarModalEliminarSolicitud() {
+    this.modalEliminarSolicitud.close();
+    this.selectedSolicitud = null;
+  }
+
+  confirmarEliminarSolicitud() {
+    if (!this.selectedSolicitud?.idSolicitud) return;
+    // Usar rechazarSolicitud con motivo fijo
+    this.solicitudesService.rechazarSolicitud(this.selectedSolicitud.idSolicitud, 'Eliminada por el usuario').subscribe({
+      next: () => {
+        this.modalEliminarSolicitud.close();
+        this.selectedSolicitud = null;
+        this.listarSolicitudes();
+      },
+      error: () => alert('Error al rechazar/eliminar la solicitud')
+    });
+  }
+
+  cerrarModalEditarSolicitud(): void {
+    this.modalEditarSolicitud.close();
+    this.selectedSolicitud = null;
+    this.formEditarSolicitud.reset();
+  }
+
+  initFormEditarSolicitud(solicitud?: ServiceModel) {
+    this.fieldsEditarSolicitud = [
+      { type: 'select', name: 'tipoResiduo', label: 'Tipo de Residuo', cols: 6, options: [
+        { value: 'Plastico', text: 'Plástico' },
+        { value: 'Papel', text: 'Papel' },
+        { value: 'Vidrio', text: 'Vidrio' },
+        { value: 'Metal', text: 'Metal' },
+        { value: 'Organico', text: 'Orgánico' },
+        { value: 'Electronico', text: 'Electrónico' },
+        { value: 'Otro', text: 'Otro' }
+      ] },
+      { type: 'text', name: 'cantidad', label: 'Cantidad', placeholder: 'Cantidad', cols: 6 },
+      { type: 'select', name: 'localidad', label: 'Localidad', cols: 6, options: [
+        { value: '', text: 'Seleccione' },
+        { value: 'Usaquen', text: 'Usaquén' },
+        { value: 'Chapinero', text: 'Chapinero' },
+        { value: 'Santa_Fe', text: 'Santa Fe' },
+        { value: 'San_Cristobal', text: 'San Cristóbal' },
+        { value: 'Usme', text: 'Usme' },
+        { value: 'Tunjuelito', text: 'Tunjuelito' },
+        { value: 'Bosa', text: 'Bosa' },
+        { value: 'Kennedy', text: 'Kennedy' },
+        { value: 'Fontibon', text: 'Fontibón' },
+        { value: 'Engativa', text: 'Engativá' },
+        { value: 'Suba', text: 'Suba' },
+        { value: 'Barrios_Unidos', text: 'Barrios Unidos' },
+        { value: 'Teusaquillo', text: 'Teusaquillo' },
+        { value: 'Los_Martires', text: 'Los Mártires' },
+        { value: 'Antonio_Nariño', text: 'Antonio Nariño' },
+        { value: 'Puente_Aranda', text: 'Puente Aranda' },
+        { value: 'Candelaria', text: 'Candelaria' },
+        { value: 'Rafael_Uribe_Uribe', text: 'Rafael Uribe Uribe' },
+        { value: 'Ciudad_Bolivar', text: 'Ciudad Bolívar' },
+        { value: 'Sumapaz', text: 'Sumapaz' }
+      ] },
+      { type: 'text', name: 'ubicacion', label: 'Ubicación exacta', placeholder: 'Ubicación', cols: 6 },
+      { type: 'textarea', name: 'descripcion', label: 'Descripción', placeholder: 'Descripción', cols: 12 },
+      { type: 'date', name: 'fechaProgramada', label: 'Fecha programada', cols: 6 }
+    ];
+    const group: any = {};
+    this.fieldsEditarSolicitud.forEach(f => {
+      group[f.name!] = new FormControl(solicitud ? (solicitud as any)[f.name!] ?? '' : '', []);
+    });
+    this.formEditarSolicitud = new FormGroup(group);
+  }
 
   confirmarRechazo(): void {
     if (!this.selectedSolicitud) return;
@@ -159,10 +245,23 @@ cellTemplates = {
     });
   }
 
-  cerrarModalRechazo(): void {
-    this.selectedSolicitud = null;
-    this.motivoRechazo = '';
-    this.mostrarModalRechazo = false;
+  actualizarSolicitud(): void {
+    if (!this.selectedSolicitud?.idSolicitud) return;
+    if (this.formEditarSolicitud.invalid) return;
+    const datosActualizados = {
+      ...this.selectedSolicitud,
+      ...this.formEditarSolicitud.value
+    };
+    this.solicitudesService.actualizarSolicitud(this.selectedSolicitud.idSolicitud, datosActualizados).subscribe({
+      next: () => {
+        alert('Solicitud actualizada correctamente');
+        this.cerrarModalEditarSolicitud();
+        this.listarSolicitudes();
+      },
+      error: () => {
+        alert('Error al actualizar la solicitud');
+      }
+    });
   }
 
   // ===============================
@@ -253,10 +352,6 @@ cellTemplates = {
     });
   }
 
-  abrirModalEdicion(solicitud: ServiceModel): void {
-    console.log('✏️ Editar solicitud:', solicitud);
-  }
-
   private downloadBlob(blob: Blob, filename: string) {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -272,4 +367,9 @@ cellTemplates = {
     const d = new Date();
     return `${d.getFullYear()}${(d.getMonth()+1).toString().padStart(2,'0')}${d.getDate().toString().padStart(2,'0')}_${d.getHours().toString().padStart(2,'0')}${d.getMinutes().toString().padStart(2,'0')}`;
   }
+
+  // Añade métodos para manejar los eventos de la tabla y abrir los modales correctamente
+  onVerSolicitud = (item: ServiceModel) => this.abrirModalVerSolicitud(item);
+  onEditarSolicitud = (item: ServiceModel) => this.abrirModalEdicion(item);
+  onEliminarSolicitud = (item: ServiceModel) => this.eliminarSolicitud(item);
 }
