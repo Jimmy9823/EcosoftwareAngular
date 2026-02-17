@@ -15,10 +15,8 @@ import { ListarTabla } from '../../Logic/recolecciones-comp/listar-tabla/listar-
 import { GraficoUsuariosLocalidad } from '../../Logic/usuarios.comp/grafica-usuarios-localidad/grafica-usuarios-localidad';
 import { GraficoUsuariosBarrios } from '../../Logic/usuarios.comp/grafica-usuarios-barrio/grafica-usuarios-barrio';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
-import { Mapa } from '../../Logic/puntos-recoleccion/mapa/mapa';
 import { PuntosIframe } from '../../shared/puntos-iframe/puntos-iframe';
-import { CrudPuntos } from '../../Logic/puntos-recoleccion/crud-puntos/crud-puntos';
-import { PuntosService } from '../../Services/puntos-reciclaje.service';
+import { PuntosReciclajeService, PuntosResponse } from '../../Services/puntos-reciclaje.service';
 import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
 import { SolicitudesLocalidadChartComponent } from "../../Logic/solicitudes-comp/solicitudes-localidad-chart-component/solicitudes-localidad-chart-component";
 import { RechazadasMotivoChartComponent } from '../../Logic/solicitudes-comp/rechazadas-motivo-chart-component/rechazadas-motivo-chart-component';
@@ -34,13 +32,14 @@ import { ReporteService } from '../../Services/reporte.service';
 import { ServiceModel } from '../../Models/solicitudes.model';
 import { AceptarRechazarUsuarios } from '../../Logic/usuarios.comp/aceptar-rechazar-usuarios/aceptar-rechazar-usuarios';
 import { CardsNoticias } from "../../Logic/cards-noticias.component/cards-noticias.component";
+import { MapaComponent } from '../mapa/mapa.component';
 
 @Component({
   selector: 'app-administrador',
   imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent, AceptarRechazarUsuarios,
     RechazadasMotivoChartComponent, PendientesAceptadasChartComponent, GraficoUsuariosLocalidad,
     GraficoUsuariosBarrios, RegistroAdmin, Usuario, ListarTabla, Solcitudes,
-    EditarUsuario, CapacitacionesLista, CargaMasiva, BarraLateral, Boton, Titulo, Modal, FormComp, PuntosIframe, CrudPuntos, Rutas, CardsNoticias],
+    EditarUsuario, CapacitacionesLista, CargaMasiva, BarraLateral, Boton, Titulo, Modal, FormComp, PuntosIframe, MapaComponent, Rutas, CardsNoticias],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
@@ -75,7 +74,7 @@ export class Administrador {
   @ViewChild('rechazadasGrafico') rechazadasGrafico!: ElementRef;
   @ViewChild('estadoGrafico') estadoGrafico!: ElementRef;
 
-  @ViewChild(CrudPuntos) puntosCrud!: CrudPuntos;
+  @ViewChild(MapaComponent) mapaComponent?: MapaComponent;
 
   // Lista de solicitudes para reportes
   solicitudes: ServiceModel[] = [];
@@ -84,22 +83,22 @@ export class Administrador {
     private usuarioService: UsuarioService,
     private router: Router,
     private authService: AuthService,
-    private puntosService: PuntosService,
+    private puntosService: PuntosReciclajeService,
     private solicitudService: Service,
     private reporteService: ReporteService
   ) { }
 
   cargarPuntos(): void {
-    this.puntosService.obtenerTodos().subscribe({
-      next: (response) => {
-        const data = Array.isArray(response) ? response : response.data;
-        this.puntos = (data || []).map((p: any) => ({
+    this.puntosService.getPuntos().subscribe({
+      next: (response: PuntosResponse | PuntoReciclaje[]) => {
+        const data = Array.isArray(response) ? response : response?.data ?? [];
+        this.puntos = data.map((p: any) => ({
           ...p,
           latitud: p.latitud !== null && p.latitud !== undefined ? parseFloat(String(p.latitud)) : null,
           longitud: p.longitud !== null && p.longitud !== undefined ? parseFloat(String(p.longitud)) : null
         }));
       },
-      error: (err) => {
+      error: (err: unknown) => {
         console.error('Error al cargar puntos:', err);
       }
     });
@@ -431,11 +430,12 @@ export class Administrador {
   }
 
   openCreateFromTitulo(): void {
-    try {
-      if (this.puntosCrud) this.puntosCrud.openCreate();
-    } catch (e) {
-      console.error('No se pudo abrir modal de crear punto:', e);
+    const mapId = this.mapaComponent?.mapContainerId;
+    if (!mapId) {
+      console.warn('No se encontró el componente de mapa para enfocar.');
+      return;
     }
+    document.getElementById(mapId)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   editarPerfil(): void {

@@ -7,13 +7,12 @@ import { CardARSolicitud } from '../../Logic/solicitudes-comp/card-a-r-solicitud
 import { CardsRecoleccion } from '../../Logic/recolecciones-comp/cards-recoleccion/cards-recoleccion';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
 import { Titulo } from '../../shared/titulo/titulo';
-import { Mapa } from "../../Logic/puntos-recoleccion/mapa/mapa";
 import { PuntosIframe } from '../../shared/puntos-iframe/puntos-iframe';
-import { CrudPuntos } from '../../Logic/puntos-recoleccion/crud-puntos/crud-puntos';
-import { PuntosService } from '../../Services/puntos-reciclaje.service';
+import { PuntosReciclajeService, PuntosResponse } from '../../Services/puntos-reciclaje.service';
 import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
 import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { CardsNoticias } from "../../Logic/cards-noticias.component/cards-noticias.component";
+import { MapaComponent } from '../mapa/mapa.component';
 /**
  * Interfaz para los elementos del menú lateral.
  */
@@ -31,7 +30,7 @@ interface MenuItem {
   selector: 'app-empresa',
   standalone: true,
   imports: [COMPARTIR_IMPORTS, CardARSolicitud, CardsRecoleccion,
-    EditarUsuario, BarraLateral, Titulo, PuntosIframe, CrudPuntos, CardsNoticias],
+    EditarUsuario, BarraLateral, Titulo, PuntosIframe, MapaComponent, CardsNoticias],
   templateUrl: './empresa.html',
   styleUrls: ['./empresa.css']
 })
@@ -50,7 +49,7 @@ export class Empresa {
   mostrarPuntos = false;
   puntosList: PuntoReciclaje[] = [];
 
-  @ViewChild(CrudPuntos) puntosCrud!: CrudPuntos;
+  @ViewChild(MapaComponent) mapaComponent?: MapaComponent;
 
   menu: MenuItem[] = [
     { vista: 'panel', label: 'Panel de Control', icon: 'bi bi-speedometer2' },
@@ -66,13 +65,11 @@ export class Empresa {
   // ========================
   togglePuntos(): void {
     this.mostrarPuntos = !this.mostrarPuntos;
-    if (this.mostrarPuntos) {
-      setTimeout(() => { try { this.puntosCrud?.openCreate(); } catch(e) { console.warn('openCreate failed', e); } }, 50);
-    }
   }
 
   openMyPointsFromPage(): void {
-    try { this.puntosCrud?.openMyPoints(); } catch (e) { console.warn('puntosCrud not ready', e); }
+    this.vistaActual = 'puntos';
+    this.mostrarPuntos = true;
   }
 
   /**
@@ -84,7 +81,7 @@ export class Empresa {
   constructor(
     public usuarioService: UsuarioService,
     public router: Router,
-    private puntosService: PuntosService
+    private puntosService: PuntosReciclajeService
   ) {}
 
   ngOnInit(): void {
@@ -92,16 +89,16 @@ export class Empresa {
   }
 
   cargarPuntos(): void {
-    this.puntosService.obtenerTodos().subscribe({
-      next: (response) => {
-        const data = Array.isArray(response) ? response : response.data;
-        this.puntosList = (data || []).map((p: any) => ({
+    this.puntosService.getPuntos().subscribe({
+      next: (response: PuntosResponse | PuntoReciclaje[]) => {
+        const data = Array.isArray(response) ? response : response?.data ?? [];
+        this.puntosList = data.map((p: any) => ({
           ...p,
           latitud: p.latitud !== null && p.latitud !== undefined ? parseFloat(String(p.latitud)) : null,
           longitud: p.longitud !== null && p.longitud !== undefined ? parseFloat(String(p.longitud)) : null
         }));
       },
-      error: (err) => {
+      error: (err: unknown) => {
         console.error('Error al cargar puntos:', err);
       }
     });
