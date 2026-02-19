@@ -6,25 +6,26 @@ import { FormRegistro } from '../../Logic/solicitudes-comp/vista-solicitudes/for
 import { CardsSolicitud } from '../../Logic/solicitudes-comp/cards-solicitud/cards-solicitud';
 import { RouterLink } from '@angular/router';
 import { CardsRecoleccionCiudadano } from '../../Logic/recolecciones-comp/cards-recoleccion-ciudadano/cards-recoleccion-ciudadano';
-import { Mapa } from '../../Logic/puntos-recoleccion/mapa/mapa';
-import { PuntosService } from '../../Services/puntos-reciclaje.service';
+import { PuntosReciclajeService, PuntosResponse } from '../../Services/puntos-reciclaje.service';
 import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
 import { PuntosIframe } from '../../shared/puntos-iframe/puntos-iframe';
-import { CrudPuntos } from '../../Logic/puntos-recoleccion/crud-puntos/crud-puntos';
 import { Boton } from '../../shared/botones/boton/boton';
 import { Titulo } from '../../shared/titulo/titulo';
 import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitaciones/listar-capacitaciones';
 import { CardsNoticias } from "../../Logic/cards-noticias.component/cards-noticias.component";
 import { CapacitacionesCrudComponent } from "../../Logic/capacitaciones/card-crud-capacitacion/card-crud-capacitacion";
+import { MapaComponent } from '../mapa/mapa.component';
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
   imports: [COMPARTIR_IMPORTS, FormRegistro,
     EditarUsuario,
-    CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CapacitacionesLista, PuntosIframe, CrudPuntos, CardsNoticias, CapacitacionesCrudComponent, Mapa],
+
+    CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CapacitacionesLista, PuntosIframe, MapaComponent, CardsNoticias, CapacitacionesCrudComponent],
+
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })
@@ -43,26 +44,24 @@ export class Ciudadano {
   constructor(
     private usuarioService: UsuarioService,
     private router: Router,
-    private puntosService: PuntosService
+    private puntosService: PuntosReciclajeService
   ) {}
-
-  @ViewChild(CrudPuntos) puntosCrud!: CrudPuntos;
 
   ngOnInit(): void {
     this.cargarPuntos();
   }
 
   cargarPuntos(): void {
-    this.puntosService.obtenerTodos().subscribe({
-      next: (response) => {
-        const data = Array.isArray(response) ? response : response.data;
-        this.puntos = (data || []).map((p: any) => ({
+    this.puntosService.getPuntos().subscribe({
+      next: (response: PuntosResponse | PuntoReciclaje[]) => {
+        const data = Array.isArray(response) ? response : response?.data ?? [];
+        this.puntos = data.map((p: any) => ({
           ...p,
           latitud: p.latitud !== null && p.latitud !== undefined ? parseFloat(String(p.latitud)) : null,
           longitud: p.longitud !== null && p.longitud !== undefined ? parseFloat(String(p.longitud)) : null
         }));
       },
-      error: (err) => {
+      error: (err: unknown) => {
         console.error('Error al cargar puntos:', err);
       }
     });
@@ -76,7 +75,7 @@ export class Ciudadano {
   { vista: 'panel', label: 'Panel de Control', icon: 'bi bi-speedometer2' },
   { vista: 'solicitudes', label: 'Solicitudes', icon: 'bi bi-bar-chart-line' },
   { vista: 'recolecciones', label: 'Recolecciones', icon: 'bi bi-truck' },
-  { vista: 'puntos', label: 'Puntos de Reciclaje', icon: 'bi bi-geo-alt' }, // ✅ ICONO CORREGIDO
+  { vista: 'puntos', label: 'Puntos de Reciclaje', icon: 'bi bi-geo-alt' }, 
   { vista: 'capacitaciones', label: 'Capacitaciones', icon: 'bi bi-mortarboard-fill' },
   { vista: 'noticias', label: 'Noticias', icon: 'bi bi-newspaper' }
 ];
@@ -90,14 +89,11 @@ export class Ciudadano {
 
   togglePuntos(): void {
     this.mostrarPuntos = !this.mostrarPuntos;
-    // if we just opened the registrar panel, request the child to open the create form
-    if (this.mostrarPuntos) {
-      setTimeout(() => { try { this.puntosCrud?.openCreate(); } catch(e) { console.warn('openCreate failed', e); } }, 50);
-    }
   }
 
   openMyPointsFromPage(): void {
-    try { this.puntosCrud?.openMyPoints(); } catch (e) { console.warn('puntosCrud not ready', e); }
+    this.vistaActual = 'puntos';
+    this.mostrarPuntos = true;
   }
 
   toggleMenu(): void {

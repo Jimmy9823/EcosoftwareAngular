@@ -7,6 +7,7 @@ import { Registro } from './auth/registro/registro';
 import { Administrador } from './pages/administrador/administrador';
 import { Ciudadano } from './pages/ciudadano/ciudadano';
 import { Empresa } from './pages/empresa/empresa';
+import { MapaComponent } from './pages/mapa/mapa.component';
 
 // Paginas de modulos
 import { Usuario } from './Logic/usuarios.comp/listar-filtrar-usuarios/usuario';
@@ -18,7 +19,6 @@ import { FormRegistro } from './Logic/solicitudes-comp/vista-solicitudes/form-re
 import { EditarUsuario } from './Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { Error } from './core/error/error';
 import { AuthGuard } from './auth/auth.guard';
-import { Mapa } from './Logic/puntos-recoleccion/mapa/mapa';
 import { GraficoUsuariosLocalidad } from './Logic/usuarios.comp/grafica-usuarios-localidad/grafica-usuarios-localidad';
 import { GraficoUsuariosBarrios } from './Logic/usuarios.comp/grafica-usuarios-barrio/grafica-usuarios-barrio';
 import {PendientesAceptadasChartComponent} from "./Logic/solicitudes-comp/pendientes-aceptadas-chart-component/pendientes-aceptadas-chart-component";
@@ -72,7 +72,8 @@ export const routes: Routes = [
   { path: 'card-solicitud', component: CardsSolicitud },
   { path: 'card-re-acpt-solicitud', component: CardARSolicitud },
   { path: 'form-solicitud', component: FormRegistro },
-  { path: 'mapa', component: Mapa },
+  { path: 'mapa', component: MapaComponent },
+  { path: 'puntos-reciclaje', component: MapaComponent },
   { path: '**', component: Error }
 ];
 
