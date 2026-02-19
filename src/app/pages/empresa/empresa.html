@@ -102,6 +102,7 @@
         iconoBoton="bi bi-plus-lg"
         colorBoton="outline-custom-success"
         hoverColorBoton="custom-success-filled"
+        
         (clickBoton)="togglePuntos()">
       </app-titulo>
 
@@ -115,6 +116,7 @@
         <ng-container *ngIf="!mostrarPuntos">
           <div class="contenido-solicitud">
             <app-puntos-iframe></app-puntos-iframe>
+            <app-rutas></app-rutas>
 
             <div class="d-flex justify-content-end align-items-center mt-3">
             </div>

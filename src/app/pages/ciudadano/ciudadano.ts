@@ -24,7 +24,7 @@ import { CapacitacionesCrudComponent } from "../../Logic/capacitaciones/card-cru
   standalone: true,
   imports: [COMPARTIR_IMPORTS, FormRegistro,
     EditarUsuario,
-    CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CapacitacionesLista, PuntosIframe, CrudPuntos, CardsNoticias, CapacitacionesCrudComponent],
+    CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CapacitacionesLista, PuntosIframe, CrudPuntos, CardsNoticias, CapacitacionesCrudComponent, Mapa],
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })
