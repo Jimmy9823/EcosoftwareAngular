@@ -23,7 +23,9 @@ import { MapaComponent } from '../mapa/mapa.component';
   standalone: true,
   imports: [COMPARTIR_IMPORTS, FormRegistro,
     EditarUsuario,
+
     CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CapacitacionesLista, PuntosIframe, MapaComponent, CardsNoticias, CapacitacionesCrudComponent],
+
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
 })

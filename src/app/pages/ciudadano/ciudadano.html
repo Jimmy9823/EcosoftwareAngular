@@ -146,7 +146,9 @@
 
           <ng-container *ngIf="!mostrarPuntos">
             <div class="contenido-solicitud">
-              <app-puntos-iframe></app-puntos-iframe>
+              <app-puntos-iframe>
+                <app-mapa></app-mapa>
+              </app-puntos-iframe>
             </div>
           </ng-container>
         </div>

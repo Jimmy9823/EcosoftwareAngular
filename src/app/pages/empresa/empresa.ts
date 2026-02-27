@@ -12,6 +12,8 @@ import { PuntosReciclajeService, PuntosResponse } from '../../Services/puntos-re
 import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
 import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { CardsNoticias } from "../../Logic/cards-noticias.component/cards-noticias.component";
+import { Rutas } from '../../Logic/rutas/rutas';
+
 import { MapaComponent } from '../mapa/mapa.component';
 /**
  * Interfaz para los elementos del menú lateral.
@@ -30,6 +32,7 @@ interface MenuItem {
   selector: 'app-empresa',
   standalone: true,
   imports: [COMPARTIR_IMPORTS, CardARSolicitud, CardsRecoleccion,
+Rutas,
     EditarUsuario, BarraLateral, Titulo, PuntosIframe, MapaComponent, CardsNoticias],
   templateUrl: './empresa.html',
   styleUrls: ['./empresa.css']

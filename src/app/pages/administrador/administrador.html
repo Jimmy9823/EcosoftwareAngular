@@ -12,7 +12,7 @@
     <ng-container *ngIf="vistaActual === 'panel'">
 
       <app-titulo titulo="Panel de Control" subtitulo="Resumen de análisis y métricas de la plataforma"
-        iconoBoton="bi bi-bell" colorBoton="outline-custom-success" hoverColorBoton="custom-success-filled">
+        iconoBoton="bi bi-bell" textoBoton="Pendientes" colorBoton="outline-custom-success" hoverColorBoton="custom-success-filled">
       </app-titulo>
 
       <!-- Auth status removed -->
@@ -75,7 +75,7 @@
 
     </ng-container>
     <ng-container *ngIf="vistaActual === 'editar-perfil'">
-      <app-titulo titulo="Editar Perfil" subtitulo="Actualiza tu información personal" iconoBoton="bi bi-eye"
+      <app-titulo titulo="Editar Perfil" subtitulo="Actualiza tu información personal" iconoBoton="bi bi-plus"
         colorBoton="outline-custom-success">
 
       </app-titulo>
@@ -126,14 +126,16 @@
 
     <!-- SOLICITUDES -->
     <ng-container *ngIf="vistaActual === 'solicitudes'">
-      <app-titulo titulo="Solicitudes de Recolección" subtitulo="Gestión de solicitudes de recolección" >
+      <app-titulo titulo="Solicitudes de Recolección" subtitulo="Gestión de solicitudes de recolección"
+      [mostrarBoton]="false" >
       </app-titulo>
       <app-solcitudes></app-solcitudes>
     </ng-container>
 
     <!-- RECOLECCIONES -->
     <ng-container *ngIf="vistaActual === 'recolecciones'">
-      <app-titulo titulo="Recolecciones" subtitulo="Gestión de recolecciones" >
+      <app-titulo titulo="Recolecciones" subtitulo="Gestión de recolecciones" 
+      [mostrarBoton]="false">
       </app-titulo>
 
       <app-listar-tabla></app-listar-tabla>
@@ -153,9 +155,8 @@
 
     <!-- CAPACITACIONES -->
     <ng-container *ngIf="vistaActual === 'capacitaciones'">
-      <app-titulo titulo="Capacitaciones y Módulos" subtitulo="Gestión de capacitaciones y módulos"
-        [textoBoton]="capacitaciones ? 'Mostrar capacitaciones' : 'Mostrar Módulos'" iconoBoton="bi bi-plus-circle"
-        colorBoton="outline-custom-success" hoverColorBoton="custom-success-filled" (clickBoton)="toggleVista()">
+      <app-titulo titulo="Capacitaciones y Módulos" subtitulo="Gestión de capacitaciones y módulos" iconoBoton="bi bi-plus-circle"
+        colorBoton="outline-custom-success" textoBoton="Nueva Capacitacion"  hoverColorBoton="custom-success-filled" (clickBoton)="toggleVista()">
       </app-titulo>
 
       <div class="contenedor-toggle">
@@ -181,7 +182,7 @@
 
     <!-- NOTICIAS -->
     <ng-container *ngIf="vistaActual === 'noticias'">
-      <app-titulo titulo="Noticias" subtitulo="Gestión de noticias y novedades">
+      <app-titulo titulo="Noticias" subtitulo="Gestión de noticias y novedades" [mostrarBoton]="false">
       </app-titulo>
       <!-- <app-rutas></app-rutas> -->
        <cards-noticias></cards-noticias>
