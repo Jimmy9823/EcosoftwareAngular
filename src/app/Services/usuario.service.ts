@@ -126,6 +126,8 @@ export class UsuarioService {
     );
   }
 
+  
+
   /** Actualizar usuario */
   actualizar(id: number, usuario: UsuarioModel): Observable<UsuarioModel> {
     return this.http.put<UsuarioModel>(`${this.apiUrlSpringboot}/${id}`, usuario).pipe(
@@ -280,7 +282,7 @@ export class UsuarioService {
     formData.append('file', file);
     formData.append('tipo', tipo);
 
-    return this.http.post(`${this.apiUrlSpringboot}/${id}/documento`, formData);
+    return this.http.post(`${this.apiUrlSpringboot}/${id}/documentos`, formData);
   }
 
   /** Ping backend */

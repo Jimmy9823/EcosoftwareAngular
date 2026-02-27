@@ -36,13 +36,5 @@ export class CloudinaryService {
     return this.http.post(this.apiUrl, formData);
   }
 
-  // Método para documentos/PDFs
-  subirDocumento(file: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', this.uploadPreset);
-    formData.append('folder', 'ecosoftware/certificaciones');
-    
-    return this.http.post(this.apiUrl, formData);
-  }
+  
 }

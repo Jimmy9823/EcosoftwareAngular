@@ -46,12 +46,19 @@ export class Registro {
 
     this.usuarioService.guardar(this.usuario).subscribe({
       next: (response) => {
-        console.log('Registro exitoso:', response);
-        this.enviando = false;
-        alert('Usuario registrado correctamente');
-        
-        this.redirigirSegunRol(this.usuario.rolId!);
-      },
+  console.log('Registro exitoso:', response);
+  this.enviando = false;
+
+  if (this.usuario.rolId === 2) {
+    // Ciudadano
+    alert('Usuario registrado correctamente');
+    this.router.navigate(['/login']);
+  } else {
+    // Empresa o Reciclador
+    alert('Tu cuenta quedó pendiente de aprobación. Debes subir documentos.');
+    this.router.navigate(['/subir-documentos', response.idUsuario]);
+  }
+},
       error: (error) => {
         console.error('Error:', error);
         this.enviando = false;
@@ -67,21 +74,7 @@ export class Registro {
     });
   }
 
-  private redirigirSegunRol(rolId: number) {
-    switch (rolId) {
-      case 2: // Ciudadano
-        this.router.navigate(['/ciudadano']);
-        break;
-      case 3: // Empresa
-        this.router.navigate(['/empresa']);
-        break;
-      case 4: // Reciclador
-        this.router.navigate(['/reciclador']);
-        break;
-      default:
-        this.router.navigate(['/login']);
-    }
-  }
+  
 
   validarFuerte(valor: string): boolean {
     if (!valor) return false;

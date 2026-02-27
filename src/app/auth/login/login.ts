@@ -95,27 +95,37 @@ export class Login implements OnInit, OnDestroy {
 
     this.authService.login(credenciales).subscribe({
       next: (response) => {
-        console.log('Login exitoso');
-        localStorage.setItem('jwt_token', response.token);
-        localStorage.setItem('rol', response.rol);
 
-        switch (response.rol) {
-          case 'Administrador': this.router.navigate(['/administrador']); break;
-          case 'Ciudadano': this.router.navigate(['/ciudadano']); break;
-          case 'Empresa': this.router.navigate(['/empresa']); break;
-          case 'Reciclador': this.router.navigate(['/empresa']); break;
-          default: this.router.navigate(['/login']);
-        }
-      },
+  if (response.estadoRegistro && response.estadoRegistro !== 'APROBADO') {
+    this.errorMessage = 'Tu cuenta aún no ha sido aprobada por el administrador.';
+    return;
+  }
+
+  localStorage.setItem('jwt_token', response.token);
+  localStorage.setItem('rol', response.rol);
+
+  switch (response.rol) {
+    case 'Administrador': this.router.navigate(['/administrador']); break;
+    case 'Ciudadano': this.router.navigate(['/ciudadano']); break;
+    case 'Empresa': this.router.navigate(['/empresa']); break;
+    case 'Reciclador': this.router.navigate(['/reciclador']); break;
+    default: this.router.navigate(['/login']);
+  }
+},
       error: (err) => {
-        if (err.status === 401) {
-          this.errorMessage = 'Correo o contraseña incorrectos.';
-        } else if (err.status === 500) {
-          this.errorMessage = 'Error en el servidor. Intente de nuevo.';
-        } else {
-          this.errorMessage = 'Ha ocurrido un error inesperado.';
-        }
-      }
+  if (err.status === 401) {
+    this.errorMessage = 'Correo o contraseña incorrectos.';
+  } 
+  else if (err.status === 403) {
+    this.errorMessage = 'Tu cuenta aún no ha sido aprobada.';
+  }
+  else if (err.status === 500) {
+    this.errorMessage = 'Error en el servidor.';
+  } 
+  else {
+    this.errorMessage = 'Ha ocurrido un error inesperado.';
+  }
+}
     });
   }
 

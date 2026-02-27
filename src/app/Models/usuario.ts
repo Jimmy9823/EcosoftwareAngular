@@ -40,6 +40,7 @@ export interface UsuarioModel {
   cantidad_minima?: number;
   estado?: boolean;
   fechaCreacion?: string;
+  estadoRegistro?: EstadoRegistro; // Nuevo campo para el estado del registro
 
   // Campos adicionales del front
   tipoMaterial?: string[];       // reciclador / empresa
@@ -59,3 +60,11 @@ export enum TipoDeMaterial {
   Otro = 'Otro'
 }
 
+
+export enum EstadoRegistro {
+    PENDIENTE_DOCUMENTACION,
+    PENDIENTE_REVISAR,
+    APROBADO,
+    RECHAZADO
+
+}

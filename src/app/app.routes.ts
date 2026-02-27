@@ -30,6 +30,7 @@ import { AceptarRechazarUsuarios } from './Logic/usuarios.comp/aceptar-rechazar-
 import { CardsNoticias } from './Logic/cards-noticias.component/cards-noticias.component';
 import { Capacitaciones } from './pages/capacitaciones/capacitaciones';
 import { Noticias } from './pages/noticias/noticias';
+import { SubirDocumentos } from './auth/subir-documentos/subir-documentos';
 
 export const routes: Routes = [
   { path: '', component: Inicio },
@@ -49,6 +50,7 @@ export const routes: Routes = [
   {path: 'Cardsnoticias', component: CardsNoticias},
   {path: 'noticias', component: Noticias},
   {path: 'capacitaciones', component: Capacitaciones},
+  {path: 'subir-documentos/:id', component: SubirDocumentos},
 
   { path: 'login', component: Login},
   {
