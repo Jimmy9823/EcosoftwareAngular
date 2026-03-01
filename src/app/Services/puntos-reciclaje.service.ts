@@ -24,7 +24,7 @@ export type GenericResponse<T = unknown> = ApiResponse<T>;
 
 @Injectable({ providedIn: 'root' })
 export class PuntosReciclajeService {
-  private readonly baseUrl = 'http://localhost:8082/api/puntos';
+  private readonly baseUrl = 'https://ecosoftwarespringboot.onrender.com/api/puntos';
   private readonly refreshSubject = new Subject<void>();
   readonly refresh$ = this.refreshSubject.asObservable();
 
