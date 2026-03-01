@@ -20,8 +20,8 @@ FROM nginx:alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copiamos TODO el contenido del dist
-COPY --from=build /app/dist/ /usr/share/nginx/html
+# 🔥 IMPORTANTE: apuntamos a browser
+COPY --from=build /app/dist/EscosoftwareAngular/browser/ /usr/share/nginx/html/
 
 EXPOSE 80
 
