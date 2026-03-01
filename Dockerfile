@@ -10,7 +10,6 @@ RUN npm install
 
 COPY . .
 
-# Build correcto especificando proyecto
 RUN npx ng build EscosoftwareAngular --configuration production
 
 
@@ -20,7 +19,9 @@ RUN npx ng build EscosoftwareAngular --configuration production
 FROM nginx:alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist/EscosoftwareAngular /usr/share/nginx/html
+
+# Copiamos TODO el contenido del dist
+COPY --from=build /app/dist/ /usr/share/nginx/html
 
 EXPOSE 80
 
