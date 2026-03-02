@@ -1,0 +1,12 @@
+<h2>Subir Documentos</h2>
+
+<select [(ngModel)]="tipo">
+  <option value="">Selecciona tipo</option>
+  <option value="RUT">RUT</option>
+  <option value="Cámara">Cámara de Comercio</option>
+  <option value="Certificado">Certificación</option>
+</select>
+
+<input type="file" (change)="seleccionarArchivo($event)" />
+
+<button (click)="subir()">Subir</button>
