@@ -6,21 +6,32 @@ export const AuthGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  //  Verificar si hay sesión
+  // 1️⃣ Verificar autenticación
   if (!authService.isAuthenticated()) {
-    console.warn('🚫 Usuario no autenticado');
-    router.navigate(['/login']);
-    return false;
+    return router.createUrlTree(['/login']);
   }
 
-  //  Verificar rol, si la ruta lo requiere
-  const rolRequerido = route.data?.['rol'];
-  const rolUsuario = authService.getUserRole();
+  const user = authService.getUser();
 
-  if (rolRequerido && rolUsuario !== rolRequerido) {
-    console.warn(` Acceso denegado: se requiere rol ${rolRequerido}`);
-    router.navigate(['/login']);
-    return false;
+  if (!user) {
+    return router.createUrlTree(['/login']);
+  }
+
+  // 2️⃣ 🔥 VALIDAR ESTADO DE REGISTRO
+  if (user.estadoRegistro === 'PENDIENTE_DOCUMENTACION') {
+    return router.createUrlTree(['/subir-documentos']);
+  }
+
+  if (user.estadoRegistro !== 'APROBADO') {
+    return router.createUrlTree(['/login']);
+  }
+
+  // 3️⃣ Verificar roles
+  const rolesPermitidos = route.data?.['roles'] as string[] | undefined;
+  const rolUsuario = user.rol;
+
+  if (rolesPermitidos && !rolesPermitidos.includes(rolUsuario)) {
+    return router.createUrlTree(['/login']);
   }
 
   return true;

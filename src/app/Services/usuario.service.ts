@@ -62,24 +62,23 @@ export class UsuarioService {
   }
 
   /** Login API (autenticación real) */
-  loginApi(credentials: { usuario: string; password: string }): Observable<AuthResponse> {
-    return this.api.post<AuthResponse>('/api/auth/login', credentials).pipe(
-      map(response => {
-        if (response.usuario) {
-          localStorage.setItem('usuarioLogueado', JSON.stringify(response.usuario));
-        }
-        return response;
-      }),
-      catchError(err => {
-        console.error('Error en login API', err);
-        return of({
-          token: '',
-          expiresIn: 0,
-          usuario: { id: 0, nombre: '', rol: '' }
-        });
-      })
-    );
-  }
+  loginApi(credentials: { correo: string; contrasena: string }): Observable<AuthResponse> {
+  return this.api.post<AuthResponse>('/api/auth/login', credentials).pipe(
+    map(response => {
+
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('roles', response.rol);
+      localStorage.setItem('correo', response.correo);
+      localStorage.setItem('idUsuario', response.idUsuario.toString());
+
+      return response;
+    }),
+    catchError(err => {
+      console.error('Error en login API', err);
+      return throwError(() => err);
+    })
+  );
+}
 
   // ============================================================
   // 3. FILTROS DE USUARIO
@@ -199,8 +198,11 @@ export class UsuarioService {
   }
 
   logout(): void {
-    localStorage.clear();
-  }
+  localStorage.removeItem('token');
+  localStorage.removeItem('rol');
+  localStorage.removeItem('correo');
+  localStorage.removeItem('idUsuario');
+}
 
   isTokenExpired(): boolean {
     const expiresIn = Number(localStorage.getItem('expiresIn'));

@@ -86,9 +86,9 @@
         <!-- Nuevo campo: Verificar Contraseña -->
         <div class="form-group">
           <label>Verificar Contraseña *</label>
-          <input type="password" [(ngModel)]="verificarContrasena" name="verificarContrasena" required 
+          <input type="password" [(ngModel)]="verificarContrasena" name="verificarContrasena" required
             #verificarContrasenaInput="ngModel" class="form-input" placeholder="Repite tu contraseña">
-          
+
           <div class="error" *ngIf="verificarContrasenaInput.touched">
             <span *ngIf="verificarContrasenaInput.errors?.['required']">
               Verificar contraseña es requerido
@@ -102,7 +102,7 @@
         <div class="form-row">
           <div class="form-group half">
             <label>Cédula *</label>
-            <input type="text" [(ngModel)]="usuario.cedula" name="cedula" required minlength="5" #cedula="ngModel"
+            <input type="number" [(ngModel)]="usuario.cedula" name="cedula" required minlength="5" #cedula="ngModel"
               class="form-input" placeholder="Número de cédula">
             <div class="error" *ngIf="cedula.invalid && cedula.touched">
               <span *ngIf="cedula.errors?.['required']">La cédula es requerida</span>
@@ -112,8 +112,8 @@
 
           <div class="form-group half">
             <label>Teléfono *</label>
-            <input type="text" [(ngModel)]="usuario.telefono" name="telefono" required minlength="7" #telefono="ngModel"
-              class="form-input" placeholder="Número de contacto">
+            <input type="number" [(ngModel)]="usuario.telefono" name="telefono" required minlength="7"
+              #telefono="ngModel" class="form-input" placeholder="Número de contacto">
             <div class="error" *ngIf="telefono.invalid && telefono.touched">
               <span *ngIf="telefono.errors?.['required']">El teléfono es requerido</span>
               <span *ngIf="telefono.errors?.['minlength']">Mínimo 7 caracteres</span>
@@ -133,9 +133,9 @@
           <select [(ngModel)]="usuario.localidad" name="localidad" required #localidad="ngModel" class="form-input">
             <option value="">Selecciona tu localidad</option>
             <option *ngFor="let loc of localidades" [value]="loc">
-  {{ loc | 
-    localidadNombre }}
-</option>
+              {{ loc |
+              localidadNombre }}
+            </option>
 
           </select>
           <div class="error" *ngIf="localidad.invalid && localidad.touched">Selecciona tu localidad</div>
@@ -172,8 +172,8 @@
           </div>
         </div>
 
-        <button type="submit" [disabled]="!registroForm.valid || enviando || !contrasenasCoinciden()" class="submit-btn">
-          {{ enviando ? 'Creando tu cuenta...' : 'Crear mi cuenta' }}
+        <button type="submit" [disabled]="!registroForm.valid || enviando || !contrasenasCoinciden() || !validarFuerte(usuario.contrasena)"
+          class="submit-btn"> {{ enviando ? 'Creando tu cuenta...' : 'Crear mi cuenta' }}
         </button>
 
         <div class="auth-footer">

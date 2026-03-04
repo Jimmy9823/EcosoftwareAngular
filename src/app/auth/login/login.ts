@@ -96,13 +96,7 @@ export class Login implements OnInit, OnDestroy {
     this.authService.login(credenciales).subscribe({
       next: (response) => {
 
-  if (response.estadoRegistro && response.estadoRegistro !== 'APROBADO') {
-    this.errorMessage = 'Tu cuenta aún no ha sido aprobada por el administrador.';
-    return;
-  }
-
-  localStorage.setItem('jwt_token', response.token);
-  localStorage.setItem('rol', response.rol);
+  this.authService.setSession(response);
 
   switch (response.rol) {
     case 'Administrador': this.router.navigate(['/administrador']); break;

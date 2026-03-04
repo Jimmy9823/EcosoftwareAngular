@@ -5,13 +5,9 @@ export interface ApiResponse<T> {
 }
 
 export interface AuthResponse {
+  mensaje: string;
   token: string;
-  refreshToken?: string;
-  expiresIn: number;
-  usuario: {
-    id: number;
-    nombre: string;
-    rol: string;
-    // ...otros campos
-  };
+  correo: string;
+  rol: string;
+  idUsuario: number;
 }

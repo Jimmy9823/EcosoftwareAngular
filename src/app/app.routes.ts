@@ -7,6 +7,7 @@ import { Registro } from './auth/registro/registro';
 import { Administrador } from './pages/administrador/administrador';
 import { Ciudadano } from './pages/ciudadano/ciudadano';
 import { Empresa } from './pages/empresa/empresa';
+import { Reciclador } from './pages/reciclador/reciclador';
 import { MapaComponent } from './pages/mapa/mapa.component';
 
 // Paginas de modulos
@@ -19,7 +20,6 @@ import { FormRegistro } from './Logic/solicitudes-comp/vista-solicitudes/form-re
 import { EditarUsuario } from './Logic/usuarios.comp/editar-usuario/editar-usuario';
 import { Error } from './core/error/error';
 import { AuthGuard } from './auth/auth.guard';
-import { GraficoUsuariosLocalidad } from './Logic/usuarios.comp/grafica-usuarios-localidad/grafica-usuarios-localidad';
 import { GraficoUsuariosBarrios } from './Logic/usuarios.comp/grafica-usuarios-barrio/grafica-usuarios-barrio';
 import {PendientesAceptadasChartComponent} from "./Logic/solicitudes-comp/pendientes-aceptadas-chart-component/pendientes-aceptadas-chart-component";
 import {RechazadasMotivoChartComponent} from "./Logic/solicitudes-comp/rechazadas-motivo-chart-component/rechazadas-motivo-chart-component";
@@ -33,49 +33,66 @@ import { Noticias } from './pages/noticias/noticias';
 import { SubirDocumentos } from './auth/subir-documentos/subir-documentos';
 
 export const routes: Routes = [
+
   { path: '', component: Inicio },
-  { path: 'solicitudes', component: Solcitudes,
-    canActivate: [AuthGuard],  data: { rol: 'Administrador' }
-   },
-  { path: 'usuarios', component: Usuario },
+  { path: 'login', component: Login },
   { path: 'registro', component: Registro },
+
+  {
+    path: 'administrador',
+    component: Administrador,
+    canActivate: [AuthGuard],
+    data: { roles: ['Administrador'] }
+  },
+
+  {
+    path: 'ciudadano',
+    component: Ciudadano,
+    canActivate: [AuthGuard],
+    data: { roles: ['Ciudadano'] }
+  },
+
+  {
+    path: 'empresa',
+    component: Empresa,
+    canActivate: [AuthGuard],
+    data: { roles: ['Empresa'] }
+  },
+
+  {
+    path: 'reciclador',
+    component: Reciclador,
+    canActivate: [AuthGuard],
+    data: { roles: ['Reciclador'] }
+  },
+
+  {
+    path: 'solicitudes',
+    component: Solcitudes,
+    canActivate: [AuthGuard],
+    data: { roles: ['Administrador'] }
+  },
+
   { path: 'usuarios', component: Usuario },
   { path: 'grafica', component: GraficoUsuariosBarrios },
   { path: 'grafica2', component: PendientesAceptadasChartComponent },
   { path: 'grafica3', component: RechazadasMotivoChartComponent },
-  { path: 'grafica4', component: SolicitudesLocalidadChartComponent  },
-  { path: 'listar-por-recolector', component: ListarPorRecolector  },
-  { path: 'rutas', component: Rutas  },
-  {path: 'aceptar-rechazar-usuarios', component: AceptarRechazarUsuarios},
-  {path: 'Cardsnoticias', component: CardsNoticias},
-  {path: 'noticias', component: Noticias},
-  {path: 'capacitaciones', component: Capacitaciones},
-  {path: 'subir-documentos/:id', component: SubirDocumentos},
-
-  { path: 'login', component: Login},
-  {
-    path: 'administrador', component: Administrador,
-    canActivate: [AuthGuard],  data: { rol: 'Administrador' }
-  },
-  {
-    path: 'ciudadano', component: Ciudadano,
-    canActivate: [AuthGuard],  data: { rol: 'Ciudadano' }
-  },
-  {
-    path:'empresa', component: Empresa,
-    canActivate: [AuthGuard], data: { roles: ['Empresa', 'Reciclador'] }
-  },
-  {
-    path:'c', component: Empresa,
-    canActivate: [AuthGuard], data: { roles: ['Empresa', 'Reciclador'] }
-  },
-
+  { path: 'grafica4', component: SolicitudesLocalidadChartComponent },
+  { path: 'listar-por-recolector', component: ListarPorRecolector },
+  { path: 'rutas', component: Rutas },
+  { path: 'aceptar-rechazar-usuarios', component: AceptarRechazarUsuarios },
+  { path: 'Cardsnoticias', component: CardsNoticias },
+  { path: 'noticias', component: Noticias },
+  { path: 'capacitaciones', component: Capacitaciones },
+{ path: 'subir-documentos', component: SubirDocumentos },
   { path: 'editar-usuario', component: EditarUsuario },
   { path: 'card-solicitud', component: CardsSolicitud },
   { path: 'card-re-acpt-solicitud', component: CardARSolicitud },
   { path: 'form-solicitud', component: FormRegistro },
   { path: 'mapa', component: MapaComponent },
   { path: 'puntos-reciclaje', component: MapaComponent },
+
   { path: '**', component: Error }
+
 ];
 

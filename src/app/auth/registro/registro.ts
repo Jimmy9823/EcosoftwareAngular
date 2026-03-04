@@ -38,8 +38,27 @@ export class Registro {
     private router: Router
   ) {}
 
+  private resetFormulario() {
+  this.usuario = {
+    rolId: 2,
+    nombre: '',
+    contrasena: '',
+    correo: '',
+    cedula: '',
+    telefono: '',
+    direccion: '',
+    localidad: '' as Localidad,
+    estado: true,
+    fechaCreacion: new Date().toISOString()
+  };
+
+  this.verificarContrasena = '';
+}
+
   registrar() {
-    if (this.enviando || !this.contrasenasCoinciden()) return;
+  if (this.enviando || 
+      !this.contrasenasCoinciden() || 
+      !this.validarFuerte(this.usuario.contrasena)) return;
     
     this.enviando = true;
     console.log('Datos a enviar:', this.usuario);
@@ -49,12 +68,14 @@ export class Registro {
   console.log('Registro exitoso:', response);
   this.enviando = false;
 
-  if (this.usuario.rolId === 2) {
-    // Ciudadano
+  const rolRegistrado = this.usuario.rolId;
+
+  this.resetFormulario();
+
+  if (rolRegistrado === 2) {
     alert('Usuario registrado correctamente');
     this.router.navigate(['/login']);
   } else {
-    // Empresa o Reciclador
     alert('Tu cuenta quedó pendiente de aprobación. Debes subir documentos.');
     this.router.navigate(['/subir-documentos', response.idUsuario]);
   }

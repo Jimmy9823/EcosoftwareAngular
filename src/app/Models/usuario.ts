@@ -39,6 +39,9 @@ export interface UsuarioModel {
   imagen_perfil?: string;
   cantidad_minima?: number;
   estado?: boolean;
+  documento?: string;
+  camara_comercio?: string;
+  rut?: string;
   fechaCreacion?: string;
   estadoRegistro?: EstadoRegistro; // Nuevo campo para el estado del registro
 
