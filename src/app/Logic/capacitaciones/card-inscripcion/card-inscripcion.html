@@ -1,5 +1,6 @@
 <div class="container mt-4">
   <div class="row">
+
     <div class="col-md-6 col-lg-4 mb-4" *ngFor="let cap of capacitaciones">
 
       <div class="capacitacion-card">
@@ -12,9 +13,11 @@
             loading="lazy"
           />
 
-          <span class="capacitacion-badge disponible">
-            <i class="fas fa-leaf"></i> Disponible
+          <!-- BADGE DIFERENTE -->
+          <span class="capacitacion-badge inscrito">
+            <i class="bi bi-check-circle"></i> Inscrito
           </span>
+
         </div>
 
         <!-- Contenido -->
@@ -29,6 +32,7 @@
           </p>
 
           <div class="capacitacion-info">
+
             <div>
               <i class="bi bi-clipboard"></i>
               {{ cap.numeroDeClases }} clases
@@ -39,39 +43,29 @@
               {{ cap.duracion }}
             </div>
 
-            <div *ngIf="cap.modulos">
-              <i class="bi bi-layer-group"></i>
-              {{ cap.modulos.length }} módulos
-            </div>
           </div>
 
-          <button 
-  class="capacitacion-btn"
-  (click)="inscribirse(cap)">
-  <i class="bi bi-person-plus"></i> Inscribirme
-</button>
+          <button class="capacitacion-btn">
+            <i class="bi bi-play-circle"></i>
+            Continuar capacitación
+          </button>
 
         </div>
       </div>
 
     </div>
+
   </div>
+
+  <!-- Si no tiene capacitaciones -->
+  <div *ngIf="capacitaciones.length === 0" class="text-center mt-5">
+
+    <i class="bi bi-emoji-frown" style="font-size:40px;"></i>
+
+    <p class="mt-3">
+      Aún no estás inscrito en ninguna capacitación.
+    </p>
+
+  </div>
+
 </div>
-
-<app-modal
-  [isOpen]="modalOpen"
-  [title]="modalTitle"
-  size="md"
-  headerColor="#16a34a"
-  (closed)="cerrarModal()"
->
-
-  <p>{{ modalMessage }}</p>
-
-  <div modal-footer>
-    <button class="btn btn-success" (click)="cerrarModal()">
-      Aceptar
-    </button>
-  </div>
-
-</app-modal>

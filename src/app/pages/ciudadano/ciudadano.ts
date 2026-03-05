@@ -17,14 +17,14 @@ import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitac
 import { CardsNoticias } from "../../Logic/cards-noticias.component/cards-noticias.component";
 import { CapacitacionesCrudComponent } from "../../Logic/capacitaciones/card-crud-capacitacion/card-crud-capacitacion";
 import { MapaComponent } from '../mapa/mapa.component';
+import { CardInscripcion } from "../../Logic/capacitaciones/card-inscripcion/card-inscripcion";
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
   imports: [COMPARTIR_IMPORTS, FormRegistro,
     EditarUsuario,
-
-    CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CapacitacionesLista, PuntosIframe, MapaComponent, CardsNoticias, CapacitacionesCrudComponent],
+    CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CapacitacionesLista, PuntosIframe, MapaComponent, CardsNoticias, CapacitacionesCrudComponent, CardInscripcion],
 
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']

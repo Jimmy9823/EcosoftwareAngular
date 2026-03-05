@@ -38,6 +38,12 @@ export class CapacitacionesService {
     return this.http.get<Capacitacion[]>(this.apiUrl);
   }
 
+  obtenerMisCapacitaciones(usuarioId: number){
+  return this.http.get<Capacitacion[]>(
+    `${this.apiUrl}/mis-capacitaciones/${usuarioId}`
+  );
+}
+
   // ===========================
   // CARGA MASIVA EXCEL
   // ===========================

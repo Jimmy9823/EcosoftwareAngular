@@ -1,33 +1,30 @@
+import { AuthService } from './../../../auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { CapacitacionesService } from '../../../Services/capacitacion.service';
 import { Capacitacion } from '../../../Models/capacitacion.model';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Modal } from '../../../shared/modal/modal'; // importa tu modal
 
 @Component({
   selector: 'app-card-crud-capacitacion',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, Modal],
   templateUrl: './card-crud-capacitacion.html',
   styleUrls: ['./card-crud-capacitacion.css']
 })
 export class CapacitacionesCrudComponent implements OnInit {
-  // 📌 Lista de capacitaciones
+
   capacitaciones: Capacitacion[] = [];
 
-  // 📌 Modal de creación / edición
-  mostrarModal = false;
-  esEdicion = false;
+  // CONTROL MODAL
+  modalOpen = false;
+  modalTitle = "";
+  modalMessage = "";
 
-  // 📌 Objeto editable
-  capacitacionForm: Capacitacion = {
-    nombre: '',
-    descripcion: '',
-    numeroDeClases: '',
-    duracion: ''
-  };
-
-  constructor(private capacitacionesService: CapacitacionesService) {}
+  constructor(
+    private capacitacionesService: CapacitacionesService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.obtenerCapacitaciones();
@@ -40,65 +37,49 @@ export class CapacitacionesCrudComponent implements OnInit {
     });
   }
 
-  // ✅ Abrir formulario para crear
-  abrirCrear(): void {
-    this.esEdicion = false;
-    this.mostrarModal = true;
-    this.capacitacionForm = {
-      nombre: '',
-      descripcion: '',
-      numeroDeClases: '',
-      duracion: ''
-    };
+  // FUNCION PARA ABRIR MODAL
+  abrirModal(titulo: string, mensaje: string) {
+    this.modalTitle = titulo;
+    this.modalMessage = mensaje;
+    this.modalOpen = true;
   }
 
-  // ✅ Abrir formulario para editar
-  abrirEditar(capacitacion: Capacitacion): void {
-    this.esEdicion = true;
-    this.mostrarModal = true;
-    this.capacitacionForm = { ...capacitacion };
+inscribirse(cap: Capacitacion) {
+
+  const usuarioId = this.authService.getUserId();
+
+  // ❗ Usuario no logueado
+  if (!usuarioId) {
+    this.abrirModal(
+      "Acceso requerido",
+      "Debes iniciar sesión para inscribirte en una capacitación."
+    );
+    return;
   }
 
-  // ✅ Guardar (crear o editar)
-  guardarCapacitacion(): void {
-    if (this.esEdicion && this.capacitacionForm.id) {
-      this.capacitacionesService.actualizarCapacitacion(this.capacitacionForm.id, this.capacitacionForm)
-        .subscribe(() => {
-          this.mostrarModal = false;
-          this.obtenerCapacitaciones();
-        });
-    } else {
-      this.capacitacionesService.crearCapacitacion(this.capacitacionForm)
-        .subscribe(() => {
-          this.mostrarModal = false;
-          this.obtenerCapacitaciones();
-        });
+  // Llamada al backend
+  this.capacitacionesService.inscribirse(usuarioId, cap.id!).subscribe({
+
+    next: () => {
+      this.abrirModal(
+        "Inscripción exitosa",
+        `Te has inscrito correctamente en "${cap.nombre}".`
+      );
+    },
+
+    error: () => {
+      this.abrirModal(
+        "Error",
+        "No se pudo completar la inscripción."
+      );
     }
+
+  });
+
+}
+
+  cerrarModal() {
+    this.modalOpen = false;
   }
 
-  // ✅ Eliminar
-  eliminarCapacitacion(id?: number): void {
-    if (!id) return;
-    if (confirm('¿Seguro que deseas eliminar esta capacitación?')) {
-      this.capacitacionesService.eliminarCapacitacion(id).subscribe(() => {
-        this.obtenerCapacitaciones();
-      });
-    }
-  }
-
-  inscribirse(cap: Capacitacion) {
-    const usuarioId = 1;
-    if (!cap.id) {
-      alert('No se puede inscribir: capacitación sin ID');
-      return;
-    }
-    this.capacitacionesService.inscribirse(usuarioId, cap.id).subscribe({
-      next: () => {
-        alert(`Inscripción exitosa a "${cap.nombre}"`);
-      },
-      error: (err) => {
-        alert('Error al inscribirse: ' + (err?.error?.message || err.message || ''));
-      }
-    });
-  }
 }

@@ -31,6 +31,7 @@ import { CardsNoticias } from './Logic/cards-noticias.component/cards-noticias.c
 import { Capacitaciones } from './pages/capacitaciones/capacitaciones';
 import { Noticias } from './pages/noticias/noticias';
 import { SubirDocumentos } from './auth/subir-documentos/subir-documentos';
+import { CardInscripcion } from './Logic/capacitaciones/card-inscripcion/card-inscripcion';
 
 export const routes: Routes = [
 
@@ -88,6 +89,7 @@ export const routes: Routes = [
   { path: 'editar-usuario', component: EditarUsuario },
   { path: 'card-solicitud', component: CardsSolicitud },
   { path: 'card-re-acpt-solicitud', component: CardARSolicitud },
+  { path: 'card-inscripcion', component: CardInscripcion },
   { path: 'form-solicitud', component: FormRegistro },
   { path: 'mapa', component: MapaComponent },
   { path: 'puntos-reciclaje', component: MapaComponent },
