@@ -21,4 +21,6 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
   console.log('[AuthInterceptor] no token, sending request without Authorization to', req.url);
   return next(req);
+
+  
 };

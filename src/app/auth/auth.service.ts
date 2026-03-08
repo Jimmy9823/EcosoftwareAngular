@@ -54,4 +54,9 @@ login(credentials: { correo: string; contrasena: string }): Observable<any> {
     const user = this.getUser();
     return user?.rol || null;
   }
+
+  isLoggedIn(): boolean {
+  return !!this.getToken();
+
+}
 }
