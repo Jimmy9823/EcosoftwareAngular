@@ -6,8 +6,14 @@ import { AuthService } from '../auth.service';
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = authService.getToken();
+  const isRoutingProxyRequest = req.url.startsWith('/api/route') || req.url.startsWith('/api/nearest');
   const masked = token ? (token.length > 16 ? token.slice(0,8) + '...' + token.slice(-6) : token) : null;
   console.log('[AuthInterceptor] token?', !!token, 'masked:', masked);
+
+  if (isRoutingProxyRequest) {
+    console.log('[AuthInterceptor] skipping Authorization header for routing proxy request', req.url);
+    return next(req);
+  }
 
   if (token) {
     const cloned = req.clone({

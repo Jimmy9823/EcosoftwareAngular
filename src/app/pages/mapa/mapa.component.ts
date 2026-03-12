@@ -18,6 +18,7 @@ import {
   PuntoReciclaje,
   PuntosReciclajeService,
 } from '../../Services/puntos-reciclaje.service';
+import { OsrmService } from '../../Services/osrm.service';
 
 interface OsrmStep {
   name: string;
@@ -96,7 +97,8 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
 
   constructor(
     private readonly puntosService: PuntosReciclajeService,
-    private readonly http: HttpClient
+    private readonly http: HttpClient,
+    private readonly osrmService: OsrmService
   ) {}
 
   ngOnInit(): void {
@@ -300,12 +302,15 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
     }
     this.marcarOrigen(origen);
 
-    const url = `https://router.project-osrm.org/route/v1/driving/${origen.lng},${origen.lat};${destLng},${destLat}?overview=full&geometries=geojson&steps=true&alternatives=2`;
     this.rutaCalculando = true;
 
     // log coordinates for debugging
     console.debug('calculating OSRM route', { origen, destLat, destLng });
-    this.http.get<OsrmResponse>(url).subscribe({
+    this.osrmService.calcularRuta<OsrmResponse>(
+      { lat: origen.lat, lng: origen.lng },
+      { lat: destLat, lng: destLng },
+      2
+    ).subscribe({
       next: (response) => {
         this.rutaCalculando = false;
         const routes = response?.routes ?? [];
@@ -696,9 +701,8 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   private async snapToRoad(lat: number, lng: number): Promise<{ lat: number; lng: number }> {
-    const url = `https://router.project-osrm.org/nearest/v1/driving/${lng},${lat}?number=1`;
     try {
-      const respuesta = await firstValueFrom(this.http.get<{ waypoints: Array<{ location: [number, number] }> }>(url));
+      const respuesta = await firstValueFrom(this.osrmService.nearest(lat, lng, 1));
       const wp = respuesta?.waypoints?.[0];
       if (wp && Array.isArray(wp.location) && wp.location.length === 2) {
         // OSRM returns [lon, lat]
