@@ -26,7 +26,7 @@
           <input
             id="origen-input"
             type="text"
-            placeholder="Escribe la dirección de partida"
+            placeholder="Escribe la dirección de partida (ej. carrera 59 #22b-31, Bogotá)"
             [(ngModel)]="origenInput"
           />
           <button type="button" class="ghost" (click)="usarMiUbicacion()">Ubicación actual</button>
@@ -35,8 +35,9 @@
 
       <div class="panel-field">
         <label for="destino-select">Destino</label>
-        <select id="destino-select" [(ngModel)]="destinoSeleccionadoId">
+        <select id="destino-select" [(ngModel)]="destinoSeleccionadoId" (change)="onDestinoChange()">
           <option [ngValue]="null">Selecciona un punto...</option>
+          <option [ngValue]="-1">Otra dirección...</option>
           <option
             *ngFor="let punto of puntos"
             [ngValue]="punto.id ?? null"
@@ -44,6 +45,15 @@
             {{ punto.nombre }}
           </option>
         </select>
+      </div>
+      <div class="panel-field" *ngIf="destinoSeleccionadoId === -1">
+        <label for="destino-input"></label>
+        <input
+          id="destino-input"
+          type="text"
+          placeholder="Escribe la dirección de destino"
+          [(ngModel)]="destinoInput"
+        />
       </div>
 
       <button class="primary" type="button" (click)="calcularRuta()" [disabled]="rutaCalculando">
@@ -92,7 +102,7 @@
               {{ punto.tipoResiduo || 'General' }}
             </span>
           </div>
-          <p>{{ punto.direccion }}</p>
+          <p>📍 {{ punto.direccion }}</p>
           <p>{{ punto.horario || 'Horario no informado' }}</p>
           <p>{{ punto.descripcion || 'Sin descripción' }}</p>
         </article>

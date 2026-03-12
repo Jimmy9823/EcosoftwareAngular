@@ -1,0 +1,8 @@
+{
+  "/osrm/*": {
+    "target": "https://router.project-osrm.org",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": { "^/osrm": "" }
+  }
+}

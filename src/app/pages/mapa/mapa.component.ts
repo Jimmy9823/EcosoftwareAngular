@@ -85,6 +85,7 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
   public puntos: PuntoReciclaje[] = [];
   public puntosDecorados: Array<PuntoReciclaje & { cardColor: string; borderColor: string; chipBg: string; chipColor: string }> = [];
   public origenInput = '';
+  public destinoInput = '';
   public destinoSeleccionadoId: number | null = null;
   public rutasCalculadas: RutaCalculada[] = [];
   public rutaSeleccionadaIndex = 0;
@@ -249,31 +250,67 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
       return;
     }
 
-    const destino = this.puntos.find((p) => p.id === this.destinoSeleccionadoId);
-    if (!destino) {
-      this.rutaError = 'Selecciona un punto de destino.';
-      return;
-    }
+    let destLat: number;
+    let destLng: number;
 
-    const destLat = Number(destino.latitud);
-    const destLng = Number(destino.longitud);
-    if (Number.isNaN(destLat) || Number.isNaN(destLng)) {
-      this.rutaError = 'El destino no tiene coordenadas válidas.';
-      return;
-    }
+    if (this.destinoSeleccionadoId === -1) {
+      // user chose to type an address
+      const texto = this.destinoInput.trim();
+      if (!texto) {
+        this.rutaError = 'Ingresa una dirección de destino.';
+        return;
+      }
 
-    this.colorRutaActual = this.obtenerColorResiduo(destino.tipoResiduo ?? '');
+      try {
+        const coords = await this.geocodificarDireccion(texto);
+        destLat = coords.lat;
+        destLng = coords.lng;
+      } catch (error) {
+        this.rutaError =
+          error instanceof Error ? error.message : 'No pudimos interpretar el destino indicado.';
+        return;
+      }
+
+      // keep default route color for free-text destinations
+      this.colorRutaActual = '#0ea5e9';
+
+      // attempt to snap to nearest road to improve OSRM acceptance
+      try {
+        const snap = await this.snapToRoad(destLat, destLng);
+        destLat = snap.lat;
+        destLng = snap.lng;
+      } catch (snapErr) {
+        console.warn('No se pudo ajustar destino a la vía', snapErr);
+      }
+    } else {
+      const destino = this.puntos.find((p) => p.id === this.destinoSeleccionadoId);
+      if (!destino) {
+        this.rutaError = 'Selecciona un punto de destino.';
+        return;
+      }
+
+      destLat = Number(destino.latitud);
+      destLng = Number(destino.longitud);
+      if (Number.isNaN(destLat) || Number.isNaN(destLng)) {
+        this.rutaError = 'El destino no tiene coordenadas válidas.';
+        return;
+      }
+
+      this.colorRutaActual = this.obtenerColorResiduo(destino.tipoResiduo ?? '');
+    }
     this.marcarOrigen(origen);
 
     const url = `https://router.project-osrm.org/route/v1/driving/${origen.lng},${origen.lat};${destLng},${destLat}?overview=full&geometries=geojson&steps=true&alternatives=2`;
     this.rutaCalculando = true;
 
+    // log coordinates for debugging
+    console.debug('calculating OSRM route', { origen, destLat, destLng });
     this.http.get<OsrmResponse>(url).subscribe({
       next: (response) => {
         this.rutaCalculando = false;
         const routes = response?.routes ?? [];
         if (!routes.length) {
-          this.rutaError = 'No encontramos rutas disponibles.';
+          this.rutaError = 'No encontramos rutas disponibles. Puede que el destino esté fuera de la zona de enrutamiento.';
           return;
         }
 
@@ -290,7 +327,9 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
       error: (err) => {
         console.error('Error OSRM', err);
         this.rutaCalculando = false;
-        this.rutaError = 'No se pudo calcular la ruta con OSRM.';
+        const msg = err?.message || '';
+        // if we have coords, include them in message for debugging
+        this.rutaError = `Error de enrutamiento${destLat != null && destLng != null ? ` (coords ${destLat.toFixed(6)},${destLng.toFixed(6)})` : ''}: ${msg || 'No se pudo calcular la ruta con OSRM.'}`;
       },
     });
   }
@@ -329,13 +368,16 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
     const valor = this.origenInput.trim();
 
     if (valor) {
-      const coords = this.parseLatLngString(valor);
-      if (coords) {
-        this.origenCoords = coords;
-        return coords;
+      const parsed = this.parseLatLngString(valor);
+      if (parsed) {
+        this.origenCoords = parsed;
+        return parsed;
       }
 
-      return this.geocodificarDireccion(valor);
+      const geocoded = await this.geocodificarDireccion(valor);
+      // geocodificarDireccion nunca devuelve null, siempre retorna lat/lng
+      this.origenCoords = geocoded;
+      return geocoded;
     }
 
     if (this.origenCoords) {
@@ -474,8 +516,23 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
     return map[modifier] ?? 'Continúa recto';
   }
 
+  private normalizeAddress(termino: string): string {
+    // If the user didn't specify a city/country, append a default to improve
+    // geocoding results. Many addresses in this app are meant for Bogotá.
+    const lower = termino.toLowerCase();
+    const hasComma = termino.includes(',');
+    const hasBogota = lower.includes('bogotá') || lower.includes('bogota');
+    const hasColombia = lower.includes('colombia');
+
+    if (!hasComma && !hasBogota && !hasColombia) {
+      return `${termino}, Bogotá, Colombia`;
+    }
+    return termino;
+  }
+
   private async geocodificarDireccion(termino: string): Promise<{ lat: number; lng: number }> {
     const url = 'https://nominatim.openstreetmap.org/search';
+    const query = this.normalizeAddress(termino.trim());
     try {
       const respuesta = await firstValueFrom(
         this.http.get<Array<{ lat: string; lon: string }>>(url, {
@@ -483,7 +540,7 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
             format: 'json',
             addressdetails: '0',
             limit: '1',
-            q: termino,
+            q: query,
           },
           headers: {
             'Accept-Language': 'es',
@@ -502,7 +559,7 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
         throw new Error('No pudimos interpretar la dirección proporcionada.');
       }
 
-      this.origenCoords = { lat, lng };
+      // no modificamos originCoords aquí; let caller decide
       return { lat, lng };
     } catch (error) {
       console.error('Error geocodificando dirección', error);
@@ -614,6 +671,12 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
     };
   }
 
+  public onDestinoChange(): void {
+    if (this.destinoSeleccionadoId !== -1) {
+      this.destinoInput = '';
+    }
+  }
+
   public irAPaso(paso: RutaPaso): void {
     if (!this.mapInstance) {
       return;
@@ -630,6 +693,21 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
       }),
       interactive: false,
     }).addTo(this.mapInstance);
+  }
+
+  private async snapToRoad(lat: number, lng: number): Promise<{ lat: number; lng: number }> {
+    const url = `https://router.project-osrm.org/nearest/v1/driving/${lng},${lat}?number=1`;
+    try {
+      const respuesta = await firstValueFrom(this.http.get<{ waypoints: Array<{ location: [number, number] }> }>(url));
+      const wp = respuesta?.waypoints?.[0];
+      if (wp && Array.isArray(wp.location) && wp.location.length === 2) {
+        // OSRM returns [lon, lat]
+        return { lat: wp.location[1], lng: wp.location[0] };
+      }
+    } catch (err) {
+      console.warn('snapToRoad failed', err);
+    }
+    return { lat, lng };
   }
 
   private obtenerAnguloPorModifier(modifier?: string): number {
