@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -100,8 +100,13 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
     private readonly puntosService: PuntosReciclajeService,
     private readonly http: HttpClient,
     private readonly osrmService: OsrmService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly location: Location
   ) {}
+
+  public volverAtras(): void {
+    this.location.back();
+  }
 
   public get requiereInicioSesion(): boolean {
     return !this.authService.isLoggedIn();

@@ -1,4 +1,6 @@
 <section class="mapa-shell" [class.mapa-shell--bloqueado]="requiereInicioSesion">
+  <button class="mapa-back-btn" type="button" (click)="volverAtras()">← Volver</button>
+
   <div class="mapa-shell__map">
     <div class="map-wrapper" [id]="mapContainerId"></div>
 

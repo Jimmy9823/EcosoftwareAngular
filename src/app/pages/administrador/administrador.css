@@ -9,6 +9,65 @@
   min-height: 100vh;
 }
 
+.puntos-admin-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.puntos-admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.puntos-admin-actions .btn.active {
+  background: #198754;
+  border-color: #198754;
+  color: #fff;
+}
+
+.puntos-admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.punto-item {
+  background: #fff;
+  border: 1px solid #dce3dd;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.punto-item h6 {
+  margin: 0 0 6px;
+  color: #198754;
+  font-weight: 700;
+}
+
+.punto-item p {
+  margin: 2px 0;
+}
+
+.puntos-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.form-group-full {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+}
+
 /* BOTONES DE REPORTES */
 .reportes-buttons-row {
   display: flex;
@@ -167,6 +226,18 @@
 
   .reportes-buttons-row .btn {
     width: 100%;
+  }
+
+  .puntos-admin-actions .btn {
+    width: 100%;
+  }
+
+  .puntos-admin-toolbar > .btn {
+    width: 100%;
+  }
+
+  .puntos-form-grid {
+    grid-template-columns: 1fr;
   }
 }
     

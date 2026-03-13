@@ -4,27 +4,22 @@ import { UsuarioService } from '../../Services/usuario.service'; // ajusta ruta 
 import { COMPARTIR_IMPORTS } from '../../shared/imports';
 import { FormRegistro } from '../../Logic/solicitudes-comp/vista-solicitudes/form-registro/form-registro';
 import { CardsSolicitud } from '../../Logic/solicitudes-comp/cards-solicitud/cards-solicitud';
-import { RouterLink } from '@angular/router';
 import { CardsRecoleccionCiudadano } from '../../Logic/recolecciones-comp/cards-recoleccion-ciudadano/cards-recoleccion-ciudadano';
 import { PuntosReciclajeService, PuntosResponse } from '../../Services/puntos-reciclaje.service';
 import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
-import { PuntosIframe } from '../../shared/puntos-iframe/puntos-iframe';
-import { Boton } from '../../shared/botones/boton/boton';
 import { Titulo } from '../../shared/titulo/titulo';
 import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
-import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitaciones/listar-capacitaciones';
 import { CardsNoticias } from "../../Logic/cards-noticias.component/cards-noticias.component";
-import { CapacitacionesCrudComponent } from "../../Logic/capacitaciones/card-crud-capacitacion/card-crud-capacitacion";
-import { MapaComponent } from '../mapa/mapa.component';
 import { CardInscripcion } from "../../Logic/capacitaciones/card-inscripcion/card-inscripcion";
+import { ColumnaTabla, Tabla } from '../../shared/tabla/tabla';
 
 @Component({
   selector: 'app-ciudadano',
   standalone: true,
   imports: [COMPARTIR_IMPORTS, FormRegistro,
     EditarUsuario,
-    CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CapacitacionesLista, PuntosIframe, MapaComponent, CardsNoticias, CapacitacionesCrudComponent, CardInscripcion],
+    CardsSolicitud, CardsRecoleccionCiudadano, BarraLateral, Titulo, CardsNoticias, CardInscripcion, Tabla],
 
   templateUrl: './ciudadano.html',
   styleUrls: ['./ciudadano.css']
@@ -39,7 +34,19 @@ export class Ciudadano {
   nombreUsuario: string = localStorage.getItem('nombreUsuario') ?? 'Usuario';
   nombreRol: string = localStorage.getItem('nombreRol') ?? 'Rol';
   puntos: PuntoReciclaje[] = [];
-  mostrarPuntos: boolean = false;
+  vistaPuntos: 'todos' = 'todos';
+
+  columnasPuntos: ColumnaTabla[] = [
+    { campo: 'nombre', titulo: 'Nombre' },
+    { campo: 'direccion', titulo: 'Dirección' },
+    { campo: 'horario', titulo: 'Horario' },
+    { campo: 'tipoResiduo', titulo: 'Tipo Residuo' },
+  ];
+
+  puntosCellTemplates: { [campo: string]: (item: any) => string } = {
+    horario: (item: any) => item?.horario || 'No informado',
+    tipoResiduo: (item: any) => item?.tipoResiduo || item?.tipo_residuo || 'General',
+  };
 
   constructor(
     private usuarioService: UsuarioService,
@@ -87,13 +94,16 @@ export class Ciudadano {
     this.mostrarNuevaSolicitud = !this.mostrarNuevaSolicitud;
   }
 
-  togglePuntos(): void {
-    this.mostrarPuntos = !this.mostrarPuntos;
+  get puntosFiltrados(): PuntoReciclaje[] {
+    return this.puntos;
   }
 
-  openMyPointsFromPage(): void {
-    this.vistaActual = 'puntos';
-    this.mostrarPuntos = true;
+  mostrarTodosLosPuntos(): void {
+    this.vistaPuntos = 'todos';
+  }
+
+  irAPaginaMapa(): void {
+    this.router.navigate(['/puntos-reciclaje']);
   }
 
   toggleMenu(): void {
