@@ -1,4 +1,4 @@
-<section class="mapa-shell">
+<section class="mapa-shell" [class.mapa-shell--bloqueado]="requiereInicioSesion">
   <div class="mapa-shell__map">
     <div class="map-wrapper" [id]="mapContainerId"></div>
 
@@ -78,7 +78,7 @@
       </div>
     </section>
 
-    <section class="panel panel-puntos">
+    <section class="panel panel-puntos" *ngIf="!requiereInicioSesion">
       <div class="panel-header">
         <h2>Listado de puntos</h2>
         <span>{{ puntos.length }} activos</span>
@@ -113,4 +113,15 @@
       </div>
     </section>
   </aside>
+
+  <div class="mapa-auth-overlay" *ngIf="requiereInicioSesion">
+    <div class="mapa-auth-modal">
+      <h2>Inicia sesión para continuar</h2>
+      <p>
+        Para ver las ubicaciones de los puntos de reciclaje y sus respectivas rutas,
+        debes iniciar sesión.
+      </p>
+      <a class="mapa-auth-btn btn-ecosoft" href="/login">Iniciar sesión</a>
+    </div>
+  </div>
 </section>

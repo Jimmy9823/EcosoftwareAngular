@@ -19,6 +19,7 @@ import {
   PuntosReciclajeService,
 } from '../../Services/puntos-reciclaje.service';
 import { OsrmService } from '../../Services/osrm.service';
+import { AuthService } from '../../auth/auth.service';
 
 interface OsrmStep {
   name: string;
@@ -98,8 +99,13 @@ export class MapaComponent implements AfterViewInit, OnDestroy, OnInit {
   constructor(
     private readonly puntosService: PuntosReciclajeService,
     private readonly http: HttpClient,
-    private readonly osrmService: OsrmService
+    private readonly osrmService: OsrmService,
+    private readonly authService: AuthService
   ) {}
+
+  public get requiereInicioSesion(): boolean {
+    return !this.authService.isLoggedIn();
+  }
 
   ngOnInit(): void {
     this.refreshSub = this.puntosService.refresh$.subscribe(() => this.cargarPuntos());
