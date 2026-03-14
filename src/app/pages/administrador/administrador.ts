@@ -1,6 +1,7 @@
 import { RegistroAdmin } from './../../auth/registro-admin/registro-admin';
 // src/app/usuario/administrador/administrador.ts
 import { Component, ViewChild, ElementRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../Services/usuario.service';
 import { UsuarioModel } from '../../Models/usuario';
@@ -13,33 +14,30 @@ import { CapacitacionesLista } from '../../Logic/capacitaciones/listar-capacitac
 import { CargaMasiva } from '../../Logic/capacitaciones/carga-masiva/carga-masiva';
 import { ListarTabla } from '../../Logic/recolecciones-comp/listar-tabla/listar-tabla';
 import { GraficoUsuariosLocalidad } from '../../Logic/usuarios.comp/grafica-usuarios-localidad/grafica-usuarios-localidad';
-import { GraficoUsuariosBarrios } from '../../Logic/usuarios.comp/grafica-usuarios-barrio/grafica-usuarios-barrio';
 import { BarraLateral } from '../../shared/barra-lateral/barra-lateral';
-import { PuntosIframe } from '../../shared/puntos-iframe/puntos-iframe';
 import { PuntosReciclajeService, PuntosResponse } from '../../Services/puntos-reciclaje.service';
 import { PuntoReciclaje } from '../../Models/puntos-reciclaje.model';
 import { SolicitudesLocalidadChartComponent } from "../../Logic/solicitudes-comp/solicitudes-localidad-chart-component/solicitudes-localidad-chart-component";
 import { RechazadasMotivoChartComponent } from '../../Logic/solicitudes-comp/rechazadas-motivo-chart-component/rechazadas-motivo-chart-component';
 import { PendientesAceptadasChartComponent } from '../../Logic/solicitudes-comp/pendientes-aceptadas-chart-component/pendientes-aceptadas-chart-component';
-import { Boton } from '../../shared/botones/boton/boton';
 import { Titulo } from '../../shared/titulo/titulo';
 import { Modal } from '../../shared/modal/modal';
 import { EditarUsuario } from '../../Logic/usuarios.comp/editar-usuario/editar-usuario';
-import { FormComp } from '../../shared/form/form.comp/form.comp';
 import { Service } from '../../Services/solicitud.service';
-import { Rutas } from "../../Logic/rutas/rutas";
 import { ReporteService } from '../../Services/reporte.service';
 import { ServiceModel } from '../../Models/solicitudes.model';
 import { AceptarRechazarUsuarios } from '../../Logic/usuarios.comp/aceptar-rechazar-usuarios/aceptar-rechazar-usuarios';
 import { CardsNoticias } from "../../Logic/cards-noticias.component/cards-noticias.component";
 import { MapaComponent } from '../mapa/mapa.component';
+import { firstValueFrom } from 'rxjs';
+
 
 @Component({
   selector: 'app-administrador',
   imports: [COMPARTIR_IMPORTS, SolicitudesLocalidadChartComponent, AceptarRechazarUsuarios,
     RechazadasMotivoChartComponent, PendientesAceptadasChartComponent, GraficoUsuariosLocalidad,
-    GraficoUsuariosBarrios, RegistroAdmin, Usuario, ListarTabla, Solcitudes,
-    EditarUsuario, CapacitacionesLista, CargaMasiva, BarraLateral, Boton, Titulo, Modal, FormComp, PuntosIframe, MapaComponent, Rutas, CardsNoticias],
+    RegistroAdmin, Usuario, ListarTabla, Solcitudes,
+    EditarUsuario, CapacitacionesLista, CargaMasiva, BarraLateral, Titulo, Modal, CardsNoticias],
   templateUrl: './administrador.html',
   styleUrl: './administrador.css'
 })
@@ -62,6 +60,18 @@ export class Administrador {
   menuAbierto = true;
   perfilMenuAbierto = false;
   puntos: PuntoReciclaje[] = [];
+  vistaPuntos: 'mis' | 'todos' = 'mis';
+  mostrarModalRegistrarPunto = false;
+  guardandoPunto = false;
+  estadoRegistroPunto = '';
+  errorRegistroPunto = '';
+  nuevoPunto = {
+    nombre: '',
+    direccion: '',
+    tipoResiduo: '',
+    horario: '',
+    descripcion: '',
+  };
 
   // botones de alternar vistas
   mostrarNuevoUsuario = false;
@@ -85,7 +95,8 @@ export class Administrador {
     private authService: AuthService,
     private puntosService: PuntosReciclajeService,
     private solicitudService: Service,
-    private reporteService: ReporteService
+    private reporteService: ReporteService,
+    private readonly http: HttpClient
   ) { }
 
   cargarPuntos(): void {
@@ -102,6 +113,188 @@ export class Administrador {
         console.error('Error al cargar puntos:', err);
       }
     });
+  }
+
+  get puntosFiltrados(): PuntoReciclaje[] {
+    if (this.vistaPuntos === 'todos') {
+      return this.puntos;
+    }
+
+    const userId = this.authService.getUserId();
+    if (userId == null) {
+      return [];
+    }
+
+    return this.puntos.filter((punto: any) => {
+      const ownerId = punto?.usuario_id ?? punto?.usuarioId ?? punto?.idUsuario ?? null;
+      return Number(ownerId) === Number(userId);
+    });
+  }
+
+  mostrarMisPuntos(): void {
+    this.vistaPuntos = 'mis';
+  }
+
+  mostrarTodosLosPuntos(): void {
+    this.vistaPuntos = 'todos';
+  }
+
+  irAPaginaMapa(): void {
+    this.router.navigate(['/puntos-reciclaje']);
+  }
+
+  abrirModalRegistrarPunto(): void {
+    this.errorRegistroPunto = '';
+    this.estadoRegistroPunto = '';
+    this.mostrarModalRegistrarPunto = true;
+  }
+
+  cerrarModalRegistrarPunto(): void {
+    this.mostrarModalRegistrarPunto = false;
+    this.errorRegistroPunto = '';
+    this.estadoRegistroPunto = '';
+  }
+
+  async registrarPunto(): Promise<void> {
+    if (!this.nuevoPunto.nombre.trim() || !this.nuevoPunto.direccion.trim() || !this.nuevoPunto.tipoResiduo.trim() ||
+      !this.nuevoPunto.horario.trim() || !this.nuevoPunto.descripcion.trim()) {
+      this.errorRegistroPunto = 'Todos los campos son obligatorios.';
+      return;
+    }
+
+    this.guardandoPunto = true;
+    this.errorRegistroPunto = '';
+    this.estadoRegistroPunto = 'Convirtiendo dirección...';
+
+    try {
+      const coords = await this.geocodificarDireccion(this.nuevoPunto.direccion.trim());
+      const usuarioId = this.authService.getUserId();
+
+      const payload: any = {
+        nombre: this.nuevoPunto.nombre.trim(),
+        direccion: this.nuevoPunto.direccion.trim(),
+        ubicacion: this.nuevoPunto.direccion.trim(),
+        tipoResiduo: this.nuevoPunto.tipoResiduo.trim(),
+        tipo_residuo: this.nuevoPunto.tipoResiduo.trim(),
+        horario: this.nuevoPunto.horario.trim(),
+        descripcion: this.nuevoPunto.descripcion.trim(),
+        latitud: coords.lat,
+        longitud: coords.lng,
+        imagen: null,
+        usuarioId,
+        usuario_id: usuarioId,
+      };
+
+      this.estadoRegistroPunto = 'Guardando punto...';
+
+      this.puntosService.crearPunto(payload).subscribe({
+        next: () => {
+          this.guardandoPunto = false;
+          this.estadoRegistroPunto = '';
+          this.cargarPuntos();
+          this.reiniciarFormularioPunto();
+          this.cerrarModalRegistrarPunto();
+        },
+        error: (err) => {
+          console.error('Error al registrar punto', err);
+          this.guardandoPunto = false;
+          this.estadoRegistroPunto = '';
+          const detalle =
+            err?.error?.message ||
+            err?.error?.error ||
+            (typeof err?.error === 'string' ? err.error : '') ||
+            err?.message ||
+            '';
+          this.errorRegistroPunto = detalle
+            ? `No se pudo registrar el punto: ${detalle}`
+            : 'No se pudo registrar el punto. Intenta nuevamente.';
+        }
+      });
+    } catch (error: any) {
+      console.error('Error en conversión de dirección', error);
+      this.guardandoPunto = false;
+      this.estadoRegistroPunto = '';
+      const detalle = typeof error?.message === 'string' ? error.message : '';
+      this.errorRegistroPunto = detalle || 'No se pudo convertir la dirección. Intenta con una dirección más específica.';
+    }
+  }
+
+  private normalizeAddress(termino: string): string {
+    const lower = termino.toLowerCase();
+    const hasComma = termino.includes(',');
+    const hasBogota = lower.includes('bogotá') || lower.includes('bogota');
+    const hasColombia = lower.includes('colombia');
+
+    if (!hasComma && !hasBogota && !hasColombia) {
+      return `${termino}, Bogotá, Colombia`;
+    }
+
+    return termino;
+  }
+
+  private async geocodificarDireccion(termino: string): Promise<{ lat: number; lng: number }> {
+    const asCoords = this.parseLatLngString(termino);
+    if (asCoords) {
+      return asCoords;
+    }
+
+    const url = 'https://nominatim.openstreetmap.org/search';
+    const query = this.normalizeAddress(termino.trim());
+    const respuesta = await firstValueFrom(
+      this.http.get<Array<{ lat: string; lon: string }>>(url, {
+        params: {
+          format: 'jsonv2',
+          addressdetails: '0',
+          limit: '1',
+          countrycodes: 'co',
+          q: query,
+        },
+        headers: {
+          'Accept-Language': 'es',
+        },
+      })
+    );
+
+    const coincidencia = respuesta?.[0];
+    if (!coincidencia) {
+      throw new Error('No se encontró la dirección.');
+    }
+
+    const lat = Number(coincidencia.lat);
+    const lng = Number(coincidencia.lon);
+    if (Number.isNaN(lat) || Number.isNaN(lng)) {
+      throw new Error('Dirección inválida para coordenadas.');
+    }
+
+    return { lat, lng };
+  }
+
+  private parseLatLngString(value: string): { lat: number; lng: number } | null {
+    const parts = value.split(',').map((part) => Number(part.trim()));
+    if (parts.length !== 2) {
+      return null;
+    }
+
+    const [lat, lng] = parts;
+    if (Number.isNaN(lat) || Number.isNaN(lng)) {
+      return null;
+    }
+
+    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+      return null;
+    }
+
+    return { lat, lng };
+  }
+
+  private reiniciarFormularioPunto(): void {
+    this.nuevoPunto = {
+      nombre: '',
+      direccion: '',
+      tipoResiduo: '',
+      horario: '',
+      descripcion: '',
+    };
   }
 
   /**

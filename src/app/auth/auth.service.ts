@@ -8,6 +8,7 @@ import { Observable, tap } from 'rxjs';
 export class AuthService {
   private apiUrl = 'http://localhost:8082/api/auth';
   private TOKEN_KEY = 'jwt_token';
+  private LEGACY_TOKEN_KEY = 'token';
   private USER_KEY = 'user_data';
 
   constructor(private http: HttpClient) {}
@@ -20,12 +21,14 @@ login(credentials: { correo: string; contrasena: string }): Observable<any> {
   /** 🚪 Cerrar sesión */
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.LEGACY_TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
   }
 
   /** 🎟 Obtener token actual */
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    const raw = localStorage.getItem(this.TOKEN_KEY) || localStorage.getItem(this.LEGACY_TOKEN_KEY);
+    return this.normalizeToken(raw);
   }
 
   /** 👤 Obtener usuario actual (correo, rol, etc.) */
@@ -35,9 +38,56 @@ login(credentials: { correo: string; contrasena: string }): Observable<any> {
   }
 
  setSession(response: any) {
-  localStorage.setItem(this.TOKEN_KEY, response.token);
-  localStorage.setItem(this.USER_KEY, JSON.stringify(response));
+  const token = this.extractToken(response);
+  if (token) {
+    localStorage.setItem(this.TOKEN_KEY, token);
+    localStorage.setItem(this.LEGACY_TOKEN_KEY, token);
+  }
+
+  const userPayload = response?.data ?? response;
+  localStorage.setItem(this.USER_KEY, JSON.stringify(userPayload));
 }
+
+  private extractToken(response: any): string | null {
+    const candidates = [
+      response?.token,
+      response?.access_token,
+      response?.jwt,
+      response?.data?.token,
+      response?.data?.access_token,
+      response?.data?.jwt,
+    ];
+
+    for (const candidate of candidates) {
+      const normalized = this.normalizeToken(candidate);
+      if (normalized) {
+        return normalized;
+      }
+    }
+
+    return null;
+  }
+
+  private normalizeToken(raw: unknown): string | null {
+    if (typeof raw !== 'string') {
+      return null;
+    }
+
+    let token = raw.trim();
+    if (!token) {
+      return null;
+    }
+
+    if (token.toLowerCase().startsWith('bearer ')) {
+      token = token.slice(7).trim();
+    }
+
+    if ((token.startsWith('"') && token.endsWith('"')) || (token.startsWith("'") && token.endsWith("'"))) {
+      token = token.slice(1, -1).trim();
+    }
+
+    return token || null;
+  }
 
   getUserId(): number | null {
     const user = this.getUser();

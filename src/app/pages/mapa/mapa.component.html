@@ -1,4 +1,6 @@
-<section class="mapa-shell">
+<section class="mapa-shell" [class.mapa-shell--bloqueado]="requiereInicioSesion">
+  <button class="mapa-back-btn" type="button" (click)="volverAtras()">← Volver</button>
+
   <div class="mapa-shell__map">
     <div class="map-wrapper" [id]="mapContainerId"></div>
 
@@ -26,7 +28,7 @@
           <input
             id="origen-input"
             type="text"
-            placeholder="Escribe la dirección de partida"
+            placeholder="Escribe la dirección de partida (ej. carrera 59 #22b-31, Bogotá)"
             [(ngModel)]="origenInput"
           />
           <button type="button" class="ghost" (click)="usarMiUbicacion()">Ubicación actual</button>
@@ -35,8 +37,9 @@
 
       <div class="panel-field">
         <label for="destino-select">Destino</label>
-        <select id="destino-select" [(ngModel)]="destinoSeleccionadoId">
+        <select id="destino-select" [(ngModel)]="destinoSeleccionadoId" (change)="onDestinoChange()">
           <option [ngValue]="null">Selecciona un punto...</option>
+          <option [ngValue]="-1">Otra dirección...</option>
           <option
             *ngFor="let punto of puntos"
             [ngValue]="punto.id ?? null"
@@ -44,6 +47,15 @@
             {{ punto.nombre }}
           </option>
         </select>
+      </div>
+      <div class="panel-field" *ngIf="destinoSeleccionadoId === -1">
+        <label for="destino-input"></label>
+        <input
+          id="destino-input"
+          type="text"
+          placeholder="Escribe la dirección de destino"
+          [(ngModel)]="destinoInput"
+        />
       </div>
 
       <button class="primary" type="button" (click)="calcularRuta()" [disabled]="rutaCalculando">
@@ -68,7 +80,7 @@
       </div>
     </section>
 
-    <section class="panel panel-puntos">
+    <section class="panel panel-puntos" *ngIf="!requiereInicioSesion">
       <div class="panel-header">
         <h2>Listado de puntos</h2>
         <span>{{ puntos.length }} activos</span>
@@ -92,7 +104,7 @@
               {{ punto.tipoResiduo || 'General' }}
             </span>
           </div>
-          <p>{{ punto.direccion }}</p>
+          <p> {{ punto.direccion }}</p>
           <p>{{ punto.horario || 'Horario no informado' }}</p>
           <p>{{ punto.descripcion || 'Sin descripción' }}</p>
         </article>
@@ -103,4 +115,15 @@
       </div>
     </section>
   </aside>
+
+  <div class="mapa-auth-overlay" *ngIf="requiereInicioSesion">
+    <div class="mapa-auth-modal">
+      <h2>Inicia sesión para continuar</h2>
+      <p>
+        Para ver las ubicaciones de los puntos de reciclaje y sus respectivas rutas,
+        debes iniciar sesión.
+      </p>
+      <a class="mapa-auth-btn btn-ecosoft" href="/login">Iniciar sesión</a>
+    </div>
+  </div>
 </section>

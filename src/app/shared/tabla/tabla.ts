@@ -20,6 +20,7 @@ export class Tabla implements OnChanges {
   @Input() data: any[] = [];
   @Input() titulo: string = 'Listado';
   @Input() cellTemplates: { [campo: string]: (item: any) => string } = {};
+  @Input() mostrarAcciones: boolean = true;
 
   @Output() ver = new EventEmitter<any>();
   @Output() editar = new EventEmitter<any>();
