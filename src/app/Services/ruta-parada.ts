@@ -8,7 +8,7 @@ import { RutaParada } from '../Models/ruta-parada';
 })
 export class RutaParadaService {
 
-  private baseUrl = 'http://localhost:8082/api/paradas';
+  private baseUrl = 'https://ecosoftwareangular.onrender.com/api/paradas';
 
   constructor(private http: HttpClient) {}
 

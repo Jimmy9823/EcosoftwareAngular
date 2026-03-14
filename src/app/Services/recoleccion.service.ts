@@ -8,7 +8,7 @@ import { ModeloRecoleccion, EstadoRecoleccion } from '../Models/modelo-recolecci
 })
 export class RecoleccionService {
 
-  private readonly URL = 'http://localhost:8082/api/recolecciones';
+  private readonly URL = 'https://ecosoftwareangular.onrender.com/api/recolecciones';
 
   constructor(private http: HttpClient) {}
 

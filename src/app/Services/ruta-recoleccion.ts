@@ -8,7 +8,7 @@ import { RutaRecoleccion } from '../Models/ruta-recoleccion';
 })
 export class RutaRecoleccionService {
 
-  private baseUrl = 'http://localhost:8082/api/rutas';
+  private baseUrl = 'https://ecosoftwareangular.onrender.com/api/rutas';
 
   constructor(private http: HttpClient) {}
 
