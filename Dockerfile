@@ -1,12 +1,21 @@
-# ===============================
-# FASE 2: Servir con Nginx
-# ===============================
+# -------- ETAPA 1: BUILD ANGULAR --------
+FROM node:20 AS build
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+
+# -------- ETAPA 2: NGINX --------
 FROM nginx:alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# 🔥 IMPORTANTE: apuntamos a browser
-COPY --from=build /app/dist/EscosoftwareAngular/browser/ /usr/share/nginx/html/
+# 🔥 IMPORTANTE: ruta del build de Angular
+COPY --from=build /app/dist/ecosoftware-angular/browser/ /usr/share/nginx/html/
 
 EXPOSE 80
 
