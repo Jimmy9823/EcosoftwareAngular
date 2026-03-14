@@ -24,6 +24,13 @@ export class AceptarRechazarUsuarios implements OnInit {
     { campo: 'localidad', titulo: 'Localidad' }
   ];
 
+  roles = [
+    { id: 1, nombre: 'Administrador' },
+    { id: 2, nombre: 'Ciudadano' },
+    { id: 3, nombre: 'Empresa' },
+    { id: 4, nombre: 'Reciclador' }
+  ];
+
   // Modal
   modalAbierto: boolean = false;
   usuarioSeleccionado?: UsuarioModel;
@@ -38,6 +45,9 @@ export class AceptarRechazarUsuarios implements OnInit {
     this.usuarioService.obtenerUsuariosPendientes().subscribe((usuarios) => {
       this.usuariosPendientes = usuarios;
     });
+  }
+  obtenerNombreRol(rolId?: number): string {
+    return this.roles.find(r => r.id === rolId)?.nombre ?? 'Desconocido';
   }
 
   // Abrir modal

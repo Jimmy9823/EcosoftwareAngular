@@ -22,7 +22,8 @@
   size="md"
 >
   <div *ngIf="usuarioSeleccionado">
-
+    <p><strong>ID:</strong> {{ usuarioSeleccionado.idUsuario }}</p>
+    <p><strong>Tipo de Usuario:</strong> {{ obtenerNombreRol(usuarioSeleccionado?.rolId) }}</p>
     <p><strong>Nombre:</strong> {{ usuarioSeleccionado.nombre }}</p>
     <p><strong>Correo:</strong> {{ usuarioSeleccionado.correo }}</p>
     <p><strong>Dirección:</strong> {{ usuarioSeleccionado.direccion }}</p>
@@ -32,6 +33,32 @@
     <p *ngIf="usuarioSeleccionado.nit">
       <strong>NIT:</strong> {{ usuarioSeleccionado.nit }}
     </p>
+
+    <h5 class="mt-3">Documentos Subidos</h5>
+
+<!-- Cédula -->
+<div *ngIf="usuarioSeleccionado?.documento">
+  <p><strong>Cédula:</strong></p>
+  <a [href]="usuarioSeleccionado.documento" target="_blank">
+    Ver documento
+  </a>
+</div>
+
+<!-- RUT -->
+<div *ngIf="usuarioSeleccionado?.rut">
+  <p><strong>RUT:</strong></p>
+  <a [href]="usuarioSeleccionado.rut" target="_blank">
+    Ver RUT
+  </a>
+</div>
+
+<!-- Cámara de comercio -->
+<div *ngIf="usuarioSeleccionado?.camara_comercio">
+  <p><strong>Cámara de Comercio:</strong></p>
+  <a [href]="usuarioSeleccionado.camara_comercio" target="_blank">
+    Ver documento
+  </a>
+</div>
 
   </div>
 

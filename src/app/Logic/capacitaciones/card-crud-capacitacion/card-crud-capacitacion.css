@@ -9,7 +9,12 @@
     transition: all 0.3s ease;
     height: 100%;
 }
-
+.cap-img{
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
 .capacitacion-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 30px rgba(34, 197, 94, 0.2);
